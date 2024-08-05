@@ -17,7 +17,7 @@ const Navbar = () => {
 				<section className="w-full flex items-center justify-between">
 					<div className="flex gap-4">
 						<div className="mr-8">
-							<TaskLogo />
+							<TaskLogo fontSize="text-[33px]" />
 						</div>
 						<ul className="flex gap-4 items-center">
 							{links.map((link) => (
