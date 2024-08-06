@@ -2,14 +2,17 @@
 import clsx from "clsx";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { BiHome } from "react-icons/bi";
-import { GoTasklist } from "react-icons/go";
+import { BiHome, BiSolidDashboard, BiTask } from "react-icons/bi";
+import { FaUsers } from "react-icons/fa6";
 
 const NavLinks = () => {
 	const pathname = usePathname();
 	const links = [
 		{ href: "/", label: "Home", icon: BiHome },
-		{ href: "/tasks", label: "Dos", icon: GoTasklist },
+		{ href: "/dashboard", label: "Dashboard", icon: BiSolidDashboard },
+
+		{ href: "/tasks", label: "Tasks", icon: BiTask },
+		{ href: "/users", label: "Users", icon: FaUsers },
 	];
 	return (
 		<>

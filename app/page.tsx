@@ -1,16 +1,17 @@
+import Image from "next/image";
 import Link from "next/link";
 import { BsArrowRight } from "react-icons/bs";
-import TaskLogo from "./components/TaskLogo";
 
 export default function Home() {
 	const session = { logged: true, name: "ahmad" };
 	return (
-		<main className="flex min-h-screen flex-col p-6">
-			<div className="flex h-20 shrink-0 items-end rounded-lg bg-gradient-to-tr from-neutral-400 via-slate-400 to-stone-400 p-4 md:h-52">
+		<main className="flex min-h-screen p-4 w-full">
+			{/* <div className="flex h-20 shrink-0 items-end rounded-lg bg-gradient-to-tr from-neutral-400 via-slate-400 to-stone-400 p-4 md:h-52">
 				<TaskLogo />
-			</div>
-			<div className="flex flex-col gap-6 mt-4 grow md:flex-row">
-				<div className="flex flex-col justify-center gap-6 rounded-lg bg-neutral-50 px-6 py-10 md:w-2/5 md:px-20">
+			</div> */}
+			<div className="flex flex-col gap-6 grow">
+				{/* THE WELCOME SECTION */}
+				<div className="flex flex-col justify-center gap-6 rounded-lg bg-neutral-50 px-6 py-10 md:px-20">
 					<h1 className="text-3xl font-bold mb-4">Welcome to Task Manager</h1>
 					{session.logged ? (
 						<>
@@ -34,7 +35,24 @@ export default function Home() {
 						</p>
 					)}
 				</div>
-				<div className="flex items-center justify-center p-6 md:w-3/5 md:px-28 md:py-12"></div>
+
+				{/* THE BANNER SECTION  */}
+				<div className="flex items-center justify-center p-6 md:px-28 md:py-12">
+					<Image
+						src={"/hero-desktop.png"}
+						height={760}
+						width={1000}
+						className="hidden md:block"
+						alt="Screenshot of the Tasks project showing desktop version"
+					/>
+					<Image
+						src={"/hero-mobile.png"}
+						height={620}
+						width={560}
+						className="block md:hidden"
+						alt="Screenshot of the Tasks project showing desktop version"
+					/>
+				</div>
 			</div>
 		</main>
 	);
