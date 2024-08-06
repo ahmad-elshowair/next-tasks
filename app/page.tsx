@@ -3,7 +3,7 @@ import Link from "next/link";
 import { BsArrowRight } from "react-icons/bs";
 
 export default function Home() {
-	const session = { logged: true, name: "ahmad" };
+	const session = { logged: false, name: "ahmad" };
 	return (
 		<main className="flex min-h-screen p-4 w-full">
 			{/* <div className="flex h-20 shrink-0 items-end rounded-lg bg-gradient-to-tr from-neutral-400 via-slate-400 to-stone-400 p-4 md:h-52">
@@ -31,7 +31,7 @@ export default function Home() {
 							<Link href={"/login"} className=" text-blue-500 hover:underline">
 								Login
 							</Link>{" "}
-							to access you tasks.
+							to access your tasks.
 						</p>
 					)}
 				</div>

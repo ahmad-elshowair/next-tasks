@@ -1,5 +1,5 @@
 const Dashboard = () => {
-	return <div>Dashboard</div>;
+	return <main className="flex p-4 w-full">Dashboard</main>;
 };
 
 export default Dashboard;
