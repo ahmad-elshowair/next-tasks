@@ -1,8 +1,7 @@
 import { compareSync, hashSync } from "bcrypt";
 
 export const hash = (password: string) => {
-	const salt = process.env.SALT || 10;
-	return hashSync(password + process.env.PEPPER, salt);
+	return hashSync(password + process.env.PEPPER, 10);
 };
 
 export const isMatch = (userPassword: string, dbPassword: string) => {
