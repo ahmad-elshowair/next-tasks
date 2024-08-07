@@ -1,5 +1,6 @@
+import { CreateTask } from "@/app/ui/tasks/buttons";
+import TasksTable from "@/app/ui/tasks/TasksTable";
 import Search from "../ui/Search";
-import TasksTable from "../ui/tasks/TasksTable";
 
 const TasksPage = ({
 	searchParams,
@@ -13,7 +14,7 @@ const TasksPage = ({
 			<h1 className="text-3xl font-bold mb-4 md:mb-8">Tasks</h1>
 			<section className="flex items-center justify-between gap-2">
 				<Search placeholder="Search Task..." />
-				{/* <CreateTask/> */}
+				<CreateTask />
 			</section>
 			<TasksTable query={query} currentPage={currentPage} />
 			<section className="mt-5 flex w-full justify-center">
