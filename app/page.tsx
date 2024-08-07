@@ -11,7 +11,7 @@ export default function Home() {
 			</div> */}
 			<div className="flex flex-col gap-6 grow">
 				{/* THE WELCOME SECTION */}
-				<div className="flex flex-col justify-center gap-6 rounded-lg bg-neutral-50 px-6 py-10 md:px-20">
+				<div className="flex flex-col justify-center gap-6 rounded-lg bg-neutral-50 px-6 py-10 md:px-20 shadow">
 					<h1 className="text-3xl font-bold mb-4">Welcome to Task Manager</h1>
 					{session.logged ? (
 						<>
