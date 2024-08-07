@@ -13,3 +13,13 @@ export type Task = {
 	user_id: string;
 	created_at: string;
 };
+
+export type TasksTable = {
+	task_id: string;
+	title: string;
+	is_completed: boolean;
+	created_at: string;
+	email: string;
+	user_name: string;
+	image_url: string;
+};
