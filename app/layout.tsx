@@ -21,9 +21,9 @@ export default function RootLayout({
 					<div className="w-full h-screen flex-none md:w-64">
 						<Sidebar />
 					</div>
-					{/* <main className="flex-grow p-6 md:overflow-y-auto md:p-12"> */}
-					{children}
-					{/* </main> */}
+					<div className="flex-grow p-6 md:overflow-y-auto md:p-12">
+						{children}
+					</div>
 				</div>
 			</body>
 		</html>
