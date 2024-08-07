@@ -1,9 +1,9 @@
 import { fetchFilteredTasks } from "@/app/tasks/actions";
+import Task from "@/app/ui/tasks/Task";
+import TaskStatus from "@/app/ui/tasks/TaskStatus";
 import Image from "next/image";
 import Link from "next/link";
 import { FaPencil, FaTrashCan } from "react-icons/fa6";
-import Task from "./Task";
-import TaskStatus from "./TaskStatus";
 
 const TasksTable = async ({
 	query,
@@ -82,8 +82,8 @@ const TasksTable = async ({
 										<div className="py-3 flex items-center gap-3">
 											<Link
 												href={`/tasks/${task.task_id}/edit`}
-												className="rounded-md border p-2 hover:bg-green-600">
-												<FaPencil className="w-5 hover:text-green-200 " />
+												className="rounded-md border p-2 hover:bg-green-600 hover:text-green-200">
+												<FaPencil className="w-5" />
 											</Link>
 
 											<form action={task.task_id}>
