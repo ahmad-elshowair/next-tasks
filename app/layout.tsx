@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 
-import Sidebar from "@/app/components/Sidebar";
-import { inter } from "./components/ui/fonts";
+import Sidebar from "@/app/ui/Sidebar";
 import "./globals.css";
+import { inter } from "./ui/fonts";
 
 export const metadata: Metadata = {
 	title: "Create Next App",
@@ -17,8 +17,8 @@ export default function RootLayout({
 	return (
 		<html lang="en">
 			<body className={`${inter.className} antialiased`}>
-				<div className="flex h-screen flex-col md:flex-row md:overflow-hidden">
-					<div className="w-full flex-none md:w-64">
+				<div className="flex flex-col md:flex-row md:overflow-hidden">
+					<div className="w-full h-screen flex-none md:w-64">
 						<Sidebar />
 					</div>
 					{/* <main className="flex-grow p-6 md:overflow-y-auto md:p-12"> */}
