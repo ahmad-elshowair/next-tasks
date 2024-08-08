@@ -14,8 +14,6 @@ const TasksPage = async ({
 	const currentPage = Number(searchParams?.page) || 1;
 	const totalPages = await fetchTasksPages(query);
 
-	console.log(totalPages);
-
 	return (
 		<main className="p-4 w-full">
 			<h1 className="text-3xl font-bold mb-4 md:mb-8">Tasks</h1>
