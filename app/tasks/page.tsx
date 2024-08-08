@@ -1,8 +1,8 @@
+import { fetchTasksPages } from "@/app/tasks/actions";
+import Pagination from "@/app/ui/Pagination";
+import Search from "@/app/ui/Search";
 import { CreateTask } from "@/app/ui/tasks/buttons";
 import TasksTable from "@/app/ui/tasks/TasksTable";
-import Pagination from "../ui/pagination/Pagination";
-import Search from "../ui/Search";
-import { fetchTasksPages } from "./actions";
 
 const TasksPage = async ({
 	searchParams,
@@ -12,6 +12,9 @@ const TasksPage = async ({
 	const query = searchParams?.query || "";
 	const currentPage = Number(searchParams?.page) || 1;
 	const totalPages = await fetchTasksPages(query);
+
+	console.log(totalPages);
+
 	return (
 		<main className="p-4 w-full">
 			<h1 className="text-3xl font-bold mb-4 md:mb-8">Tasks</h1>
