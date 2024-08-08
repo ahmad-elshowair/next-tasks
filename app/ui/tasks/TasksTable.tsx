@@ -1,18 +1,22 @@
-import { fetchFilteredTasks } from "@/app/tasks/actions";
 import Task from "@/app/ui/tasks/Task";
 import TaskStatus from "@/app/ui/tasks/TaskStatus";
 import Image from "next/image";
 import Link from "next/link";
 import { FaPencil, FaTrashCan } from "react-icons/fa6";
 
-const TasksTable = async ({
-	query,
-	currentPage,
+const TasksTable = ({
+	tasks,
 }: {
-	query: string;
-	currentPage: number;
+	tasks: Array<{
+		task_id: string;
+		title: string;
+		is_completed: boolean;
+		created_at: string;
+		email: string;
+		user_name: string;
+		image_url: string;
+	}>;
 }) => {
-	const tasks = await fetchFilteredTasks(query, currentPage);
 	return (
 		<section className="mt-6 flow-root">
 			{/* tasks in the in small screens  */}

@@ -1,9 +1,9 @@
-import { fetchTasksPages } from "@/app/tasks/actions";
+import { fetchFilteredTasks, fetchTasksPages } from "@/app/tasks/actions";
 import Search from "@/app/ui/Search";
+import { TasksTableSkeleton } from "@/app/ui/skeletons";
 import { CreateTask } from "@/app/ui/tasks/buttons";
 import TasksTable from "@/app/ui/tasks/TasksTable";
 import { Suspense } from "react";
-import { TasksTableSkeleton } from "../ui/skeletons";
 
 const TasksPage = async ({
 	searchParams,
@@ -13,6 +13,7 @@ const TasksPage = async ({
 	const query = searchParams?.query || "";
 	const currentPage = Number(searchParams?.page) || 1;
 	const totalPages = await fetchTasksPages(query);
+	const tasks = await fetchFilteredTasks(query, currentPage);
 
 	return (
 		<main className="p-4 w-full">
@@ -22,7 +23,7 @@ const TasksPage = async ({
 				<CreateTask />
 			</section>
 			<Suspense key={query + currentPage} fallback={<TasksTableSkeleton />}>
-				<TasksTable query={query} currentPage={currentPage} />
+				<TasksTable tasks={tasks} />
 			</Suspense>
 			<section className="mt-5 flex w-full justify-center">
 				{/* <Pagination totalPages={totalPages} /> */}
