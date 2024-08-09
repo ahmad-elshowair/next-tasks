@@ -60,10 +60,8 @@ const TasksTable = ({
 								<tr
 									key={task.task_id}
 									className="w-full border-b py-3 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg">
-									<td
-										className="py-3 pl-6 pr-3 whitespace-nowrap text-xs font-medium text-gray 
-										">
-										<div className="flex items-center gap-3">
+									<td className="py-3 pl-6 pr-3 whitespace-nowrap text-xs">
+										<div className="flex items-center gap-1">
 											<Image
 												src={task.image_url}
 												className="mr-2 rounded-full"
@@ -71,19 +69,21 @@ const TasksTable = ({
 												width={28}
 												alt="profile picture"
 											/>
-											<p>{task.user_name}</p>
+											<p className="font-semibold text-emerald-800">
+												{task.user_name}
+											</p>
 										</div>
 									</td>
-									<td className="whitespace-nowrap px-3 py-3 text-xs">
+									<td className="whitespace-nowrap px-3 py-3 text-xs font-semibold text-emerald-800">
 										{task.email}
 									</td>
-									<td className="whitespace-nowrap px-3 py-3 text-xs">
+									<td className="whitespace-nowrap px-3 py-3 text-xs font-semibold text-emerald-800">
 										{task.title}
 									</td>
-									<td className="whitespace-nowrap px-3 py-3 text-xs ">
+									<td className="whitespace-nowrap px-3 py-3 text-xs font-semibold text-emerald-800">
 										{task.created_at?.toString().slice(4, 16)}
 									</td>
-									<td className="whitespace-nowrap px-3 py-3">
+									<td className="whitespace-nowrap px-3 py-3 font-semibold text-emerald-800">
 										<TaskStatus status={task.is_completed} />
 									</td>
 									<td className="whitespace-nowrap px-3 ">

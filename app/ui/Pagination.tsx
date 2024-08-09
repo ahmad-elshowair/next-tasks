@@ -1,6 +1,5 @@
 "use client";
 import { generatePagination } from "@/app/lib/utils";
-
 import { clsx } from "clsx";
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";

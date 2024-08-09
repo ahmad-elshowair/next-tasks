@@ -1,4 +1,5 @@
 import { fetchFilteredTasks, fetchTasksPages } from "@/app/tasks/actions";
+import Pagination from "@/app/ui/Pagination";
 import Search from "@/app/ui/Search";
 import { TasksTableSkeleton } from "@/app/ui/skeletons";
 import { CreateTask } from "@/app/ui/tasks/buttons";
@@ -26,7 +27,7 @@ const TasksPage = async ({
 				<TasksTable tasks={tasks} />
 			</Suspense>
 			<section className="mt-5 flex w-full justify-center">
-				{/* <Pagination totalPages={totalPages} /> */}
+				<Pagination totalPages={totalPages} />
 			</section>
 		</main>
 	);

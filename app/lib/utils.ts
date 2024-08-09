@@ -1,4 +1,4 @@
-import { compareSync, hashSync } from "bcrypt";
+import { compareSync, hashSync } from "bcryptjs";
 
 export const hash = (password: string) => {
 	return hashSync(password + process.env.PEPPER, 10);
