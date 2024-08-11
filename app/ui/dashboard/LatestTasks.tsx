@@ -31,15 +31,15 @@ const LatestTasks = async () => {
 											alt={`${task.user_name}'s Profile`}
 										/>
 										<div className="flex flex-col ">
-											<p className="truncate text-sm font-medium md:text-base">
+											<p className="line-clamp-1 sm:text-sm font-medium lg:text-base">
 												{task.user_name}
 											</p>
-											<p className="truncate text-sm font-normal text-emerald-300 hidden md:block">
+											<p className="line-clamp-6 text-sm font-normal text-emerald-300 sm:hidden md:block">
 												{task.email}
 											</p>
 										</div>
 									</div>
-									<p className="text-sm ">{task.title}</p>
+									<p className="text-sm line-clamp-1">{task.title}</p>
 									<TaskStatus status={task.is_completed} />
 								</div>
 							))}
