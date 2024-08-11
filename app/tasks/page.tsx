@@ -4,7 +4,14 @@ import Search from "@/app/ui/Search";
 import { TasksTableSkeleton } from "@/app/ui/skeletons";
 import { CreateTask } from "@/app/ui/tasks/buttons";
 import TasksTable from "@/app/ui/tasks/TasksTable";
+import type { Metadata } from "next";
 import { Suspense } from "react";
+
+export const metadata: Metadata = {
+	title: "Tasks Page",
+	description:
+		"Tasks page to manage tasks which deleting, fetching, creating, and updating tasks",
+};
 
 const TasksPage = async ({
 	searchParams,
