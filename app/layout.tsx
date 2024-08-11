@@ -17,8 +17,8 @@ export default function RootLayout({
 	return (
 		<html lang="en">
 			<body className={`${inter.className} antialiased`}>
-				<div className="flex flex-col md:flex-row md:overflow-hidden">
-					<div className="w-full h-screen flex-none md:w-64">
+				<div className="flex sm:flex-col lg:flex-row md:overflow-hidden">
+					<div className="sm:w-full sm:h-fit lg:h-screen  flex-none lg:w-64">
 						<Sidebar />
 					</div>
 					<main className="flex-grow p-6 md:overflow-y-auto md:p-12">

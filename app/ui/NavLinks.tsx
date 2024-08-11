@@ -29,7 +29,7 @@ const NavLinks = () => {
 							},
 						)}>
 						<LintIcon className="w-6 font-bold" />
-						<p className="hidden md:block">{link.label}</p>
+						<p className="sm:hidden lg:block">{link.label}</p>
 					</Link>
 				);
 			})}
