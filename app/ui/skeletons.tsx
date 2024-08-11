@@ -135,3 +135,60 @@ export const CardsSkeleton = () => {
 		</>
 	);
 };
+
+export const TaskSkeleton = () => {
+	return (
+		<div
+			className={`${shimmer} flex flex-row items-center justify-between border-b border-emerald-100 py-4`}>
+			<div className="flex items-center">
+				<div className="mr-2 h-8 w-8 rounded-full bg-emerald-200" />
+				<div className="min-w-0">
+					<div className="h-5 w-40 rounded-md bg-emerald-200" />
+					<div className="mt-2 h-4 w-14 rounded-md bg-emerald-200" />
+				</div>
+			</div>
+			<div className="mt-2 h-4 w-14 rounded-md bg-emerald-200" />
+		</div>
+	);
+};
+
+export const LatestTasksSkeleton = () => {
+	return (
+		<div
+			className={`${shimmer} relative flex w-full flex-col overflow-hidden md:col-span-4`}>
+			<div className="mb-4 h-8 w-36 rounded-md bg-emerald-100" />
+			<div className="flex grow flex-col justify-between rounded-xl bg-emerald-200 p-4">
+				<div className="bg-white px-6">
+					<TaskSkeleton />
+					<TaskSkeleton />
+					<TaskSkeleton />
+					<TaskSkeleton />
+					<TaskSkeleton />
+				</div>
+				<div className="flex items-center pb-2 pt-6">
+					<div className="bg-emerald-200 h-5 w-5 rounded-full" />
+					<div className="bg-emerald-200 ml-2 h-4 w-20 rounded-md" />
+				</div>
+			</div>
+		</div>
+	);
+};
+
+export const DashboardSkeleton = () => {
+	return (
+		<>
+			<div
+				className={`${shimmer} relative mb-4 h-8 w-36 overflow-hidden rounded-md bg-emerald-100`}
+			/>
+			<div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+				<CardSkeleton />
+				<CardSkeleton />
+				<CardSkeleton />
+				<CardSkeleton />
+			</div>
+			<div className="mt-6 flex min-w-full items-center justify-center">
+				<LatestTasksSkeleton />
+			</div>
+		</>
+	);
+};

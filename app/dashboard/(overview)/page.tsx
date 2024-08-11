@@ -1,6 +1,6 @@
 import { CardWrapper } from "@/app/ui/dashboard/Cards";
 import LatestTasks from "@/app/ui/dashboard/LatestTasks";
-import { CardsSkeleton } from "@/app/ui/skeletons";
+import { CardsSkeleton, LatestTasksSkeleton } from "@/app/ui/skeletons";
 import { Suspense } from "react";
 
 const Dashboard = () => {
@@ -13,7 +13,9 @@ const Dashboard = () => {
 				</Suspense>
 			</div>
 			<div className="mt-6 flex min-w-full items-center justify-center">
-				<LatestTasks />
+				<Suspense fallback={<LatestTasksSkeleton />}>
+					<LatestTasks />
+				</Suspense>
 			</div>
 		</section>
 	);
