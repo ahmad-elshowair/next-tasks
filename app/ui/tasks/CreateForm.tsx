@@ -12,9 +12,10 @@ const CreateForm = () => {
 					</label>
 					<input
 						id="title"
-						className="peer block w-full rounded-md border border-emerald-200 py-2 pl-10 text-sm outline-2 placeholder:text-emerald-500"
+						className="peer block w-full rounded-md border border-emerald-200 py-2 pl-5 text-sm outline-2 placeholder:text-emerald-700"
 						defaultValue=""
 						aria-describedby="title-error"
+						placeholder="Describe your task..."
 					/>
 					<CiText className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-emerald-500" />
 				</div>
