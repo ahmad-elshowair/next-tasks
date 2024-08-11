@@ -1,8 +1,8 @@
 import { fetchFilteredTasks, fetchTasksPages } from "@/app/tasks/actions";
+import { CreateBtn } from "@/app/ui/buttons";
 import Pagination from "@/app/ui/Pagination";
 import Search from "@/app/ui/Search";
 import { TasksTableSkeleton } from "@/app/ui/skeletons";
-import { CreateTask } from "@/app/ui/tasks/buttons";
 import TasksTable from "@/app/ui/tasks/TasksTable";
 import type { Metadata } from "next";
 import { Suspense } from "react";
@@ -28,7 +28,7 @@ const TasksPage = async ({
 			<h1 className="text-3xl font-bold mb-4 md:mb-8">Tasks</h1>
 			<section className="flex items-center justify-between gap-2">
 				<Search placeholder="Search Task..." />
-				<CreateTask />
+				<CreateBtn href="/tasks/create" label="Create Take" />
 			</section>
 			<Suspense key={query + currentPage} fallback={<TasksTableSkeleton />}>
 				<TasksTable tasks={tasks} />
