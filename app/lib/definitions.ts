@@ -23,3 +23,12 @@ export type TasksTable = {
 	user_name: string;
 	image_url: string;
 };
+
+export type LatestTasks = {
+	task_id: string;
+	title: string;
+	is_completed: boolean;
+	user_name: string;
+	email: string;
+	image_url: string;
+};

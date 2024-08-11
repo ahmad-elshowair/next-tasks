@@ -1,4 +1,6 @@
+import { LatestTasks } from "@/app/lib/definitions";
 import pool from "@/app/lib/pool";
+import { QueryResult } from "pg";
 
 export const fetchCardData = async () => {
 	const client = await pool.connect();
@@ -25,6 +27,30 @@ export const fetchCardData = async () => {
 	} catch (error) {
 		console.error("Database Error: ", (error as Error).message);
 		throw error;
+	} finally {
+		client.release();
+	}
+};
+
+export const fetchLatestTasks = async () => {
+	const client = await pool.connect();
+	try {
+		const tasks: QueryResult<LatestTasks> = await client.query(`
+			SELECT 
+				tasks.task_id,
+				tasks.title, 
+				tasks.is_completed, 
+				users.user_name,
+				users.email,
+				users.image_url 
+			FROM tasks
+			JOIN users ON tasks.user_id = users.user_id
+			ORDER BY tasks.created_at DESC
+			LIMIT 5`);
+		return tasks.rows;
+	} catch (error) {
+		console.error("Database Error: ", (error as Error).message);
+		throw new Error((error as Error).message);
 	} finally {
 		client.release();
 	}
