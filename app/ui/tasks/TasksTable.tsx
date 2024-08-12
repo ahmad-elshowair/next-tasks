@@ -1,8 +1,7 @@
+import { DeleteBtn, EditBtn } from "@/app/ui/buttons";
 import Task from "@/app/ui/tasks/Task";
 import TaskStatus from "@/app/ui/tasks/TaskStatus";
 import Image from "next/image";
-import Link from "next/link";
-import { FaPencil, FaTrashCan } from "react-icons/fa6";
 
 const TasksTable = ({
 	tasks,
@@ -88,21 +87,9 @@ const TasksTable = ({
 									</td>
 									<td className="whitespace-nowrap px-3 ">
 										<div className="py-3 flex items-center gap-3">
-											<Link
-												href={`/tasks/${task.task_id}/edit`}
-												className="rounded-md border p-2 border-green-600
-												text-green-600 hover:bg-green-600 hover:text-green-50
-												duration-200 ease-in-out">
-												<FaPencil className="w-5" />
-											</Link>
-
+											<EditBtn href={`/tasks/${task.task_id}/edit`} />
 											<form action={task.task_id}>
-												<button
-													className="rounded-md border p-2 
-												border-red-600 hover:bg-red-600 hover:text-red-50 text-red-600 duration-200 ease-in-out">
-													<span className="sr-only">Delete</span>
-													<FaTrashCan className="w-5" />
-												</button>
+												<DeleteBtn />
 											</form>
 										</div>
 									</td>

@@ -38,4 +38,7 @@ export type UserSTable = {
 	user_name: string;
 	email: string;
 	image_url: string;
+	is_admin: boolean;
+	created_at: string;
+	updated_at: string;
 };

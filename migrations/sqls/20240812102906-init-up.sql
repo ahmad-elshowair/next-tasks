@@ -7,8 +7,8 @@ CREATE TABLE IF NOT EXISTS users (
     password VARCHAR(255),
     image_url TEXT,
     is_admin BOOLEAN DEFAULT FALSE,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    created_at timestamp DEFAULT NOW(),
+    updated_at timestamp DEFAULT NOW()
 );
 
 CREATE TABLE IF NOT EXISTS tasks (
