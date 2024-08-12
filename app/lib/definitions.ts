@@ -32,3 +32,10 @@ export type LatestTasks = {
 	email: string;
 	image_url: string;
 };
+
+export type UserSTable = {
+	user_id: string;
+	user_name: string;
+	email: string;
+	image_url: string;
+};
