@@ -1,4 +1,4 @@
-import Breadcrumb from "@/app/ui/BreadCrumb";
+import Breadcrumb from "@/app/components/BreadCrumb";
 
 const CreateUser = () => {
 	return (

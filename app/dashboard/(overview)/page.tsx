@@ -1,6 +1,6 @@
-import { CardWrapper } from "@/app/ui/dashboard/Cards";
-import LatestTasks from "@/app/ui/dashboard/LatestTasks";
-import { CardsSkeleton, LatestTasksSkeleton } from "@/app/ui/skeletons";
+import { CardWrapper } from "@/app/components/dashboard/Cards";
+import LatestTasks from "@/app/components/dashboard/LatestTasks";
+import { CardsSkeleton, LatestTasksSkeleton } from "@/app/components/skeletons";
 import { Suspense } from "react";
 
 const Dashboard = () => {

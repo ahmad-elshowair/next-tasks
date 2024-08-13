@@ -60,3 +60,17 @@ export const fetchUsersPages = async (query: string) => {
 		client.release();
 	}
 };
+
+export const fetchUserById = async (id: string) => {
+	const client = await pool.connect();
+	try {
+		const sqlQuery = `SELECT * FROM users WHERE id = $1`;
+		const result = await client.query(sqlQuery, [id]);
+		return result.rows[0];
+	} catch (error) {
+		console.error(`Error Fetching a User By Id: ${(error as Error).message}`);
+		throw new Error((error as Error).message);
+	} finally {
+		client.release();
+	}
+};

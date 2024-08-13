@@ -1,8 +1,8 @@
-import Pagination from "@/app/ui/Pagination";
-import Search from "@/app/ui/Search";
-import { CreateBtn } from "@/app/ui/buttons";
-import UsersTable from "@/app/ui/users/UsersTable";
-import { fetchFilteredUsers, fetchUsersPages } from "@/app/users/actions";
+import { fetchFilteredUsers, fetchUsersPages } from "@/app/actions/user";
+import Pagination from "@/app/components/Pagination";
+import Search from "@/app/components/Search";
+import { CreateBtn } from "@/app/components/buttons";
+import UsersTable from "@/app/components/users/UsersTable";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {

@@ -1,5 +1,5 @@
-import Breadcrumb from "@/app/ui/BreadCrumb";
-import CreateForm from "@/app/ui/tasks/CreateForm";
+import Breadcrumb from "@/app/components/BreadCrumb";
+import CreateForm from "@/app/components/tasks/CreateForm";
 
 const CreateTask = () => {
 	return (
