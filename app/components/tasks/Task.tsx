@@ -1,8 +1,8 @@
+import TaskStatus from "@/app/components/tasks/TaskStatus";
 import { TasksTable } from "@/app/lib/definitions";
 import Image from "next/image";
 import Link from "next/link";
 import { FaPencil, FaTrashCan } from "react-icons/fa6";
-import TaskStatus from "./TaskStatus";
 
 const Task = (task: TasksTable) => {
 	return (

@@ -1,4 +1,5 @@
 import Breadcrumb from "@/app/components/BreadCrumb";
+import CreateUserForm from "@/app/components/users/CreateUserForm";
 
 const CreateUser = () => {
 	return (
@@ -13,7 +14,7 @@ const CreateUser = () => {
 					},
 				]}
 			/>
-			{/* <CreateUserForm/> */}
+			<CreateUserForm />
 		</main>
 	);
 };

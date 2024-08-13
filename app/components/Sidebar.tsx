@@ -1,5 +1,5 @@
 "use client";
-import TaskLogo from "@/app/ui/TaskLogo";
+import TaskLogo from "@/app/components/TaskLogo";
 import Link from "next/link";
 import {
 	FaArrowRightToBracket,

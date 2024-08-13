@@ -1,6 +1,6 @@
-import { DeleteBtn, EditBtn } from "@/app/ui/buttons";
-import Task from "@/app/ui/tasks/Task";
-import TaskStatus from "@/app/ui/tasks/TaskStatus";
+import { DeleteBtn, EditBtn } from "@/app/components/buttons";
+import Task from "@/app/components/tasks/Task";
+import TaskStatus from "@/app/components/tasks/TaskStatus";
 import Image from "next/image";
 
 const TasksTable = ({

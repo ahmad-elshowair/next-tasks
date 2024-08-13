@@ -1,4 +1,4 @@
-import { roboto_mono } from "@/app/ui/fonts";
+import { roboto_mono } from "@/app/components/fonts";
 import clsx from "clsx";
 import Link from "next/link";
 

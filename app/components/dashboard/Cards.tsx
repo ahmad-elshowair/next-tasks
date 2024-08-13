@@ -1,4 +1,4 @@
-import { fetchCardData } from "@/app/dashboard/actions";
+import { fetchCardData } from "@/app/actions/dashboard";
 import { FaCircleCheck, FaClock, FaListCheck, FaUsers } from "react-icons/fa6";
 
 const iconMap = {

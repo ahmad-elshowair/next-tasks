@@ -1,4 +1,4 @@
-import { fetchLatestTasks } from "@/app/dashboard/actions";
+import { fetchLatestTasks } from "@/app/actions/dashboard";
 import clsx from "clsx";
 import Image from "next/image";
 import { FaClockRotateLeft } from "react-icons/fa6";
