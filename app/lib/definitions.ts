@@ -4,6 +4,9 @@ export type User = {
 	email: string;
 	password: string;
 	image_url: string;
+	role: "user" | "admin";
+	created_at: string;
+	updated_at: string;
 };
 
 export type Task = {
@@ -38,7 +41,7 @@ export type UserSTable = {
 	user_name: string;
 	email: string;
 	image_url: string;
-	is_admin: boolean;
+	role: "user" | "admin";
 	created_at: string;
 	updated_at: string;
 };

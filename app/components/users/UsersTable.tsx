@@ -51,9 +51,7 @@ const UsersTable = ({ users }: { users: UserSTable[] }) => {
 									<td className="p-3 whitespace-nowrap text-sm">
 										{user.email}
 									</td>
-									<td className="p-3 whitespace-nowrap text-sm">
-										{user.is_admin ? "Admin" : "User"}
-									</td>
+									<td className="p-3 whitespace-nowrap text-sm">{user.role}</td>
 									<td className="p-3 whitespace-nowrap text-sm">
 										{user.created_at?.toString().slice(4, 16)}
 									</td>
