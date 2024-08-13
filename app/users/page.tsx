@@ -1,8 +1,9 @@
+import Pagination from "@/app/ui/Pagination";
 import Search from "@/app/ui/Search";
 import { CreateBtn } from "@/app/ui/buttons";
 import UsersTable from "@/app/ui/users/UsersTable";
+import { fetchFilteredUsers, fetchUsersPages } from "@/app/users/actions";
 import type { Metadata } from "next";
-import { fetchFilteredUsers } from "./actions";
 
 export const metadata: Metadata = {
 	title: "Users Page",
@@ -17,7 +18,7 @@ const UsersPage = async ({
 }) => {
 	const query = searchParams?.query || "";
 	const currentPage = Number(searchParams?.page) || 1;
-	// const totalPages = await fetchUsersPages(query);
+	const totalPages = await fetchUsersPages(query);
 	const users = await fetchFilteredUsers(query, currentPage);
 	return (
 		<main className="p-4 w-full">
@@ -28,7 +29,7 @@ const UsersPage = async ({
 			</section>
 			<UsersTable users={users} />
 			<section className="mt-5 flex w-full justify-center">
-				{/* <Pagination/> */}
+				<Pagination totalPages={totalPages} />
 			</section>
 		</main>
 	);
