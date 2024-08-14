@@ -38,7 +38,7 @@ const UsersTable = ({ users }: { users: UserSTable[] }) => {
 									className="w-full border-b py-3 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg">
 									<td className="py-3 pl-6 pr-3 whitespace-nowrap">
 										<Image
-											src={user.image_url}
+											src={user.image_url || "/avatar.png"}
 											height={40}
 											width={40}
 											alt={`${user.user_name}'s profile avatar`}
