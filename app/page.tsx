@@ -5,7 +5,7 @@ import { BsArrowRight } from "react-icons/bs";
 export default function Home() {
 	const session = { logged: false, name: "ahmad" };
 	return (
-		<main className="flex min-h-screen p-4 w-full">
+		<section className="flex min-h-screen p-4 w-full">
 			{/* <div className="flex h-20 shrink-0 items-end rounded-lg bg-gradient-to-tr from-neutral-400 via-slate-400 to-stone-400 p-4 md:h-52">
 				<TaskLogo />
 			</div> */}
@@ -37,7 +37,7 @@ export default function Home() {
 				</div>
 
 				{/* THE BANNER SECTION  */}
-				<div className="flex items-center justify-center p-6 md:px-28 md:py-12">
+				<div className="flex items-center justify-center p-6 md:px-28 md:py-8">
 					<Image
 						src={"/hero-desktop.png"}
 						height={760}
@@ -54,6 +54,6 @@ export default function Home() {
 					/>
 				</div>
 			</div>
-		</main>
+		</section>
 	);
 }

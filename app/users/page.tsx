@@ -21,8 +21,8 @@ const UsersPage = async ({
 	const totalPages = await fetchUsersPages(query);
 	const users = await fetchFilteredUsers(query, currentPage);
 	return (
-		<main className="p-4 w-full">
-			<h1 className="text-3xl font-bold mb-4 md:mb-8">Users</h1>
+		<main className="py-2 px-10 w-full">
+			<h1 className=" md:mt-20 text-3xl font-bold mb-4 md:mb-8">Users</h1>
 			<section className="flex items-center justify-between gap-2">
 				<Search placeholder="Search User..." />
 				<CreateBtn href="/users/create" label="Create User" />

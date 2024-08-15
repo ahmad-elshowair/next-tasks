@@ -8,7 +8,11 @@ const EditTaskPage = ({ params }: { params: { id: string } }) => {
 			<Breadcrumb
 				breadcrumbs={[
 					{ label: "Tasks", href: "/tasks" },
-					{ label: "Edit Task", href: `/tasks/${id}/edit`, active: true },
+					{
+						label: "Edit Task",
+						href: `/tasks/${id}/edit`,
+						active: true,
+					},
 				]}
 			/>
 			<EditForm />
