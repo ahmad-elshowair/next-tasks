@@ -3,7 +3,7 @@ import CreateUserForm from "@/app/components/users/CreateUserForm";
 
 const CreateUser = () => {
 	return (
-		<main>
+		<section className="px-10 pt-20 pb-2">
 			<Breadcrumb
 				breadcrumbs={[
 					{ label: "Users", href: "/users" },
@@ -15,7 +15,7 @@ const CreateUser = () => {
 				]}
 			/>
 			<CreateUserForm />
-		</main>
+		</section>
 	);
 };
 

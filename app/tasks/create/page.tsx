@@ -3,7 +3,7 @@ import CreateForm from "@/app/components/tasks/CreateForm";
 
 const CreateTask = () => {
 	return (
-		<main>
+		<section className="pt-20 pb-2 px-10">
 			<Breadcrumb
 				breadcrumbs={[
 					{
@@ -18,7 +18,7 @@ const CreateTask = () => {
 				]}
 			/>
 			<CreateForm />
-		</main>
+		</section>
 	);
 };
 

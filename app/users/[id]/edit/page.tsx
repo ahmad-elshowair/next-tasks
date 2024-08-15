@@ -5,7 +5,7 @@ const EditUserPage = ({ params }: { params: { id: string } }) => {
 	const { id } = params;
 
 	return (
-		<main>
+		<section className="px-10 pt-20 pb-2">
 			<Breadcrumb
 				breadcrumbs={[
 					{ label: "Users", href: "/users" },
@@ -13,7 +13,7 @@ const EditUserPage = ({ params }: { params: { id: string } }) => {
 				]}
 			/>
 			<EditUserFrom />
-		</main>
+		</section>
 	);
 };
 
