@@ -1,5 +1,6 @@
 import { UserSTable } from "@/app/lib/definitions";
 import pool from "@/app/lib/pool";
+import { verifySession } from "@/app/lib/session";
 import { QueryResult } from "pg";
 
 const ITEMS_PER_PAGE = 3;
@@ -61,14 +62,31 @@ export const fetchUsersPages = async (query: string) => {
 	}
 };
 
-export const fetchUserById = async (id: string) => {
+export const fetchUserById = async () => {
 	const client = await pool.connect();
+	const session = await verifySession();
 	try {
 		const sqlQuery = `SELECT * FROM users WHERE id = $1`;
-		const result = await client.query(sqlQuery, [id]);
+		const result = await client.query(sqlQuery, [session.user_id]);
 		return result.rows[0];
 	} catch (error) {
 		console.error(`Error Fetching a User By Id: ${(error as Error).message}`);
+		throw new Error((error as Error).message);
+	} finally {
+		client.release();
+	}
+};
+
+export const fetchUserByEmail = async (email: string) => {
+	const client = await pool.connect();
+	try {
+		const sqlQuery = `SELECT * FROM users WHERE email = $1`;
+		const result = await client.query(sqlQuery, [email]);
+		return result.rows[0];
+	} catch (error) {
+		console.error(
+			`Error Fetching a User By Email: ${(error as Error).message}`,
+		);
 		throw new Error((error as Error).message);
 	} finally {
 		client.release();
