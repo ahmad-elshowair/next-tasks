@@ -68,7 +68,7 @@ export const register = async (
 		const user = result.rows[0];
 		// CREATE USER SESSION
 		await createSession({
-			user_id: user.id,
+			user_id: user.user_id,
 			role: user.role,
 			expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
 		});

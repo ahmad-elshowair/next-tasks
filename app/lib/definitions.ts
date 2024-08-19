@@ -36,7 +36,7 @@ export type LatestTasks = {
 	image_url: string;
 };
 
-export type UserSTable = {
+export type UserTable = {
 	user_id: string;
 	user_name: string;
 	email: string;

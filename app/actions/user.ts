@@ -1,4 +1,4 @@
-import { UserSTable } from "@/app/lib/definitions";
+import { User, UserTable } from "@/app/lib/definitions";
 import pool from "@/app/lib/pool";
 import { verifySession } from "@/app/lib/session";
 import { QueryResult } from "pg";
@@ -23,10 +23,7 @@ export const fetchFilteredUsers = async (
 			OFFSET $3	
             `;
 		const values = [`%${query}%`, ITEMS_PER_PAGE, offset];
-		const result: QueryResult<UserSTable> = await client.query(
-			sqlQuery,
-			values,
-		);
+		const result: QueryResult<UserTable> = await client.query(sqlQuery, values);
 
 		return result.rows;
 	} catch (error) {
@@ -67,7 +64,7 @@ export const fetchUserById = async () => {
 	const session = await verifySession();
 	try {
 		const sqlQuery = `SELECT * FROM users WHERE id = $1`;
-		const result = await client.query(sqlQuery, [session.user_id]);
+		const result = await client.query(sqlQuery, [session?.user_id]);
 		return result.rows[0];
 	} catch (error) {
 		console.error(`Error Fetching a User By Id: ${(error as Error).message}`);
@@ -81,7 +78,7 @@ export const fetchUserByEmail = async (email: string) => {
 	const client = await pool.connect();
 	try {
 		const sqlQuery = `SELECT * FROM users WHERE email = $1`;
-		const result = await client.query(sqlQuery, [email]);
+		const result: QueryResult<User> = await client.query(sqlQuery, [email]);
 		return result.rows[0];
 	} catch (error) {
 		console.error(

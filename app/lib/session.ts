@@ -79,21 +79,22 @@ export const updateSession = async () => {
 	}
 };
 
-export const verifySession = async () => {
+export const verifySession = async (): Promise<SessionPayload | null> => {
 	try {
 		const cookie = cookies().get("user-session")?.value;
 		console.log("Session Token Retrieved:", cookie); // Debugging log
 		if (!cookie) {
-			throw new Error("Session cookie is missing!");
+			console.error("NO SESSION COOKIE FOUND!");
+			return null;
 		}
 		const session = await decrypt(cookie);
 		if (!session) {
 			redirect("/login");
 		}
-		return session;
+		return session as SessionPayload;
 	} catch (error) {
 		console.error(`FAILED TO VERIFY SESSION: ${(error as Error).message}`);
-		throw new Error(`SESSION VERIFICATION FAILED: ${error}`);
+		return null;
 	}
 };
 

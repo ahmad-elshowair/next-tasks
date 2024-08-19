@@ -1,4 +1,6 @@
+"use client";
 import clsx from "clsx";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -6,13 +8,39 @@ import {
 	FaRightFromBracket,
 	FaUserPlus,
 } from "react-icons/fa6";
+import { logout } from "../actions/auth";
 
-const AuthLinks = () => {
+const AuthLinks = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
 	const pathname = usePathname();
-	const session = { logged: false };
+
+	const handleLogout = async () => {
+		await logout();
+	};
 	return (
 		<>
-			{!session.logged ? (
+			{isLoggedIn ? (
+				<>
+					<div className="sm:flex h-[48px] w-full grow items-center justify-center gap-2 rounded-md p-3 text-sm font-semibold lg:flex-none md:justify-start md:p-2 md:px-3 shadow hover:bg-green-500 text-green-600 bg-emerald-100 hover:text-green-50 duration-200 ease-in-out">
+						<div className="flex justify-center items-center gap-2 cursor-pointer">
+							<Image
+								src={"/default-avatar.png"}
+								height={30}
+								width={30}
+								alt="avatar"
+								className="rounded-full"
+							/>
+							<span>{"User Name"}</span>
+						</div>
+					</div>
+
+					<button
+						onClick={handleLogout}
+						className="flex h-[48px] w-full grow items-center justify-center gap-2 rounded-md p-3 text-sm font-semibold md:flex-none md:justify-start md:p-2 md:px-3 shadow hover:bg-green-500 text-green-600 bg-emerald-100 hover:text-green-50 duration-200 ease-in-out">
+						<FaRightFromBracket className="w-6" />
+						<span className="sm:hidden lg:block">Sign out</span>
+					</button>
+				</>
+			) : (
 				<>
 					<Link
 						href={"/login"}
@@ -37,13 +65,6 @@ const AuthLinks = () => {
 						<span className="sm:hidden lg:block">Register</span>
 					</Link>
 				</>
-			) : (
-				<form action="">
-					<button className="flex h-[48px] w-full grow items-center justify-center gap-2 rounded-md p-3 text-sm font-semibold md:flex-none md:justify-start md:p-2 md:px-3 shadow hover:bg-green-500 text-green-600 bg-emerald-100 hover:text-green-50 duration-200 ease-in-out">
-						<FaRightFromBracket className="w-6" />
-						<span className="sm:hidden lg:block">Sign out</span>
-					</button>
-				</form>
 			)}
 		</>
 	);
