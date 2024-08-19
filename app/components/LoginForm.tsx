@@ -1,9 +1,16 @@
+"use client";
+import { useFormState, useFormStatus } from "react-dom";
 import { MdOutlineAlternateEmail } from "react-icons/md";
 import { RiLockPasswordFill } from "react-icons/ri";
+import { login } from "../actions/auth";
+import { LoginFormState } from "../lib/definitions";
 
 const LoginForm = () => {
+	const initialState: LoginFormState = { message: null, errors: {} };
+	const [state, formAction] = useFormState(login, initialState);
+	const { pending } = useFormStatus();
 	return (
-		<form action="">
+		<form action={formAction}>
 			<div className="flex flex-col bg-emerald-100 px-5 py-10 rounded-lg">
 				<h1 className="text-center font-semibold text-2xl mb-5">
 					Sign in to Continue
@@ -26,6 +33,14 @@ const LoginForm = () => {
 					</div>
 				</div>
 				{/* display an error of the email if any  */}
+				<div id="email-error" aria-live="polite" aria-atomic="true">
+					{state?.errors?.email &&
+						state.errors.email.map((error: string) => (
+							<p key={error} className="text-red-500 text-sm">
+								{error}
+							</p>
+						))}
+				</div>
 
 				<div className="mt-3 ">
 					<label
@@ -46,10 +61,20 @@ const LoginForm = () => {
 					</div>
 				</div>
 				{/* display an error of the email if any  */}
+				<div id="password-error" aria-live="polite" aria-atomic="true">
+					{state?.errors?.password &&
+						state.errors.password.map((error: string) => (
+							<p key={error} className="text-red-500 text-sm">
+								{error}
+							</p>
+						))}
+				</div>
 
 				<div className="mt-6">
-					<button className="rounded-md px-4 py-2 bg-green-500 hover:bg-green-600 duration-200 ease-in-out text-emerald-50 w-full ">
-						Login
+					<button
+						className="rounded-md px-4 py-2 bg-green-500 hover:bg-green-600 duration-200 ease-in-out text-emerald-50 w-full"
+						aria-disabled={pending}>
+						{pending ? "Logging..." : "Login"}
 					</button>
 				</div>
 			</div>

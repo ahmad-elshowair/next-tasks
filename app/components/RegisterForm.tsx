@@ -1,9 +1,17 @@
+"use client";
+import { register } from "@/app/actions/auth";
+import { RegisterFormState } from "@/app/lib/definitions";
+import { useFormState, useFormStatus } from "react-dom";
 import { MdOutlineAlternateEmail } from "react-icons/md";
 import { RiEnglishInput, RiLockPasswordFill } from "react-icons/ri";
 
 const RegisterForm = () => {
+	const initialState: RegisterFormState = { message: null, errors: {} };
+
+	const [state, formAction] = useFormState(register, initialState);
+	const { pending } = useFormStatus();
 	return (
-		<form action="">
+		<form action={formAction}>
 			<div className="flex flex-col bg-emerald-100 px-5 py-10 rounded-lg">
 				<h1 className="text-2xl font-bold text-center mb-5">Register</h1>
 				<div className="mt-3 ">
@@ -24,6 +32,14 @@ const RegisterForm = () => {
 					</div>
 				</div>
 				{/* display an error of the user name if any  */}
+				<div id="user_name-error" aria-atomic="true" aria-live="polite">
+					{state?.errors?.user_name &&
+						state.errors.user_name.map((error: string) => (
+							<p key={error} className="text-red-500 text-sm">
+								{error}
+							</p>
+						))}
+				</div>
 
 				<div className="mt-3 ">
 					<label
@@ -43,6 +59,14 @@ const RegisterForm = () => {
 					</div>
 				</div>
 				{/* display an error of the email if any  */}
+				<div id="email-error" aria-live="polite" aria-atomic="true">
+					{state?.errors?.email &&
+						state.errors.email.map((error: string) => (
+							<p className="mt-2 text-xs text-red-500" key={error}>
+								{error}
+							</p>
+						))}
+				</div>
 				<div className="mt-3 ">
 					<label
 						htmlFor="password"
@@ -62,10 +86,25 @@ const RegisterForm = () => {
 					</div>
 				</div>
 				{/* display an error of the password if any  */}
+				<div id="password-error" aria-live="polite" aria-atomic="true">
+					{state?.errors?.password && (
+						<div>
+							<p className="text-red-500">Password Must: </p>
+							{state.errors.password.map((error: string) => (
+								<p className="mt-2 pl-4 text-xs text-red-500" key={error}>
+									{error}
+								</p>
+							))}
+						</div>
+					)}
+				</div>
 
 				<div className="mt-6">
-					<button className="rounded-md px-4 py-2 bg-green-500 hover:bg-green-600 duration-200 ease-in-out text-emerald-50 w-full ">
-						Register
+					<button
+						className="rounded-md px-4 py-2 bg-green-500 hover:bg-green-600 duration-200 ease-in-out text-emerald-50 w-full"
+						type="submit"
+						aria-disabled={pending}>
+						{pending ? "Registering..." : "Register"}
 					</button>
 				</div>
 			</div>

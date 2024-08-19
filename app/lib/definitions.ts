@@ -45,3 +45,28 @@ export type UserSTable = {
 	created_at: string;
 	updated_at: string;
 };
+
+export type RegisterFormState = {
+	message?: string | null;
+	errors?: {
+		user_name?: string[];
+		email?: string[];
+		password?: string[];
+		other?: string[];
+	};
+};
+
+export type LoginFormState = {
+	message?: string | null;
+	errors?: {
+		email?: string[];
+		password?: string[];
+		other?: string[];
+	};
+};
+
+export type SessionPayload = {
+	user_id: string;
+	expiresAt: Date;
+	role: "user" | "admin";
+};
