@@ -5,8 +5,9 @@ import { usePathname } from "next/navigation";
 import { BiHome, BiSolidDashboard, BiTask } from "react-icons/bi";
 import { FaUsers } from "react-icons/fa6";
 
-const NavLinks = () => {
+const NavLinks = ({ role }: { role: "admin" | "user" | undefined }) => {
 	const pathname = usePathname();
+
 	const links = [
 		{ href: "/", label: "Home", icon: BiHome },
 		{ href: "/dashboard", label: "Dashboard", icon: BiSolidDashboard },
@@ -14,9 +15,20 @@ const NavLinks = () => {
 		{ href: "/tasks", label: "Tasks", icon: BiTask },
 		{ href: "/users", label: "Users", icon: FaUsers },
 	];
+
+	const filteredLinks = links.filter((link) => {
+		if (!role) {
+			return link.href === "/";
+		}
+		if (role !== "admin" && link.href === "/users") {
+			return false;
+		}
+		return true;
+	});
+
 	return (
 		<>
-			{links.map((link) => {
+			{filteredLinks.map((link) => {
 				const LintIcon = link.icon;
 				return (
 					<Link

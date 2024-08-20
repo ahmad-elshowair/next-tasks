@@ -6,6 +6,7 @@ import { verifySession } from "../lib/session";
 const Sidebar = async () => {
 	const session = await verifySession();
 	const isLoggedIn = !!session;
+	const role = session?.role;
 
 	return (
 		<>
@@ -15,7 +16,7 @@ const Sidebar = async () => {
 						<TaskLogo />
 					</section>
 					<div className="flex grow sm:flex-row justify-between sm:space-x-2 lg:flex-col lg:space-x-0 lg:space-y-2">
-						<NavLinks />
+						<NavLinks role={role} />
 						<div className="sm:hidden h-auto w-full grow rounded-md bg-emerald-100 lg:block shadow"></div>
 						<AuthLinks
 							isLoggedIn={isLoggedIn}
