@@ -23,6 +23,9 @@ const NavLinks = ({ role }: { role: "admin" | "user" | undefined }) => {
 		if (role !== "admin" && link.href === "/users") {
 			return false;
 		}
+		if (role !== "admin" && link.href === "/dashboard") {
+			return false;
+		}
 		return true;
 	});
 

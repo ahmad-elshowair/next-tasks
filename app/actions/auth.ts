@@ -75,8 +75,8 @@ export const register = async (
 			expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
 		});
 
-		// REDIRECT USER TO DASHBOARD
-		redirect("/dashboard");
+		// REDIRECT USER TO Tasks
+		redirect("/tasks");
 	} catch (error) {
 		await client.query("ROLLBACK");
 		console.error(`ERROR REGISTERING A USER: ${error as Error}`);
@@ -144,8 +144,8 @@ export const login = async (
 		expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
 	});
 
-	// REDIRECT TO DASHBOARD
-	redirect("/dashboard");
+	// REDIRECT TO Tasks
+	redirect("/tasks");
 };
 
 export const logout = async () => {

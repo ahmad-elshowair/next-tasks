@@ -1,7 +1,6 @@
 "use server";
 import { CreateTaskStateFrom, TasksTable } from "@/app/lib/definitions";
 import pool from "@/app/lib/pool";
-import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { PoolClient, QueryResult } from "pg";
 import { z } from "zod";
@@ -142,7 +141,6 @@ export const createTask = async (
 
 		await connection.query("COMMIT");
 
-		revalidatePath("/tasks");
 		redirect("/tasks");
 	} catch (error) {
 		await connection.query("ROLLBACK");
