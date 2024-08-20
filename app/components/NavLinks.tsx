@@ -12,7 +12,8 @@ const NavLinks = ({ role }: { role: "admin" | "user" | undefined }) => {
 		{ href: "/", label: "Home", icon: BiHome },
 		{ href: "/dashboard", label: "Dashboard", icon: BiSolidDashboard },
 
-		{ href: "/tasks", label: "Tasks", icon: BiTask },
+		{ href: "/my-tasks", label: "My Tasks", icon: BiTask },
+		{ href: "/all-tasks", label: "All Tasks", icon: BiTask },
 		{ href: "/users", label: "Users", icon: FaUsers },
 	];
 
@@ -24,6 +25,9 @@ const NavLinks = ({ role }: { role: "admin" | "user" | undefined }) => {
 			return false;
 		}
 		if (role !== "admin" && link.href === "/dashboard") {
+			return false;
+		}
+		if (role !== "admin" && link.href === "/all-tasks") {
 			return false;
 		}
 		return true;
