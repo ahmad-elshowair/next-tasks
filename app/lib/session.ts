@@ -40,6 +40,8 @@ export const createSession = async (user: SessionPayload) => {
 		const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
 		const session = await encrypt({
 			user_id: user.user_id,
+			user_name: user.user_name,
+			image_url: user.image_url,
 			expiresAt: expiresAt,
 			role: user.role,
 		});

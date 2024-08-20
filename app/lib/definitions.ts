@@ -67,6 +67,8 @@ export type LoginFormState = {
 
 export type SessionPayload = {
 	user_id: string;
+	user_name: string;
+	image_url: string;
 	expiresAt: Date;
 	role: "user" | "admin";
 };

@@ -10,9 +10,16 @@ import {
 } from "react-icons/fa6";
 import { logout } from "../actions/auth";
 
-const AuthLinks = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
+const AuthLinks = ({
+	isLoggedIn,
+	image_url,
+	user_name,
+}: {
+	isLoggedIn: boolean;
+	user_name?: string;
+	image_url?: string;
+}) => {
 	const pathname = usePathname();
-
 	const handleLogout = async () => {
 		await logout();
 	};
@@ -23,13 +30,13 @@ const AuthLinks = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
 					<div className="sm:flex h-[48px] w-full grow items-center justify-center gap-2 rounded-md p-3 text-sm font-semibold lg:flex-none md:justify-start md:p-2 md:px-3 shadow hover:bg-green-500 text-green-600 bg-emerald-100 hover:text-green-50 duration-200 ease-in-out">
 						<div className="flex justify-center items-center gap-2 cursor-pointer">
 							<Image
-								src={"/default-avatar.png"}
+								src={image_url || "/default-avatar.png"}
 								height={30}
 								width={30}
-								alt="avatar"
+								alt={`avatar`}
 								className="rounded-full"
 							/>
-							<span>{"User Name"}</span>
+							<span>{user_name || "User Name"}</span>
 						</div>
 					</div>
 

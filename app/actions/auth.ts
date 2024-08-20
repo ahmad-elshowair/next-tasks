@@ -69,6 +69,8 @@ export const register = async (
 		// CREATE USER SESSION
 		await createSession({
 			user_id: user.user_id,
+			user_name: user.user_name,
+			image_url: user.image_url,
 			role: user.role,
 			expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
 		});
@@ -136,6 +138,8 @@ export const login = async (
 	// IF LOGIN SUCCESSFUL, CREATE A SESSION FOR THE USER AND REDIRECT TO THE DASHBOARD
 	await createSession({
 		user_id: user.user_id,
+		user_name: user.user_name,
+		image_url: user.image_url,
 		role: user.role,
 		expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
 	});

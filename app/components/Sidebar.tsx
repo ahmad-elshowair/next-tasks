@@ -17,7 +17,11 @@ const Sidebar = async () => {
 					<div className="flex grow sm:flex-row justify-between sm:space-x-2 lg:flex-col lg:space-x-0 lg:space-y-2">
 						<NavLinks />
 						<div className="sm:hidden h-auto w-full grow rounded-md bg-emerald-100 lg:block shadow"></div>
-						<AuthLinks isLoggedIn={isLoggedIn} />
+						<AuthLinks
+							isLoggedIn={isLoggedIn}
+							user_name={session?.user_name}
+							image_url={session?.image_url}
+						/>
 					</div>
 				</aside>
 			</section>
