@@ -73,3 +73,11 @@ export type SessionPayload = {
 	expiresAt: Date;
 	role: "user" | "admin";
 };
+
+export type CreateTaskStateFrom = {
+	message?: string | null;
+	errors?: {
+		title?: string[];
+		other?: string[];
+	};
+};

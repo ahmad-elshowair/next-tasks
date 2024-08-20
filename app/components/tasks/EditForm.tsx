@@ -34,7 +34,7 @@ const EditForm = (task: Task) => {
 									id="done"
 									name="is_completed"
 									type="radio"
-									defaultChecked={task.is_completed}
+									checked={task.is_completed === true}
 									className="h-4 w-4 cursor-pointer border-emerald-300 bg-emerald-100 text-emerald-600 focus:ring-2"
 									aria-describedby="is_completed-error"
 								/>
@@ -50,7 +50,7 @@ const EditForm = (task: Task) => {
 									id="nope"
 									name="is_completed"
 									type="radio"
-									defaultChecked={task.is_completed}
+									checked={task.is_completed === false}
 									className="h-4 w-4 cursor-pointer border-emerald-300 bg-emerald-100 text-emerald-600 focus:ring-2"
 									aria-describedby="is_completed-error"
 								/>

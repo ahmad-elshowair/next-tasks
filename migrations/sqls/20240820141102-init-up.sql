@@ -5,8 +5,8 @@ CREATE TABLE IF NOT EXISTS users (
     user_name VARCHAR(50),
     email VARCHAR(50) UNIQUE,
     password VARCHAR(255),
-    image_url TEXT,
-    is_admin BOOLEAN DEFAULT FALSE,
+    image_url TEXT DEFAULT '',
+    role VARCHAR DEFAULT 'user',
     created_at timestamp DEFAULT NOW(),
     updated_at timestamp DEFAULT NOW()
 );

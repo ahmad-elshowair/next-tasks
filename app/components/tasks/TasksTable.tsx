@@ -62,7 +62,7 @@ const TasksTable = ({
 									<td className="py-3 pl-6 pr-3 whitespace-nowrap text-xs">
 										<div className="flex items-center gap-1">
 											<Image
-												src={task.image_url}
+												src={task.image_url || "/default-avatar.png"}
 												className="mr-2 rounded-full"
 												height={28}
 												width={28}

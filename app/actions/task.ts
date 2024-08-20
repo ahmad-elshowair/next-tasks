@@ -1,7 +1,10 @@
 "use server";
-import { TasksTable } from "@/app/lib/definitions";
+import { CreateTaskStateFrom, TasksTable } from "@/app/lib/definitions";
 import pool from "@/app/lib/pool";
-import { QueryResult } from "pg";
+import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
+import { PoolClient, QueryResult } from "pg";
+import { z } from "zod";
 import { verifySession } from "../lib/session";
 
 const ITEMS_PER_PAGE = 6;
@@ -97,6 +100,57 @@ export const fetchTaskById = async (id: string) => {
 	} catch (error) {
 		console.error(`Database Error: ${(error as Error).message}`);
 		throw new Error("Failed to fetch task by id", error as Error);
+	} finally {
+		// RELEASE THE CONNECTION
+		connection.release();
+	}
+};
+
+const CreateTaskSchema = z.object({
+	title: z
+		.string()
+		.min(10, { message: "describe your task with at least 10 characters!" }),
+	user_id: z.string(),
+});
+
+export const createTask = async (
+	prevState: CreateTaskStateFrom,
+	formData: FormData,
+): Promise<CreateTaskStateFrom> => {
+	const validatedFields = CreateTaskSchema.safeParse({
+		title: formData.get("title"),
+		user_id: session?.user_id,
+	});
+
+	if (!validatedFields.success) {
+		return {
+			errors: validatedFields.error.flatten().fieldErrors,
+			message: "Missing Fields, Failed to create tasks",
+		};
+	}
+
+	const { title, user_id } = validatedFields.data;
+
+	const connection: PoolClient = await pool.connect();
+	try {
+		await connection.query("BEGIN");
+
+		await connection.query(
+			`INSERT INTO tasks (title, user_id) VALUES ($1, $2)`,
+			[title, user_id],
+		);
+
+		await connection.query("COMMIT");
+
+		revalidatePath("/tasks");
+		redirect("/tasks");
+	} catch (error) {
+		await connection.query("ROLLBACK");
+		console.error(`Database Error: ${(error as Error).message}`);
+		return {
+			errors: { other: [(error as Error).message] },
+			message: "Failed to Create tasks",
+		};
 	} finally {
 		// RELEASE THE CONNECTION
 		connection.release();

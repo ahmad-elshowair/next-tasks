@@ -1,3 +1,3 @@
 DROP TABLE tasks;
 
-DROP Table users;
+DROP TABLE users;

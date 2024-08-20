@@ -24,7 +24,7 @@ const LatestTasks = async () => {
 									)}>
 									<div className="flex items-center">
 										<Image
-											src={task.image_url}
+											src={task.image_url || "/default-avatar.png"}
 											className="mr-4 rounded-full"
 											height={32}
 											width={32}

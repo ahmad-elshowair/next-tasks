@@ -79,7 +79,7 @@ export const register = async (
 		redirect("/dashboard");
 	} catch (error) {
 		await client.query("ROLLBACK");
-		console.error(`ERROR REGISTERING A USER: ${(error as Error).message}`);
+		console.error(`ERROR REGISTERING A USER: ${error as Error}`);
 		return {
 			errors: { email: [(error as Error).message] },
 			message: "Failed to Register",

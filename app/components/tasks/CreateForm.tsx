@@ -1,10 +1,15 @@
+"use client";
+import { createTask } from "@/app/actions/task";
+import { CreateTaskStateFrom } from "@/app/lib/definitions";
 import Link from "next/link";
+import { useFormState } from "react-dom";
 import { CiText } from "react-icons/ci";
-import { FaCircleCheck, FaClock } from "react-icons/fa6";
 
 const CreateForm = () => {
+	const initialState: CreateTaskStateFrom = { message: null, errors: {} };
+	const [state, formAction] = useFormState(createTask, initialState);
 	return (
-		<form action="">
+		<form action={formAction}>
 			<div className="rounded-lg bg-emerald-100 p-4 md:p-6">
 				<div className="mb-4">
 					<label className="mb-2 block text-sm font-medium" htmlFor="title">
@@ -13,8 +18,8 @@ const CreateForm = () => {
 					<div className="relative">
 						<input
 							id="title"
+							name="title"
 							className="peer block w-full rounded-md border border-emerald-200 py-2 pl-10 text-sm outline-2 placeholder:text-emerald-700"
-							defaultValue=""
 							aria-describedby="title-error"
 							placeholder="Describe your task..."
 						/>
@@ -22,48 +27,14 @@ const CreateForm = () => {
 					</div>
 				</div>
 				{/* Show error here  */}
-				<fieldset>
-					<legend className="mb-2 block text-sm font-medium capitalize">
-						set the task status
-					</legend>
-					<div className="rounded-md border border-emerald-200 bg-white px-[14px] py-3">
-						<div className="flex gap-4">
-							<div className="flex items-center">
-								<input
-									id="done"
-									name="is_completed"
-									type="radio"
-									value={"done"}
-									className="h-4 w-4 cursor-pointer border-emerald-300 bg-emerald-100 text-emerald-600 focus:ring-2"
-									aria-describedby="is_completed-error"
-								/>
-								<label
-									htmlFor="done"
-									className="ml-2 flex cursor-pointer items-center gap-1.5 rounded-full bg-emerald-100 px-3 py-1.5 text-xs font-medium text-emerald-600">
-									<span className="hidden md:inline">Done</span>
-									<FaCircleCheck className="w-4 -h-4" />
-								</label>
-							</div>
-							<div className="flex items-center">
-								<input
-									id="nope"
-									name="is_completed"
-									type="radio"
-									value={"nope"}
-									className="h-4 w-4 cursor-pointer border-emerald-300 bg-emerald-100 text-emerald-600 focus:ring-2"
-									aria-describedby="is_completed-error"
-								/>
-								<label
-									htmlFor="nope"
-									className="ml-2 flex cursor-pointer items-center gap-1.5 rounded-full bg-emerald-100 px-3 py-1.5 text-xs font-medium text-emerald-600">
-									<span className="hidden md:inline">Nope</span>
-									<FaClock className="w-4 -h-4" />
-								</label>
-							</div>
-						</div>
-					</div>
-				</fieldset>
-				{/* error goes here  */}
+				<div id="title-error">
+					{state.errors?.title &&
+						state.errors.title.map((error: string) => (
+							<p key={error} className="text-sm text-red-600">
+								{error}
+							</p>
+						))}
+				</div>
 			</div>
 			<div className="mt-6 flex justify-end gap-4">
 				<Link

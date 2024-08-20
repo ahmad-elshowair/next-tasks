@@ -1,8 +1,8 @@
 import { DeleteBtn, EditBtn } from "@/app/components/buttons";
-import { UserSTable } from "@/app/lib/definitions";
+import { UserTable } from "@/app/lib/definitions";
 import Image from "next/image";
 
-const UsersTable = ({ users }: { users: UserSTable[] }) => {
+const UsersTable = ({ users }: { users: UserTable[] }) => {
 	return (
 		<section className="mt-6 flow-root">
 			<div className="inline-block min-w-full align-middle">
@@ -38,7 +38,7 @@ const UsersTable = ({ users }: { users: UserSTable[] }) => {
 									className="w-full border-b py-3 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg">
 									<td className="py-3 pl-6 pr-3 whitespace-nowrap">
 										<Image
-											src={user.image_url || "/avatar.png"}
+											src={user.image_url || "/default-avatar.png"}
 											height={40}
 											width={40}
 											alt={`${user.user_name}'s profile avatar`}
