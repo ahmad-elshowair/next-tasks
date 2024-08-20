@@ -84,3 +84,21 @@ export const fetchTasksPages = async (query: string) => {
 		}
 	}
 };
+
+export const fetchTaskById = async (id: string) => {
+	const connection = await pool.connect();
+	try {
+		const sqlQuery = `
+			SELECT * FROM tasks WHERE task_id = $1;
+		`;
+		const result = await connection.query(sqlQuery, [id]);
+		const task = result.rows[0];
+		return task;
+	} catch (error) {
+		console.error(`Database Error: ${(error as Error).message}`);
+		throw new Error("Failed to fetch task by id", error as Error);
+	} finally {
+		// RELEASE THE CONNECTION
+		connection.release();
+	}
+};

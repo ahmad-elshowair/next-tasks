@@ -12,9 +12,10 @@ export type User = {
 export type Task = {
 	task_id: string;
 	title: string;
-	is_competed: boolean;
+	is_completed: boolean;
 	user_id: string;
 	created_at: string;
+	update_at: string;
 };
 
 export type TasksTable = {

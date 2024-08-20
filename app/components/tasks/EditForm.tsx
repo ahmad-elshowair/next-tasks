@@ -1,8 +1,9 @@
+import { Task } from "@/app/lib/definitions";
 import Link from "next/link";
 import { CiText } from "react-icons/ci";
 import { FaCircleCheck, FaClock } from "react-icons/fa6";
 
-const EditForm = () => {
+const EditForm = (task: Task) => {
 	return (
 		<form action="">
 			<div className="rounded-lg bg-emerald-100 p-4 md:p-6">
@@ -14,7 +15,7 @@ const EditForm = () => {
 						<input
 							id="title"
 							className="peer block w-full rounded-md border border-emerald-200 py-2 pl-10 text-sm outline-2 placeholder:text-emerald-700"
-							defaultValue=""
+							defaultValue={task.title}
 							aria-describedby="title-error"
 							placeholder="Describe your task..."
 						/>
@@ -33,7 +34,7 @@ const EditForm = () => {
 									id="done"
 									name="is_completed"
 									type="radio"
-									value={"done"}
+									defaultChecked={task.is_completed}
 									className="h-4 w-4 cursor-pointer border-emerald-300 bg-emerald-100 text-emerald-600 focus:ring-2"
 									aria-describedby="is_completed-error"
 								/>
@@ -49,7 +50,7 @@ const EditForm = () => {
 									id="nope"
 									name="is_completed"
 									type="radio"
-									value={"nope"}
+									defaultChecked={task.is_completed}
 									className="h-4 w-4 cursor-pointer border-emerald-300 bg-emerald-100 text-emerald-600 focus:ring-2"
 									aria-describedby="is_completed-error"
 								/>
