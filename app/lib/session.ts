@@ -45,7 +45,6 @@ export const createSession = async (user: SessionPayload) => {
 			expiresAt: expiresAt,
 			role: user.role,
 		});
-		console.log("Session Token Created:", session); // Debugging log
 		cookies().set("user-session", session, {
 			httpOnly: true,
 			secure: true,
@@ -84,7 +83,6 @@ export const updateSession = async () => {
 export const verifySession = async (): Promise<SessionPayload | null> => {
 	try {
 		const cookie = cookies().get("user-session")?.value;
-		console.log("Session Token Retrieved:", cookie); // Debugging log
 		if (!cookie) {
 			console.error("NO SESSION COOKIE FOUND!");
 			return null;
