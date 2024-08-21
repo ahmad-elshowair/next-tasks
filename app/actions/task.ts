@@ -1,5 +1,5 @@
 "use server";
-import { CreateTaskStateFrom, TasksTable } from "@/app/lib/definitions";
+import { TasksTable, UserCreateTaskStateFrom } from "@/app/lib/definitions";
 import pool from "@/app/lib/pool";
 import { redirect } from "next/navigation";
 import { PoolClient, QueryResult } from "pg";
@@ -10,7 +10,7 @@ const ITEMS_PER_PAGE = 6;
 
 const session = await verifySession();
 
-export const fetchFilteredTasks = async (
+export const fetchFilteredMyTasks = async (
 	query: string,
 	currentPage: number,
 ) => {
@@ -55,7 +55,49 @@ export const fetchFilteredTasks = async (
 	}
 };
 
-export const fetchTasksPages = async (query: string) => {
+export const fetchFilteredAllTasks = async (
+	query: string,
+	currentPage: number,
+) => {
+	const connection = await pool.connect();
+	const offset = (currentPage - 1) * ITEMS_PER_PAGE;
+	try {
+		const sqlQuery = `
+            SELECT
+                tasks.task_id,
+                tasks.title,
+                tasks.is_completed,
+                tasks.created_at,
+                users.user_name,
+                users.email,
+                users.image_url
+            FROM tasks
+            JOIN users ON tasks.user_id = users.user_id
+            WHERE
+				tasks.title ILIKE $1 OR
+				users.user_name ILIKE $1 OR
+				tasks.created_at::text ILIKE $1 OR
+				users.email ILIKE $1
+            ORDER BY tasks.created_at DESC
+            LIMIT $2 OFFSET $3
+            `;
+
+		const values = [`%${query}%`, ITEMS_PER_PAGE, offset];
+		const tasks: QueryResult<TasksTable> = await connection.query(
+			sqlQuery,
+			values,
+		);
+		return tasks.rows;
+	} catch (error) {
+		console.error(`Database Error: ${(error as Error).message}`);
+		throw new Error("Failed to fetch all filtered tasks", error as Error);
+	} finally {
+		// RELEASE THE CONNECTION
+		connection.release();
+	}
+};
+
+export const fetchMyTasksPages = async (query: string) => {
 	const connection = await pool.connect();
 	try {
 		const sqlQueryText = `
@@ -78,7 +120,37 @@ export const fetchTasksPages = async (query: string) => {
 		return totalPages;
 	} catch (error) {
 		console.error(`Database Error: ${(error as Error).message}`);
-		throw new Error("Failed to fetch tasks pages");
+		throw new Error("Failed to fetch my tasks pages", error as Error);
+	} finally {
+		// Ensure that the client is released in case of error or success
+		if (connection) {
+			connection.release();
+		}
+	}
+};
+
+export const fetchAllTasksPages = async (query: string) => {
+	const connection = await pool.connect();
+	try {
+		const sqlQueryText = `
+            SELECT
+                COUNT(*)
+            FROM tasks
+            JOIN users ON tasks.user_id = users.user_id
+            WHERE
+				tasks.title ILIKE $1 OR
+				tasks.created_at::text ILIKE $1 OR
+				users.user_name ILIKE $1 OR
+				users.email ILIKE $1
+				`;
+		const values = [`%${query}%`];
+		const result = await connection.query(sqlQueryText, values);
+		const totalTasks = parseInt(result.rows[0].count, 10);
+		const totalPages = Math.ceil(totalTasks / ITEMS_PER_PAGE);
+		return totalPages;
+	} catch (error) {
+		console.error(`Database Error: ${(error as Error).message}`);
+		throw new Error("Failed to fetch all tasks pages", error as Error);
 	} finally {
 		// Ensure that the client is released in case of error or success
 		if (connection) {
@@ -113,9 +185,9 @@ const CreateTaskSchema = z.object({
 });
 
 export const createTask = async (
-	prevState: CreateTaskStateFrom,
+	prevState: UserCreateTaskStateFrom,
 	formData: FormData,
-): Promise<CreateTaskStateFrom> => {
+): Promise<UserCreateTaskStateFrom> => {
 	const validatedFields = CreateTaskSchema.safeParse({
 		title: formData.get("title"),
 		user_id: session?.user_id,
@@ -141,7 +213,7 @@ export const createTask = async (
 
 		await connection.query("COMMIT");
 
-		redirect("/tasks");
+		redirect("/my-tasks");
 	} catch (error) {
 		await connection.query("ROLLBACK");
 		console.error(`Database Error: ${(error as Error).message}`);

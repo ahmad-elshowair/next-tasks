@@ -76,7 +76,7 @@ export const register = async (
 		});
 
 		// REDIRECT USER TO Tasks
-		redirect("/tasks");
+		redirect("/my-tasks");
 	} catch (error) {
 		await client.query("ROLLBACK");
 		console.error(`ERROR REGISTERING A USER: ${error as Error}`);
@@ -145,7 +145,7 @@ export const login = async (
 	});
 
 	// REDIRECT TO Tasks
-	redirect("/tasks");
+	redirect("/my-tasks");
 };
 
 export const logout = async () => {

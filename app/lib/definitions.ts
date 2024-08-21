@@ -74,10 +74,31 @@ export type SessionPayload = {
 	role: "user" | "admin";
 };
 
-export type CreateTaskStateFrom = {
+export type UserCreateTaskStateFrom = {
 	message?: string | null;
 	errors?: {
 		title?: string[];
 		other?: string[];
 	};
+};
+
+export type AdminCreateTaskStateFrom = {
+	message?: string | null;
+	errors?: {
+		title?: string[];
+		user_id?: string[];
+		other?: string[];
+	};
+};
+
+export type UserField = {
+	user_id: string;
+	user_name: string;
+};
+
+export type TaskFrom = {
+	user_id: string;
+	task_id: string;
+	is_completed: boolean;
+	title: string;
 };

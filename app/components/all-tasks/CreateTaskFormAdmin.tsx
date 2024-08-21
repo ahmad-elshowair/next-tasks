@@ -1,16 +1,40 @@
 "use client";
 import { createTask } from "@/app/actions/task";
-import { CreateTaskStateFrom } from "@/app/lib/definitions";
+import { AdminCreateTaskStateFrom, UserField } from "@/app/lib/definitions";
 import Link from "next/link";
 import { useFormState } from "react-dom";
 import { CiText } from "react-icons/ci";
+import { FaUser } from "react-icons/fa6";
 
-const CreateForm = () => {
-	const initialState: CreateTaskStateFrom = { message: null, errors: {} };
+const CreateTaskFormAdmin = ({ users }: { users: UserField[] }) => {
+	const initialState: AdminCreateTaskStateFrom = { message: null, errors: {} };
 	const [state, formAction] = useFormState(createTask, initialState);
 	return (
 		<form action={formAction}>
 			<div className="rounded-lg bg-emerald-100 p-4 md:p-6">
+				<div className="mb-4">
+					<label className="mb-2 block text-sm font-medium" htmlFor="user">
+						Choose User
+					</label>
+					<div className="relative">
+						<select
+							name="user"
+							id="user"
+							aria-describedby="user-error"
+							className="peer block w-full rounded-md border border-emerald-200 py-2 pl-10 text-sm outline-2 placeholder:text-emerald-700"
+							defaultValue={""}>
+							<option value="" disabled>
+								Select user
+							</option>
+							{users.map((user) => (
+								<option key={user.user_id} value={user.user_id}>
+									{user.user_name}
+								</option>
+							))}
+						</select>
+						<FaUser className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-emerald-700" />
+					</div>
+				</div>
 				<div className="mb-4">
 					<label className="mb-2 block text-sm font-medium" htmlFor="title">
 						Title
@@ -38,7 +62,7 @@ const CreateForm = () => {
 			</div>
 			<div className="mt-6 flex justify-end gap-4">
 				<Link
-					href={"/dashboard/tasks"}
+					href={"/all-tasks"}
 					className="flex h-10 items-center rounded-lg bg-emerald-100 px-4 text-sm font-medium text-emerald-600 transition-colors hover:bg-emerald-200">
 					Cancel
 				</Link>
@@ -52,4 +76,4 @@ const CreateForm = () => {
 	);
 };
 
-export default CreateForm;
+export default CreateTaskFormAdmin;

@@ -1,9 +1,9 @@
-import { Task } from "@/app/lib/definitions";
+import { TaskFrom } from "@/app/lib/definitions";
 import Link from "next/link";
 import { CiText } from "react-icons/ci";
 import { FaCircleCheck, FaClock } from "react-icons/fa6";
 
-const EditForm = (task: Task) => {
+const EditTaskFormUser = (task: TaskFrom) => {
 	return (
 		<form action="">
 			<div className="rounded-lg bg-emerald-100 p-4 md:p-6">
@@ -68,7 +68,7 @@ const EditForm = (task: Task) => {
 			</div>
 			<div className="mt-6 flex justify-end gap-4">
 				<Link
-					href={"/tasks"}
+					href={"/my-tasks"}
 					className="flex h-10 items-center rounded-lg bg-emerald-100 px-4 text-sm font-medium text-emerald-600 transition-colors hover:bg-emerald-200">
 					Cancel
 				</Link>
@@ -82,4 +82,4 @@ const EditForm = (task: Task) => {
 	);
 };
 
-export default EditForm;
+export default EditTaskFormUser;

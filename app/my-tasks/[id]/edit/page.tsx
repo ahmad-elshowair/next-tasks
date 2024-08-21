@@ -1,6 +1,6 @@
 import { fetchTaskById } from "@/app/actions/task";
 import Breadcrumb from "@/app/components/BreadCrumb";
-import EditForm from "@/app/components/tasks/EditForm";
+import EditTaskFormUser from "@/app/components/my-tasks/EditTaskFormUser";
 
 const EditTaskPage = async ({ params }: { params: { id: string } }) => {
 	const { id } = params;
@@ -9,15 +9,15 @@ const EditTaskPage = async ({ params }: { params: { id: string } }) => {
 		<section className="px-10 pt-20 pb-2">
 			<Breadcrumb
 				breadcrumbs={[
-					{ label: "Tasks", href: "/tasks" },
+					{ label: "My Tasks", href: "/my-tasks" },
 					{
 						label: "Edit Task",
-						href: `/tasks/${id}/edit`,
+						href: `/my-tasks/${id}/edit`,
 						active: true,
 					},
 				]}
 			/>
-			<EditForm {...task} />
+			<EditTaskFormUser {...task} />
 		</section>
 	);
 };

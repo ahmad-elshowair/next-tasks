@@ -1,9 +1,9 @@
 "use client";
+import { login } from "@/app/actions/auth";
+import { LoginFormState } from "@/app/lib/definitions";
 import { useFormState, useFormStatus } from "react-dom";
 import { MdOutlineAlternateEmail } from "react-icons/md";
 import { RiLockPasswordFill } from "react-icons/ri";
-import { login } from "../actions/auth";
-import { LoginFormState } from "../lib/definitions";
 
 const LoginForm = () => {
 	const initialState: LoginFormState = { message: null, errors: {} };

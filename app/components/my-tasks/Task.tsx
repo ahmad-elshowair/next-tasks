@@ -1,4 +1,4 @@
-import TaskStatus from "@/app/components/tasks/TaskStatus";
+import TaskStatus from "@/app/components/my-tasks/TaskStatus";
 import { TasksTable } from "@/app/lib/definitions";
 import Image from "next/image";
 import Link from "next/link";

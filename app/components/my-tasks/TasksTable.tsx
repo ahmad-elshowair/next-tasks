@@ -1,11 +1,13 @@
 import { DeleteBtn, EditBtn } from "@/app/components/buttons";
-import Task from "@/app/components/tasks/Task";
-import TaskStatus from "@/app/components/tasks/TaskStatus";
+import Task from "@/app/components/my-tasks/Task";
+import TaskStatus from "@/app/components/my-tasks/TaskStatus";
 import Image from "next/image";
 
 const TasksTable = ({
 	tasks,
+	edit_href,
 }: {
+	edit_href: string;
 	tasks: Array<{
 		task_id: string;
 		title: string;
@@ -87,7 +89,7 @@ const TasksTable = ({
 									</td>
 									<td className="whitespace-nowrap px-3 ">
 										<div className="py-3 flex items-center gap-3">
-											<EditBtn href={`/tasks/${task.task_id}/edit`} />
+											<EditBtn href={`/${edit_href}/${task.task_id}/edit`} />
 											<form action={task.task_id}>
 												<DeleteBtn />
 											</form>

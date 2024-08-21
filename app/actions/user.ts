@@ -1,4 +1,4 @@
-import { User, UserTable } from "@/app/lib/definitions";
+import { User, UserField, UserTable } from "@/app/lib/definitions";
 import pool from "@/app/lib/pool";
 import { verifySession } from "@/app/lib/session";
 import { QueryResult } from "pg";
@@ -87,5 +87,21 @@ export const fetchUserByEmail = async (email: string) => {
 		throw new Error((error as Error).message);
 	} finally {
 		client.release();
+	}
+};
+
+export const fetchUsersForTasks = async () => {
+	const connection = await pool.connect();
+	try {
+		const result: QueryResult<UserField> = await connection.query(`
+			SELECT user_id, user_name FROM users ORDER By user_name ASC
+			`);
+		const users = result.rows;
+		return users;
+	} catch (error) {
+		console.error(`Database Error: ${error as Error}`);
+		throw new Error("Failed to Users for Tasks", error as Error);
+	} finally {
+		connection.release();
 	}
 };
