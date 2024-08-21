@@ -76,7 +76,6 @@ export const register = async (
 		});
 
 		// REDIRECT USER TO Tasks
-		redirect("/my-tasks");
 	} catch (error) {
 		await client.query("ROLLBACK");
 		console.error(`ERROR REGISTERING A USER: ${error as Error}`);
@@ -87,6 +86,7 @@ export const register = async (
 	} finally {
 		client.release();
 	}
+	redirect("/my-tasks");
 };
 
 const LoginSchema = z.object({
