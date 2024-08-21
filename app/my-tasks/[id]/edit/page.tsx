@@ -1,8 +1,8 @@
 import { fetchTaskById } from "@/app/actions/task";
 import Breadcrumb from "@/app/components/BreadCrumb";
-import EditTaskFormUser from "@/app/components/my-tasks/EditTaskFormUser";
+import EditUserTaskForm from "@/app/components/my-tasks/EditUserTaskForm";
 
-const EditTaskPage = async ({ params }: { params: { id: string } }) => {
+const EditUserTaskPage = async ({ params }: { params: { id: string } }) => {
 	const { id } = params;
 	const task = await fetchTaskById(id);
 	return (
@@ -17,9 +17,9 @@ const EditTaskPage = async ({ params }: { params: { id: string } }) => {
 					},
 				]}
 			/>
-			<EditTaskFormUser {...task} />
+			<EditUserTaskForm {...task} />
 		</section>
 	);
 };
 
-export default EditTaskPage;
+export default EditUserTaskPage;

@@ -3,7 +3,7 @@ import Link from "next/link";
 import { CiText } from "react-icons/ci";
 import { FaCircleCheck, FaClock } from "react-icons/fa6";
 
-const EditTaskFormUser = (task: TaskFrom) => {
+const EditUserTaskForm = (task: TaskFrom) => {
 	return (
 		<form action="">
 			<div className="rounded-lg bg-emerald-100 p-4 md:p-6">
@@ -82,4 +82,4 @@ const EditTaskFormUser = (task: TaskFrom) => {
 	);
 };
 
-export default EditTaskFormUser;
+export default EditUserTaskForm;

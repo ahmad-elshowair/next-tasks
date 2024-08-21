@@ -182,18 +182,18 @@ export const fetchTaskById = async (id: string) => {
 	}
 };
 
-const CreateMyTaskSchema = z.object({
+const CreateUserTaskSchema = z.object({
 	title: z
 		.string()
 		.min(10, { message: "describe your task with at least 10 characters!" }),
 	user_id: z.string(),
 });
 
-export const createMyTask = async (
+export const createUserTask = async (
 	prevState: UserCreateTaskStateFrom,
 	formData: FormData,
 ): Promise<UserCreateTaskStateFrom> => {
-	const validatedFields = CreateMyTaskSchema.safeParse({
+	const validatedFields = CreateUserTaskSchema.safeParse({
 		title: formData.get("title"),
 		user_id: session?.user_id,
 	});
@@ -217,8 +217,6 @@ export const createMyTask = async (
 		);
 
 		await connection.query("COMMIT");
-		revalidatePath("/my-tasks");
-		redirect("/my-tasks");
 	} catch (error) {
 		await connection.query("ROLLBACK");
 		console.error(`Database Error: ${(error as Error).message}`);
@@ -230,6 +228,8 @@ export const createMyTask = async (
 		// RELEASE THE CONNECTION
 		connection.release();
 	}
+	revalidatePath("/my-tasks");
+	redirect("/my-tasks");
 };
 
 const CreateAdminTaskSchema = z.object({

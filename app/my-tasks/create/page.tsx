@@ -1,5 +1,5 @@
 import Breadcrumb from "@/app/components/BreadCrumb";
-import CreateTaskFormUser from "@/app/components/my-tasks/CreateTaskFormUser";
+import CreateUserTaskForm from "@/app/components/my-tasks/CreateUserTaskForm";
 
 const CreateTaskPageUser = () => {
 	return (
@@ -17,7 +17,7 @@ const CreateTaskPageUser = () => {
 					},
 				]}
 			/>
-			<CreateTaskFormUser />
+			<CreateUserTaskForm />
 		</section>
 	);
 };
