@@ -21,14 +21,14 @@ const EditTaskFormAdmin = ({
 		<form action={""}>
 			<div className="rounded-lg bg-emerald-100 p-4 md:p-6">
 				<div className="mb-4">
-					<label className="mb-2 block text-sm font-medium" htmlFor="user">
+					<label className="mb-2 block text-sm font-medium" htmlFor="user_id">
 						Choose User
 					</label>
 					<div className="relative">
 						<select
-							name="user"
-							id="user"
-							aria-describedby="user-error"
+							name="user_id"
+							id="user_id"
+							aria-describedby="user_id-error"
 							className="peer block w-full rounded-md border border-emerald-200 py-2 pl-10 text-sm outline-2 placeholder:text-emerald-700"
 							defaultValue={task.user_id}>
 							<option value="" disabled>
