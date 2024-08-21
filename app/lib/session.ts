@@ -85,7 +85,7 @@ export const verifySession = async (): Promise<SessionPayload | null> => {
 		const cookie = cookies().get("user-session")?.value;
 		if (!cookie) {
 			console.error("NO SESSION COOKIE FOUND!");
-			return null;
+			redirect("/login");
 		}
 		const session = await decrypt(cookie);
 		if (!session) {

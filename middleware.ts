@@ -1,23 +1,19 @@
-import { decrypt } from "@/app/lib/session";
-import { cookies } from "next/headers";
+import { verifySession } from "@/app/lib/session";
 import { NextRequest, NextResponse } from "next/server";
 
+//  SPECIFY PROTECTED AND PUBLIC ROUTES
+const protectedRoutes = ["/dashboard", "/users", "/my-tasks", "/all-tasks"];
+const adminRoutes = ["/dashboard", "/users", "/all-tasks"];
 export default async function middleware(req: NextRequest) {
-	//  CHECK IF THE ROUTE IS PROTECTED
-	const protectedRoutes = ["/dashboard", "/users", "/my-tasks", "/all-tasks"];
 	const currentPath = req.nextUrl.pathname;
 	const isProtectedRoute = protectedRoutes.includes(currentPath);
+	const isAdminRoute = adminRoutes.includes(currentPath);
+	// GET THE session
+	const session = await verifySession();
+
 	if (isProtectedRoute) {
-		// CHECK FOR VALID SESSION
-		const cookie = cookies().get("user-session")?.value;
-		if (!cookie) {
-			// IF NO COOKIE, REDIRECT TO LOGIN PAGE
-			return NextResponse.redirect(new URL("/login", req.url));
-		}
-		const session = await decrypt(cookie);
-		// REDIRECT UNAUTHED USERS
-		if (!session) {
-			return NextResponse.redirect(new URL("/login", req.nextUrl));
+		if (isAdminRoute && session?.role !== "admin") {
+			return NextResponse.rewrite(new URL("/not-authorized", req.url));
 		}
 	}
 
