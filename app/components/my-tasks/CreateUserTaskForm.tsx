@@ -2,12 +2,15 @@
 import { createUserTask } from "@/app/actions/task";
 import { UserCreateTaskStateFrom } from "@/app/lib/definitions";
 import Link from "next/link";
-import { useFormState } from "react-dom";
+import { useActionState } from "react";
 import { CiText } from "react-icons/ci";
 
 const CreateUserTaskForm = () => {
 	const initialState: UserCreateTaskStateFrom = { message: null, errors: {} };
-	const [state, formAction] = useFormState(createUserTask, initialState);
+	const [state, formAction, pending] = useActionState(
+		createUserTask,
+		initialState,
+	);
 	return (
 		<form action={formAction}>
 			<div className="rounded-lg bg-emerald-100 p-4 md:p-6">
@@ -44,8 +47,9 @@ const CreateUserTaskForm = () => {
 				</Link>
 				<button
 					type="submit"
-					className="h-10 rounded-lg bg-green-500 px-4 text-sm font-medium transition-colors hover:bg-green-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-500 active:bg-green-500 aria-disabled:cursor-not-allowed aria-disabled:opacity-50 text-green-50">
-					Create Task
+					className="h-10 rounded-lg bg-green-500 px-4 text-sm font-medium transition-colors hover:bg-green-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-500 active:bg-green-500 aria-disabled:cursor-not-allowed aria-disabled:opacity-50 text-green-50"
+					aria-disabled={pending}>
+					{pending ? "Creating..." : "Create Task"}
 				</button>
 			</div>
 		</form>
