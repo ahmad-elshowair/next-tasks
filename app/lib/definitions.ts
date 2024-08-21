@@ -87,6 +87,7 @@ export type AdminCreateTaskStateFrom = {
 	errors?: {
 		title?: string[];
 		user_id?: string[];
+		is_completed?: string[];
 		other?: string[];
 	};
 };

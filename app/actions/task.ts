@@ -1,6 +1,11 @@
 "use server";
-import { TasksTable, UserCreateTaskStateFrom } from "@/app/lib/definitions";
+import {
+	AdminCreateTaskStateFrom,
+	TasksTable,
+	UserCreateTaskStateFrom,
+} from "@/app/lib/definitions";
 import pool from "@/app/lib/pool";
+import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { PoolClient, QueryResult } from "pg";
 import { z } from "zod";
@@ -177,18 +182,18 @@ export const fetchTaskById = async (id: string) => {
 	}
 };
 
-const CreateTaskSchema = z.object({
+const CreateMyTaskSchema = z.object({
 	title: z
 		.string()
 		.min(10, { message: "describe your task with at least 10 characters!" }),
 	user_id: z.string(),
 });
 
-export const createTask = async (
+export const createMyTask = async (
 	prevState: UserCreateTaskStateFrom,
 	formData: FormData,
 ): Promise<UserCreateTaskStateFrom> => {
-	const validatedFields = CreateTaskSchema.safeParse({
+	const validatedFields = CreateMyTaskSchema.safeParse({
 		title: formData.get("title"),
 		user_id: session?.user_id,
 	});
@@ -212,7 +217,7 @@ export const createTask = async (
 		);
 
 		await connection.query("COMMIT");
-
+		revalidatePath("/my-tasks");
 		redirect("/my-tasks");
 	} catch (error) {
 		await connection.query("ROLLBACK");
@@ -225,4 +230,59 @@ export const createTask = async (
 		// RELEASE THE CONNECTION
 		connection.release();
 	}
+};
+
+const CreateAdminTaskSchema = z.object({
+	user_id: z.string({ invalid_type_error: "Please Select  a User" }),
+	title: z.string().min(10, {
+		message: "Please describe your task with at least 10 characters!",
+	}),
+	is_completed: z.boolean({
+		invalid_type_error: "Please select the task status",
+	}),
+});
+export const createAdminTask = async (
+	prevState: AdminCreateTaskStateFrom,
+	formData: FormData,
+): Promise<AdminCreateTaskStateFrom> => {
+	const validatedFields = CreateAdminTaskSchema.safeParse({
+		user_id: formData.get("user_id"),
+		title: formData.get("title"),
+		is_completed: formData.get("is_completed") === "true",
+	});
+
+	if (!validatedFields.success) {
+		return {
+			errors: validatedFields.error.flatten().fieldErrors,
+			message: "Failed to Create Admin tasks",
+		};
+	}
+	const { user_id, title, is_completed } = validatedFields.data;
+	const connection = await pool.connect();
+	try {
+		await connection.query("BEGIN");
+
+		const sqlQuery = `
+		INSERT INTO tasks (user_id, title, is_completed) VALUES($1, $2, $3)`;
+
+		const values = [user_id, title, is_completed];
+
+		await connection.query(sqlQuery, values);
+
+		await connection.query("COMMIT");
+	} catch (error) {
+		await connection.query("ROLLBACK");
+
+		console.error(`Database Error: ${error as Error}`);
+		return {
+			errors: {
+				other: [(error as Error).message],
+			},
+		};
+	} finally {
+		connection.release();
+	}
+
+	revalidatePath("all-tasks");
+	redirect("/all-tasks");
 };

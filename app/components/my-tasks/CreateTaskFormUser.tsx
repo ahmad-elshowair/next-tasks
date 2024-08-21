@@ -1,5 +1,5 @@
 "use client";
-import { createTask } from "@/app/actions/task";
+import { createMyTask } from "@/app/actions/task";
 import { UserCreateTaskStateFrom } from "@/app/lib/definitions";
 import Link from "next/link";
 import { useFormState } from "react-dom";
@@ -7,7 +7,7 @@ import { CiText } from "react-icons/ci";
 
 const CreateTaskFormUser = () => {
 	const initialState: UserCreateTaskStateFrom = { message: null, errors: {} };
-	const [state, formAction] = useFormState(createTask, initialState);
+	const [state, formAction] = useFormState(createMyTask, initialState);
 	return (
 		<form action={formAction}>
 			<div className="rounded-lg bg-emerald-100 p-4 md:p-6">
