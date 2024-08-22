@@ -125,7 +125,9 @@ const CreateUserForm = () => {
 									className="h-4 w-4 cursor-pointer border-emerald-300 bg-emerald-100 text-emerald-600 focus:ring-2"
 									aria-describedby="role-error"
 								/>
-								<label className="ml-2 flex cursor-pointer items-center gap-1.5 rounded-full bg-emerald-100 px-3 py-1.5 text-xs font-medium text-emerald-600">
+								<label
+									className="ml-2 flex cursor-pointer items-center gap-1.5 rounded-full bg-emerald-100 px-3 py-1.5 text-xs font-medium text-emerald-600"
+									htmlFor="user">
 									<span className="text-sm hidden md:inline-block">User</span>
 									<FaRegUser className="h-4 w-4" />
 								</label>
@@ -138,7 +140,9 @@ const CreateUserForm = () => {
 									value="admin"
 									className="h-4 w-4 cursor-pointer border-emerald-300 bg-emerald-100 text-emerald-600 focus:ring-2"
 								/>
-								<label className="ml-2 flex cursor-pointer items-center gap-1.5 rounded-full bg-emerald-100 px-3 py-1.5 text-xs font-medium text-emerald-600">
+								<label
+									className="ml-2 flex cursor-pointer items-center gap-1.5 rounded-full bg-emerald-100 px-3 py-1.5 text-xs font-medium text-emerald-600"
+									htmlFor="admin">
 									<span className="text-sm hidden md:inline-block">Admin</span>
 									<RiAdminLine className="h-4 w-4" />
 								</label>
@@ -183,6 +187,7 @@ const CreateUserForm = () => {
 					<input
 						type="file"
 						id="image_url"
+						name="image_url"
 						className="hidden"
 						onChange={handleFile}
 					/>

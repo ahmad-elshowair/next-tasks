@@ -16,7 +16,7 @@ export default async function Home() {
 							<span className="text-green-400 ml-4">{session?.user_name}</span>
 						</p>
 						<Link
-							href="/tasks"
+							href="/my-tasks"
 							className="flex text-lg font-bold items-center gap-2 hover:text-green-500 group duration-500 ease-in-out">
 							<span className="group-hover:mr-4">View Tasks</span>
 							<i className="text-2xl">
