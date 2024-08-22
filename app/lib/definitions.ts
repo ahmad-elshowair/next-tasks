@@ -103,3 +103,15 @@ export type TaskFrom = {
 	is_completed: boolean;
 	title: string;
 };
+
+export type CreateUserFormState = {
+	message?: string | null;
+	errors?: {
+		user_name?: string[];
+		email?: string[];
+		password?: string[];
+		image_url?: string[];
+		role?: string[];
+		other?: string[];
+	};
+};

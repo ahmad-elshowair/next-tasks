@@ -55,7 +55,7 @@ export const register = async (
 			message: "Email already exist",
 		};
 	}
-	// create a user
+	// Register
 	const client = await pool.connect();
 	try {
 		await client.query("BEGIN");

@@ -1,7 +1,9 @@
 "use client";
+import { CreateUser } from "@/app/actions/user";
+import { CreateUserFormState } from "@/app/lib/definitions";
 import Image from "next/image";
 import Link from "next/link";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useActionState, useState } from "react";
 import { FaRegUser, FaUser } from "react-icons/fa6";
 import { MdOutlineAlternateEmail } from "react-icons/md";
 import { RiAdminLine, RiLockPasswordFill } from "react-icons/ri";
@@ -18,9 +20,10 @@ const CreateUserForm = () => {
 			setFileName(file.name);
 		}
 	};
-
+	const initialState: CreateUserFormState = { message: null, errors: {} };
+	const [state, formAction, pending] = useActionState(CreateUser, initialState);
 	return (
-		<form>
+		<form action={formAction}>
 			<div className="rounded-lg bg-emerald-100 p-4 md:p-6">
 				<div className="mb-4">
 					<label
@@ -42,6 +45,14 @@ const CreateUserForm = () => {
 					</div>
 				</div>
 				{/* DISPLAY ERROR IF ANY FOR THE USER NAME */}
+				<div id="user_name-error" aria-live="polite" aria-atomic="true">
+					{state.errors?.user_name &&
+						state.errors.user_name.map((error: string) => (
+							<p key={error} className="text-sm text-red-600">
+								{error}
+							</p>
+						))}
+				</div>
 				<div className="mb-4">
 					<label
 						className="block mb-2 text-sm font-medium text-emerald-900"
@@ -61,6 +72,14 @@ const CreateUserForm = () => {
 					</div>
 				</div>
 				{/* DISPLAY ERROR IF ANY FOR THE EMAIL */}
+				<div id="email-error" aria-live="polite" aria-atomic="true">
+					{state.errors?.email &&
+						state.errors.email.map((error: string) => (
+							<p key={error} className="text-sm text-red-600">
+								{error}
+							</p>
+						))}
+				</div>
 				<div className="mb-4">
 					<label
 						className="block mb-2 text-sm font-medium text-emerald-900"
@@ -81,6 +100,18 @@ const CreateUserForm = () => {
 					</div>
 				</div>
 				{/* DISPLAY ERROR IF ANY FOR THE PASSWORD */}
+				<div id="password-error" aria-live="polite" aria-atomic="true">
+					{state.errors?.password && (
+						<div>
+							<p className="text-red-500">Password must:</p>
+							{state.errors.password.map((error: string) => (
+								<p key={error} className="text-sm text-red-600">
+									{error}
+								</p>
+							))}
+						</div>
+					)}
+				</div>
 				<fieldset>
 					<legend className="mb-2 block text-sm font-medium">Role</legend>
 					<div className="rounded-md border border-emerald-200 bg-white px-[14px] py-3">
@@ -116,6 +147,14 @@ const CreateUserForm = () => {
 					</div>
 				</fieldset>
 				{/* DISPLAY ERROR IF ANY FOR THE ROLE */}
+				<div id="role-error" aria-live="polite" aria-atomic="true">
+					{state.errors?.role &&
+						state.errors.role.map((error: string) => (
+							<p key={error} className="text-sm text-red-600">
+								{error}
+							</p>
+						))}
+				</div>
 
 				<div className="mt-4 flex items-center gap-6">
 					{file ? (
@@ -157,8 +196,9 @@ const CreateUserForm = () => {
 				</Link>
 				<button
 					type="submit"
-					className="rounded-md bg-green-500 px-6 py-2 text-sm font-medium transition-colors hover:bg-green-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-50 active:bg-green-600 duration-200 aria-disabled:cursor-not-allowed aria-disabled:opacity-50 text-green-50">
-					Create User
+					className="rounded-md bg-green-500 px-6 py-2 text-sm font-medium transition-colors hover:bg-green-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-50 active:bg-green-600 duration-200 aria-disabled:cursor-not-allowed aria-disabled:opacity-50 text-green-50"
+					aria-disabled={pending}>
+					{pending ? "Creating..." : "Create User"}
 				</button>
 			</div>
 		</form>
