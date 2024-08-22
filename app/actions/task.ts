@@ -3,13 +3,13 @@ import {
 	AdminCreateTaskStateFrom,
 	TasksTable,
 	UserCreateTaskStateFrom,
-} from "@/app/lib/definitions";
-import pool from "@/app/lib/pool";
+} from "@/lib/definitions";
+import pool from "@/lib/pool";
+import { verifySession } from "@/lib/session";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { PoolClient, QueryResult } from "pg";
 import { z } from "zod";
-import { verifySession } from "../lib/session";
 
 const ITEMS_PER_PAGE = 6;
 

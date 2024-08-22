@@ -1,5 +1,5 @@
-import Breadcrumb from "@/app/components/BreadCrumb";
-import CreateUserForm from "@/app/components/users/CreateUserForm";
+import Breadcrumb from "@/components/BreadCrumb";
+import CreateUserForm from "@/components/users/CreateUserForm";
 
 const CreateUser = () => {
 	return (

@@ -1,6 +1,6 @@
 "use client";
 import { register } from "@/app/actions/auth";
-import { RegisterFormState } from "@/app/lib/definitions";
+import { RegisterFormState } from "@/lib/definitions";
 import { useFormState, useFormStatus } from "react-dom";
 import { MdOutlineAlternateEmail } from "react-icons/md";
 import { RiEnglishInput, RiLockPasswordFill } from "react-icons/ri";

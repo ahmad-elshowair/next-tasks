@@ -1,6 +1,6 @@
 "use client";
 import { login } from "@/app/actions/auth";
-import { LoginFormState } from "@/app/lib/definitions";
+import { LoginFormState } from "@/lib/definitions";
 import { useFormState, useFormStatus } from "react-dom";
 import { MdOutlineAlternateEmail } from "react-icons/md";
 import { RiLockPasswordFill } from "react-icons/ri";

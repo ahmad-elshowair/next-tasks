@@ -1,4 +1,4 @@
-import { SessionPayload } from "@/app/lib/definitions";
+import { SessionPayload } from "@/lib/definitions";
 import { jwtVerify, SignJWT } from "jose";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";

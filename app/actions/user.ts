@@ -4,15 +4,15 @@ import {
 	User,
 	UserField,
 	UserTable,
-} from "@/app/lib/definitions";
-import pool from "@/app/lib/pool";
-import { verifySession } from "@/app/lib/session";
-import { hash } from "@/app/lib/utils";
+} from "@/lib/definitions";
+import { hash } from "@/lib/helpers";
+import pool from "@/lib/pool";
+import { verifySession } from "@/lib/session";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { QueryResult } from "pg";
 import { z } from "zod";
-import { uploadFile } from "../lib/upload-file";
+import { uploadFile } from "../../lib/upload-file";
 
 const ITEMS_PER_PAGE = 3;
 export const fetchFilteredUsers = async (

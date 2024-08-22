@@ -1,5 +1,5 @@
-import TaskStatus from "@/app/components/my-tasks/TaskStatus";
-import { TasksTable } from "@/app/lib/definitions";
+import TaskStatus from "@/components/my-tasks/TaskStatus";
+import { TasksTable } from "@/lib/definitions";
 import Image from "next/image";
 import Link from "next/link";
 import { FaPencil, FaTrashCan } from "react-icons/fa6";

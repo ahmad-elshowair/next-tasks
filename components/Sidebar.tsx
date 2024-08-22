@@ -1,6 +1,6 @@
-import AuthLinks from "@/app/components/AuthLinks";
-import NavLinks from "@/app/components/NavLinks";
-import TaskLogo from "@/app/components/TaskLogo";
+import AuthLinks from "@/components/AuthLinks";
+import NavLinks from "@/components/NavLinks";
+import TaskLogo from "@/components/TaskLogo";
 import { verifySession } from "../lib/session";
 
 const Sidebar = async () => {

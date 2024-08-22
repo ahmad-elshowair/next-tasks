@@ -8,7 +8,7 @@ import {
 	FaRightFromBracket,
 	FaUserPlus,
 } from "react-icons/fa6";
-import { logout } from "../actions/auth";
+import { logout } from "../app/actions/auth";
 
 const AuthLinks = ({
 	isLoggedIn,

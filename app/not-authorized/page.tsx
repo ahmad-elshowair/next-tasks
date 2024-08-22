@@ -1,4 +1,4 @@
-import NotAuthorized from "@/app/components/NotAuthorized";
+import NotAuthorized from "@/components/NotAuthorized";
 
 const NotAuthorizedPage = () => {
 	return (

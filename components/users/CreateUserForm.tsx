@@ -1,6 +1,6 @@
 "use client";
 import { CreateUser } from "@/app/actions/user";
-import { CreateUserFormState } from "@/app/lib/definitions";
+import { CreateUserFormState } from "@/lib/definitions";
 import Image from "next/image";
 import Link from "next/link";
 import { ChangeEvent, useActionState, useState } from "react";

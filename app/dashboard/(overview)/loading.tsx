@@ -1,4 +1,4 @@
-import { DashboardSkeleton } from "@/app/components/skeletons";
+import { DashboardSkeleton } from "@/components/skeletons";
 
 const Loading = () => {
 	return <DashboardSkeleton />;

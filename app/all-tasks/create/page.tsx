@@ -1,6 +1,6 @@
 import { fetchUsersForTasks } from "@/app/actions/user";
-import CreateTaskFormAdmin from "@/app/components/all-tasks/CreateTaskFormAdmin";
-import Breadcrumb from "@/app/components/BreadCrumb";
+import CreateTaskFormAdmin from "@/components/all-tasks/CreateTaskFormAdmin";
+import Breadcrumb from "@/components/BreadCrumb";
 
 const CreateTaskAdminPage = async () => {
 	const users = await fetchUsersForTasks();

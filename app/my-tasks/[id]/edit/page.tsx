@@ -1,6 +1,6 @@
 import { fetchTaskById } from "@/app/actions/task";
-import Breadcrumb from "@/app/components/BreadCrumb";
-import EditUserTaskForm from "@/app/components/my-tasks/EditUserTaskForm";
+import Breadcrumb from "@/components/BreadCrumb";
+import EditUserTaskForm from "@/components/my-tasks/EditUserTaskForm";
 
 const EditUserTaskPage = async ({ params }: { params: { id: string } }) => {
 	const { id } = params;

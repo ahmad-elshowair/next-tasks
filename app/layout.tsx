@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 
-import { inter } from "@/app/components/fonts";
-import Sidebar from "@/app/components/Sidebar";
 import "@/app/globals.css";
+import { inter } from "@/components/fonts";
+import Sidebar from "@/components/Sidebar";
 
 export const metadata: Metadata = {
 	title: "Tasks",

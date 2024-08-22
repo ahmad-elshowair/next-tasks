@@ -1,5 +1,5 @@
 import { fetchLatestTasks } from "@/app/actions/dashboard";
-import TaskStatus from "@/app/components/my-tasks/TaskStatus";
+import TaskStatus from "@/components/my-tasks/TaskStatus";
 import clsx from "clsx";
 import Image from "next/image";
 import { FaClockRotateLeft } from "react-icons/fa6";

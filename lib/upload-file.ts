@@ -54,7 +54,7 @@ export const uploadFile = async (
 		// CREATE A UNIQUE FILE NAME.
 		const uniqueFilename = `${new Date().getDate()}-${
 			new Date().getMonth() + 1
-		}-${new Date().getFullYear()}-${new Date().getMilliseconds}-${file.name}`;
+		}-${new Date().getFullYear()}-${new Date().getMilliseconds()}-${file.name}`;
 
 		// ENSURE THE UPLOAD DIRECTORY EXISTS.
 		const uploadDir = path.join(process.cwd(), "public", directory);

@@ -1,5 +1,5 @@
-import { DeleteBtn, EditBtn } from "@/app/components/buttons";
-import { UserTable } from "@/app/lib/definitions";
+import { DeleteBtn, EditBtn } from "@/components/buttons";
+import { UserTable } from "@/lib/definitions";
 import Image from "next/image";
 
 const UsersTable = ({ users }: { users: UserTable[] }) => {

@@ -1,4 +1,4 @@
-import { verifySession } from "@/app/lib/session";
+import { verifySession } from "@/lib/session";
 import { NextRequest, NextResponse } from "next/server";
 
 //  SPECIFY PROTECTED AND PUBLIC ROUTES

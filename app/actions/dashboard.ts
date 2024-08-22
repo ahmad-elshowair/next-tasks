@@ -1,5 +1,5 @@
-import { LatestTasks } from "@/app/lib/definitions";
-import pool from "@/app/lib/pool";
+import { LatestTasks } from "@/lib/definitions";
+import pool from "@/lib/pool";
 import { QueryResult } from "pg";
 
 export const fetchCardData = async () => {

@@ -1,4 +1,4 @@
-import { verifySession } from "@/app/lib/session";
+import { verifySession } from "@/lib/session";
 import Link from "next/link";
 import { BsArrowRight } from "react-icons/bs";
 

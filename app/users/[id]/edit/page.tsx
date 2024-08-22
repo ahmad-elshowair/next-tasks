@@ -1,5 +1,5 @@
-import Breadcrumb from "@/app/components/BreadCrumb";
-import EditUserFrom from "@/app/components/users/EditUserForm";
+import Breadcrumb from "@/components/BreadCrumb";
+import EditUserFrom from "@/components/users/EditUserForm";
 
 const EditUserPage = ({ params }: { params: { id: string } }) => {
 	const { id } = params;

@@ -1,9 +1,9 @@
 import { fetchFilteredMyTasks, fetchMyTasksPages } from "@/app/actions/task";
-import { CreateBtn } from "@/app/components/buttons";
-import TasksTable from "@/app/components/my-tasks/TasksTable";
-import Pagination from "@/app/components/Pagination";
-import Search from "@/app/components/Search";
-import { TasksTableSkeleton } from "@/app/components/skeletons";
+import { CreateBtn } from "@/components/buttons";
+import TasksTable from "@/components/my-tasks/TasksTable";
+import Pagination from "@/components/Pagination";
+import Search from "@/components/Search";
+import { TasksTableSkeleton } from "@/components/skeletons";
 import type { Metadata } from "next";
 import { Suspense } from "react";
 

@@ -1,6 +1,6 @@
 "use client";
 import { createUserTask } from "@/app/actions/task";
-import { UserCreateTaskStateFrom } from "@/app/lib/definitions";
+import { UserCreateTaskStateFrom } from "@/lib/definitions";
 import Link from "next/link";
 import { useActionState } from "react";
 import { CiText } from "react-icons/ci";

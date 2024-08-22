@@ -1,10 +1,10 @@
 "use server";
-import pool from "@/app/lib/pool";
-import { hash, isMatch } from "@/app/lib/utils";
+import { hash, isMatch } from "@/lib/helpers";
+import pool from "@/lib/pool";
 import { redirect } from "next/navigation";
 import { z } from "zod";
-import { LoginFormState, RegisterFormState } from "../lib/definitions";
-import { createSession, deleteSession } from "../lib/session";
+import { LoginFormState, RegisterFormState } from "../../lib/definitions";
+import { createSession, deleteSession } from "../../lib/session";
 import { fetchUserByEmail } from "./user";
 
 const RegisterSchema = z.object({
