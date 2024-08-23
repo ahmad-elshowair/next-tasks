@@ -1,14 +1,14 @@
 "use client";
 import { login } from "@/app/actions/auth";
 import { LoginFormState } from "@/lib/definitions";
-import { useFormState, useFormStatus } from "react-dom";
+import { useActionState } from "react";
 import { MdOutlineAlternateEmail } from "react-icons/md";
 import { RiLockPasswordFill } from "react-icons/ri";
 
 const LoginForm = () => {
 	const initialState: LoginFormState = { message: null, errors: {} };
-	const [state, formAction] = useFormState(login, initialState);
-	const { pending } = useFormStatus();
+	const [state, formAction, pending] = useActionState(login, initialState);
+
 	return (
 		<form action={formAction}>
 			<div className="flex flex-col bg-emerald-100 px-5 py-10 rounded-lg">

@@ -1,6 +1,7 @@
-import { DeleteBtn, EditBtn } from "@/components/buttons";
+import { EditBtn } from "@/components/buttons";
 import { UserTable } from "@/lib/definitions";
 import Image from "next/image";
+import DeleteModal from "../DeleteModal";
 
 const UsersTable = ({ users }: { users: UserTable[] }) => {
 	return (
@@ -58,9 +59,7 @@ const UsersTable = ({ users }: { users: UserTable[] }) => {
 									<td className="whitespace-nowrap px-3">
 										<div className="flex items-center gap-3">
 											<EditBtn href={`/users/${user.user_id}/edit`} />
-											<form action="">
-												<DeleteBtn />
-											</form>
+											<DeleteModal label="User" />
 										</div>
 									</td>
 								</tr>

@@ -1,7 +1,8 @@
-import { DeleteBtn, EditBtn } from "@/components/buttons";
+import { EditBtn } from "@/components/buttons";
 import Task from "@/components/my-tasks/Task";
 import TaskStatus from "@/components/my-tasks/TaskStatus";
 import Image from "next/image";
+import DeleteModal from "../DeleteModal";
 
 const TasksTable = ({
 	tasks,
@@ -90,9 +91,7 @@ const TasksTable = ({
 									<td className="whitespace-nowrap px-3 ">
 										<div className="py-3 flex items-center gap-3">
 											<EditBtn href={`/${edit_href}/${task.task_id}/edit`} />
-											<form action={task.task_id}>
-												<DeleteBtn />
-											</form>
+											<DeleteModal label="Task" />
 										</div>
 									</td>
 								</tr>
