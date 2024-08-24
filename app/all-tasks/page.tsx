@@ -1,5 +1,6 @@
 import { fetchAllTasksPages, fetchFilteredAllTasks } from "@/app/actions/task";
 import { CreateBtn } from "@/components/buttons";
+import Message from "@/components/Message";
 import TasksTable from "@/components/my-tasks/TasksTable";
 import Pagination from "@/components/Pagination";
 import Search from "@/components/Search";
@@ -16,16 +17,24 @@ export const metadata: Metadata = {
 const AllTasksPage = async ({
 	searchParams,
 }: {
-	searchParams?: { query?: string; page?: number };
+	searchParams?: {
+		query?: string;
+		page?: number;
+		message?: string;
+		status?: "success" | "error";
+	};
 }) => {
 	const query = searchParams?.query || "";
 	const currentPage = Number(searchParams?.page) || 1;
 	const totalPages = await fetchAllTasksPages(query);
 	const tasks = await fetchFilteredAllTasks(query, currentPage);
+	const message = searchParams?.message;
+	const status = searchParams?.status;
 
 	return (
 		<main className="py-2 px-10 w-full">
 			<h1 className="md:mt-20 text-3xl font-bold mb-4 md:mb-8">Tasks</h1>
+			{message && status && <Message message={message} status={status} />}
 			<section className="flex items-center justify-between gap-2">
 				<Search placeholder="Search Task..." />
 				<CreateBtn href="/all-tasks/create" label="Create Take" />

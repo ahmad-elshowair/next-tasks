@@ -1,3 +1,5 @@
+"use client";
+import { deleteTask } from "@/app/actions/task";
 import { Button } from "@/components/ui/button";
 import {
 	Dialog,
@@ -9,11 +11,34 @@ import {
 	DialogTitle,
 	DialogTrigger,
 } from "@/components/ui/dialog";
+import { useRouter } from "next/navigation";
+import { useState, useTransition } from "react";
 import { FaTrashCan } from "react-icons/fa6";
 
-const DeleteModal = ({ label }: { label: string }) => {
+const DeleteModal = ({
+	label,
+	id,
+	link,
+}: {
+	label: string;
+	id: string;
+	link: string;
+}) => {
+	const [isOpen, setIsOpen] = useState(false);
+	const [isPending, startTransition] = useTransition();
+	const { replace } = useRouter();
+
+	const handleDelete = async () => {
+		startTransition(async () => {
+			const { message, status } = await deleteTask(id, link);
+			replace(
+				`/${link}?message=${encodeURIComponent(message!)}&status=${status}`,
+			);
+		});
+	};
+
 	return (
-		<Dialog>
+		<Dialog open={isOpen} onOpenChange={setIsOpen}>
 			<DialogTrigger asChild>
 				<Button className="bg-transparent px-2 border border-red-600 hover:bg-red-600 hover:text-red-50 text-red-600 h-fit">
 					<span className="sr-only">Delete</span>
@@ -33,44 +58,18 @@ const DeleteModal = ({ label }: { label: string }) => {
 							Close
 						</Button>
 					</DialogClose>
-					<form>
+					<form action="">
 						<Button
 							type="submit"
+							onClick={handleDelete}
+							disabled={isPending}
 							className="bg-red-200 text-red-700 hover:bg-red-500 hover:text-red-50 h-fit">
-							Delete
+							{isPending ? "Deleting..." : "Delete"}
 						</Button>
 					</form>
 				</DialogFooter>
 			</DialogContent>
 		</Dialog>
-
-		// <Dialog>
-		// 	<DialogTrigger asChild>
-		// 		<Button className="rounded-md border p-2 border-red-600 hover:bg-red-600 hover:text-red-50 text-red-600 duration-200 ease-in-out">
-		// 			<span className="sr-only">Delete</span>
-		// 			<FaTrashCan className="w-5" />
-		// 		</Button>
-		// 	</DialogTrigger>
-		// 	<DialogContent className="sm:max-w-md">
-		// 		<DialogHeader>
-		// 			<DialogTitle>{label}</DialogTitle>
-		// 		</DialogHeader>
-		// 		<DialogDescription>
-		// 			Are you sure you want to delete this item?
-		// 		</DialogDescription>
-		// 		<DialogFooter className="sm:justify-start">
-		// 			<DialogClose>
-		// 				<Button
-		// 					className="rounded-md border p-2 border-gray-600 hover:bg-gray-600
-		// 					hover:text-gray-50 text-gray-600 duration-200 ease-in-out"
-		// 					type="button">
-		// 					Cancel
-		// 				</Button>
-		// 			</DialogClose>
-		// 			<Button type="submit">Delete</Button>
-		// 		</DialogFooter>
-		// 	</DialogContent>
-		// </Dialog>
 	);
 };
 

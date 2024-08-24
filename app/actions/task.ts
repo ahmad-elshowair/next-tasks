@@ -1,6 +1,7 @@
 "use server";
 import {
 	AdminCreateTaskStateFrom,
+	DeleteStateForm,
 	TasksTable,
 	UserCreateTaskStateFrom,
 } from "@/lib/definitions";
@@ -285,4 +286,46 @@ export const createAdminTask = async (
 
 	revalidatePath("all-tasks");
 	redirect("/all-tasks");
+};
+
+export const deleteTask = async (
+	id: string,
+	link: string,
+): Promise<DeleteStateForm> => {
+	const connection = await pool.connect();
+	try {
+		const sqlQuery = `
+		DELETE FROM tasks WHERE task_id = $1`;
+		const values = [id];
+
+		const task = await fetchTaskById(id);
+		if (!task) {
+			return {
+				message: "Task not found",
+				status: "error",
+			};
+		}
+
+		const session = await verifySession();
+		if (task.user_id === session?.user_id || session?.role === "admin") {
+			await connection.query(sqlQuery, values);
+			revalidatePath(`/${link}`);
+			return {
+				message: "Task Deleted successfully!",
+				status: "success",
+			};
+		}
+		return {
+			message: "You don't have permission to delete this task",
+			status: "error",
+		};
+	} catch (error) {
+		console.error(`Database Error: ${error as Error}`);
+		return {
+			message: (error as Error).message,
+			status: "error",
+		};
+	} finally {
+		connection.release();
+	}
 };

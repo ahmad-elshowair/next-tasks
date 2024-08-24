@@ -115,3 +115,8 @@ export type CreateUserFormState = {
 		other?: string[];
 	};
 };
+
+export type DeleteStateForm = {
+	message?: string;
+	status?: "error" | "success";
+};
