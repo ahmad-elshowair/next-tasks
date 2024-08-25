@@ -1,18 +1,13 @@
 "use server";
-import {
-	CreateUserFormState,
-	User,
-	UserField,
-	UserTable,
-} from "@/lib/definitions";
+import { User, UserField, UserFormState, UserTable } from "@/lib/definitions";
 import { hash } from "@/lib/helpers";
+import { deleteFile, uploadFile } from "@/lib/manage-upload";
 import pool from "@/lib/pool";
 import { verifySession } from "@/lib/session";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { QueryResult } from "pg";
 import { z } from "zod";
-import { uploadFile } from "../../lib/upload-file";
 
 const ITEMS_PER_PAGE = 3;
 export const fetchFilteredUsers = async (
@@ -70,12 +65,21 @@ export const fetchUsersPages = async (query: string) => {
 	}
 };
 
-export const fetchUserById = async () => {
+export const fetchUserById = async (user_id: string) => {
 	const client = await pool.connect();
 	const session = await verifySession();
 	try {
-		const sqlQuery = `SELECT * FROM users WHERE id = $1`;
-		const result = await client.query(sqlQuery, [session?.user_id]);
+		const sqlQuery = `SELECT
+							user_id, 
+							user_name, 
+							email, 
+							image_url, 
+							role, 
+							created_at, 
+							updated_at 
+						FROM users 
+						WHERE user_id = $1`;
+		const result: QueryResult = await client.query(sqlQuery, [user_id]);
 		return result.rows[0];
 	} catch (error) {
 		console.error(`Error Fetching a User By Id: ${(error as Error).message}`);
@@ -138,9 +142,9 @@ const CreateUserSchema = z.object({
 });
 
 export const CreateUser = async (
-	prevState: CreateUserFormState,
+	prevState: UserFormState,
 	formData: FormData,
-): Promise<CreateUserFormState> => {
+): Promise<UserFormState> => {
 	const validatedFields = CreateUserSchema.safeParse({
 		user_name: formData.get("user_name"),
 		email: formData.get("email"),
@@ -221,4 +225,99 @@ export const CreateUser = async (
 	}
 	revalidatePath("/users");
 	redirect("/users");
+};
+
+const UpdateUserSchema = CreateUserSchema.omit({ password: true });
+export const updateUser = async (
+	prevState: UserFormState,
+	formData: FormData,
+): Promise<UserFormState> => {
+	const validatedFields = UpdateUserSchema.safeParse({
+		user_name: formData.get("user_name"),
+		email: formData.get("email"),
+		role: formData.get("role"),
+	});
+
+	if (!validatedFields.success) {
+		return {
+			errors: validatedFields.error.flatten().fieldErrors,
+			message: "Failed to update User",
+		};
+	}
+
+	const { user_name, email, role } = validatedFields.data;
+	const user_id = formData.get("user_id");
+	const newImageFile = formData.get("image_url") as File | null;
+
+	const connection = await pool.connect();
+
+	try {
+		await connection.query("BEGIN");
+
+		// Fetch the current user's image
+		const currentUser = await connection.query(
+			`SELECT image_url FROM users WHERE user_id = $1`,
+			[user_id],
+		);
+
+		let newImageUrl: string | null = "/default-avatar.png";
+
+		// if a new image is provided, then upload it
+		if (newImageFile) {
+			const uploadResult = await uploadFile(newImageFile, "uploads", {
+				maxSize: 5 * 1024 * 1024,
+				allowedTypes: ["image/jpeg", "image/png", "image/jpg", "image/gif"],
+			});
+
+			if (!uploadResult.success) {
+				return {
+					errors: {
+						image_url: [uploadResult.error!],
+					},
+					message: "Failed to upload image",
+				};
+			}
+			newImageUrl = uploadResult.filePath;
+
+			// delete the old image
+			const oldImageUrl = currentUser.rows[0]?.image_url;
+			if (oldImageUrl) {
+				await deleteFile(oldImageUrl);
+			}
+		}
+		const sqlQuery = `
+		UPDATE users 
+			SET user_name = $1,
+				email = $2, 
+				role = $3,
+				image_url = COALESCE($4, image_url) 
+			WHERE user_id = $5
+			RETURNING *
+		`;
+		const values = [user_name, email, role, newImageUrl, user_id];
+		const result = await connection.query(sqlQuery, values);
+		if (result.rowCount === 0) {
+			return {
+				errors: {
+					user_id: ["User not found"],
+				},
+				message: "User not found or no changes made",
+			};
+		}
+		await connection.query("COMMIT");
+		revalidatePath("/users");
+		return {
+			message: "User updated successfully",
+		};
+	} catch (error) {
+		await connection.query("ROLLBACK");
+		console.error(`ERROR UPDATING A USER: ${error as Error}`);
+		return {
+			errors: { other: [(error as Error).message] },
+			message: "Failed to update User",
+		};
+	} finally {
+		// RELEASE THE CONNECTION
+		connection.release();
+	}
 };

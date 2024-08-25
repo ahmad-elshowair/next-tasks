@@ -69,7 +69,7 @@ export const uploadFile = async (
 		// RETURN THE RELATIVE PATH TO THE FILE.
 		return {
 			success: true,
-			filePath: `/${directory}/${uniqueFilename}`,
+			filePath: path.join("/", directory, uniqueFilename).replace(/\\/g, "/"),
 		};
 	} catch (error) {
 		console.error(`Failed to upload file ${error as Error}`);
@@ -77,6 +77,23 @@ export const uploadFile = async (
 			success: false,
 			filePath: null,
 			error: `Failed to upload file ${(error as Error).message}`,
+		};
+	}
+};
+
+export const deleteFile = async (filePath: string) => {
+	try {
+		const absoluteFilePath = path.join(process.cwd(), "public", filePath);
+
+		// delete the file if it exists
+		await fs.unlink(absoluteFilePath);
+		return { success: true, message: `Deleted file: ${absoluteFilePath}` };
+	} catch (error) {
+		console.error(`Failed to delete file${error as Error}`);
+		return {
+			success: false,
+			error: `Failed to delete file ${(error as Error).message}`,
+			filePath: null,
 		};
 	}
 };

@@ -97,16 +97,25 @@ export type UserField = {
 	user_name: string;
 };
 
-export type TaskFrom = {
+export type EditTaskFrom = {
 	user_id: string;
 	task_id: string;
 	is_completed: boolean;
 	title: string;
 };
 
-export type CreateUserFormState = {
+export type UserEditForm = {
+	user_id: string;
+	user_name: string;
+	email: string;
+	image_url: string;
+	role: "user" | "admin";
+};
+
+export type UserFormState = {
 	message?: string | null;
 	errors?: {
+		user_id?: string[];
 		user_name?: string[];
 		email?: string[];
 		password?: string[];

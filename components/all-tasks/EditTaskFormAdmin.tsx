@@ -1,7 +1,7 @@
 "use client";
 import {
 	AdminCreateTaskStateFrom,
-	TaskFrom,
+	EditTaskFrom,
 	UserField,
 } from "@/lib/definitions";
 import Link from "next/link";
@@ -12,7 +12,7 @@ const EditTaskFormAdmin = ({
 	users,
 	task,
 }: {
-	task: TaskFrom;
+	task: EditTaskFrom;
 	users: UserField[];
 }) => {
 	const initialState: AdminCreateTaskStateFrom = { message: null, errors: {} };
