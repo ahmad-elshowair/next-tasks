@@ -22,8 +22,9 @@ export const uploadFile = async (
 		return { success: true, filePath: null };
 	}
 
+	// make the max size 500KB
 	const {
-		maxSize = 5 * 1024 * 1024,
+		maxSize = 500 * 1024,
 		allowedTypes = ["image/jpeg", "image/jpg", "image/png", "image/gif"],
 	} = options;
 
@@ -32,7 +33,7 @@ export const uploadFile = async (
 		return {
 			success: false,
 			filePath: null,
-			error: `File size exceeds the limit of ${maxSize / (1024 * 1024)} MB`,
+			error: `File size exceeds the limit of ${maxSize / 1024} KB`,
 		};
 	}
 

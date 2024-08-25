@@ -169,10 +169,7 @@ export const CreateUser = async (
 	// if file exist.
 	if (file && file.size > 0) {
 		// then upload the file.
-		const uploadResult = await uploadFile(file, "uploads", {
-			maxSize: 5 * 1024 * 1024,
-			allowedTypes: ["image/jpeg", "image/png", "image/jpg", "image/gif"],
-		});
+		const uploadResult = await uploadFile(file);
 
 		if (uploadResult.success && uploadResult.filePath) {
 			image_url = uploadResult.filePath;
@@ -264,10 +261,7 @@ export const updateUser = async (
 
 		// if a new image is provided, then upload it
 		if (newImageFile) {
-			const uploadResult = await uploadFile(newImageFile, "uploads", {
-				maxSize: 5 * 1024 * 1024,
-				allowedTypes: ["image/jpeg", "image/png", "image/jpg", "image/gif"],
-			});
+			const uploadResult = await uploadFile(newImageFile);
 
 			if (!uploadResult.success) {
 				return {

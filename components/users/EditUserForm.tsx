@@ -14,9 +14,15 @@ const EditUserFrom = ({ user }: { user: UserEditForm }) => {
 		user.image_url || "No file Chosen",
 	);
 
+	const MAX_SIZE = 500 * 1024;
+	const [imageError, setImageError] = useState("");
+
 	const handleFile = (event: ChangeEvent<HTMLInputElement>) => {
 		const input = event.target;
 		const file = input.files?.[0];
+		if (file?.size! > MAX_SIZE) {
+			setImageError(`File size must be less than ${MAX_SIZE / 1024} KB`);
+		}
 		if (file) {
 			setFile(file);
 			setFileName(file.name);
@@ -51,6 +57,15 @@ const EditUserFrom = ({ user }: { user: UserEditForm }) => {
 					</div>
 				</div>
 				{/* DISPLAY ERROR IF ANY FOR THE USER NAME */}
+				{state.errors?.user_name && (
+					<div id="user_name-error" aria-atomic="true" aria-live="polite">
+						{state.errors.user_name.map((error: string) => (
+							<p key={error} className="text-red-500 text-sm">
+								{error}
+							</p>
+						))}
+					</div>
+				)}
 				<div className="mb-4">
 					<label
 						className="block mb-2 text-sm font-medium text-emerald-900"
@@ -70,6 +85,16 @@ const EditUserFrom = ({ user }: { user: UserEditForm }) => {
 					</div>
 				</div>
 				{/* DISPLAY ERROR IF ANY FOR THE EMAIL */}
+
+				{state.errors?.email && (
+					<div id="email-error" aria-atomic="true" aria-live="polite">
+						{state.errors.email.map((error: string) => (
+							<p key={error} className="text-red-500 text-sm">
+								{error}
+							</p>
+						))}
+					</div>
+				)}
 				{/* <div className="mb-4">
 					<label
 						className="block mb-2 text-sm font-medium text-emerald-900"
@@ -130,6 +155,15 @@ const EditUserFrom = ({ user }: { user: UserEditForm }) => {
 					</div>
 				</fieldset>
 				{/* DISPLAY ERROR IF ANY FOR THE ROLE */}
+				{state.errors?.role && (
+					<div id="role-error" aria-atomic="true" aria-live="polite">
+						{state.errors.role.map((error: string) => (
+							<p key={error} className="text-red-500 text-sm">
+								{error}
+							</p>
+						))}
+					</div>
+				)}
 
 				<div className="mt-4 flex items-center gap-6">
 					{file ? (
@@ -163,6 +197,11 @@ const EditUserFrom = ({ user }: { user: UserEditForm }) => {
 						onChange={handleFile}
 					/>
 				</div>
+				{imageError && (
+					<p className="mt-2 p-2 rounded-lg bg-red-100 text-red-600 uppercase ring-2 ring-red-700">
+						{imageError}
+					</p>
+				)}
 			</div>
 			{state.message && (
 				<div
