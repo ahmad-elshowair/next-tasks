@@ -245,7 +245,7 @@ export const updateUser = async (
 	if (!validatedFields.success) {
 		return {
 			errors: validatedFields.error.flatten().fieldErrors,
-			message: "Failed to update User",
+			message: "Invalid Data",
 		};
 	}
 

@@ -74,7 +74,7 @@ export type SessionPayload = {
 	role: "user" | "admin";
 };
 
-export type UserCreateTaskStateFrom = {
+export type UserTaskStateFrom = {
 	message?: string | null;
 	errors?: {
 		title?: string[];
@@ -82,16 +82,15 @@ export type UserCreateTaskStateFrom = {
 	};
 };
 
-export type AdminCreateTaskStateFrom = {
+export type AdminTaskStateFrom = {
 	message?: string | null;
+	status: "success" | "error" | null;
 	errors?: {
 		title?: string[];
 		user_id?: string[];
 		is_completed?: string[];
-		other?: string[];
 	};
 };
-
 export type UserField = {
 	user_id: string;
 	user_name: string;

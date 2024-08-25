@@ -1,9 +1,9 @@
 "use server";
 import {
-	AdminCreateTaskStateFrom,
+	AdminTaskStateFrom,
 	DeleteStateForm,
 	TasksTable,
-	UserCreateTaskStateFrom,
+	UserTaskStateFrom,
 } from "@/lib/definitions";
 import pool from "@/lib/pool";
 import { verifySession } from "@/lib/session";
@@ -13,8 +13,6 @@ import { PoolClient, QueryResult } from "pg";
 import { z } from "zod";
 
 const ITEMS_PER_PAGE = 6;
-
-const session = await verifySession();
 
 export const fetchFilteredMyTasks = async (
 	query: string,
@@ -45,6 +43,8 @@ export const fetchFilteredMyTasks = async (
             ORDER BY tasks.created_at DESC
             LIMIT $3 OFFSET $4
             `;
+
+		const session = await verifySession();
 
 		const values = [session?.user_id, `%${query}%`, ITEMS_PER_PAGE, offset];
 		const tasks: QueryResult<TasksTable> = await connection.query(
@@ -119,6 +119,9 @@ export const fetchMyTasksPages = async (query: string) => {
 					users.user_name ILIKE $2 OR
 					users.email ILIKE $2
 				)`;
+
+		const session = await verifySession();
+
 		const values = [session?.user_id, `%${query}%`];
 		const result = await connection.query(sqlQueryText, values);
 		const totalTasks = parseInt(result.rows[0].count, 10);
@@ -191,9 +194,11 @@ const CreateUserTaskSchema = z.object({
 });
 
 export const createUserTask = async (
-	prevState: UserCreateTaskStateFrom,
+	prevState: UserTaskStateFrom,
 	formData: FormData,
-): Promise<UserCreateTaskStateFrom> => {
+): Promise<UserTaskStateFrom> => {
+	const session = await verifySession();
+
 	const validatedFields = CreateUserTaskSchema.safeParse({
 		title: formData.get("title"),
 		user_id: session?.user_id,
@@ -234,6 +239,7 @@ export const createUserTask = async (
 };
 
 const CreateAdminTaskSchema = z.object({
+	task_id: z.string(),
 	user_id: z.string({ invalid_type_error: "Please Select  a User" }),
 	title: z.string().min(10, {
 		message: "Please describe your task with at least 10 characters!",
@@ -243,9 +249,9 @@ const CreateAdminTaskSchema = z.object({
 	}),
 });
 export const createAdminTask = async (
-	prevState: AdminCreateTaskStateFrom,
+	prevState: AdminTaskStateFrom,
 	formData: FormData,
-): Promise<AdminCreateTaskStateFrom> => {
+): Promise<AdminTaskStateFrom> => {
 	const validatedFields = CreateAdminTaskSchema.safeParse({
 		user_id: formData.get("user_id"),
 		title: formData.get("title"),
@@ -256,6 +262,7 @@ export const createAdminTask = async (
 		return {
 			errors: validatedFields.error.flatten().fieldErrors,
 			message: "Failed to Create Admin tasks",
+			status: "error",
 		};
 	}
 	const { user_id, title, is_completed } = validatedFields.data;
@@ -276,9 +283,8 @@ export const createAdminTask = async (
 
 		console.error(`Database Error: ${error as Error}`);
 		return {
-			errors: {
-				other: [(error as Error).message],
-			},
+			message: (error as Error).message,
+			status: "error",
 		};
 	} finally {
 		connection.release();
@@ -326,6 +332,66 @@ export const deleteTask = async (
 			status: "error",
 		};
 	} finally {
+		connection.release();
+	}
+};
+
+const AdminUpdateTaskSchema = CreateAdminTaskSchema.omit({ task_id: true });
+export const adminUpdateTask = async (
+	task_id: string,
+	prevState: AdminTaskStateFrom,
+	formData: FormData,
+): Promise<AdminTaskStateFrom> => {
+	const validatedFields = AdminUpdateTaskSchema.safeParse({
+		title: formData.get("title"),
+		user_id: formData.get("user_id"),
+		is_completed: formData.get("is_completed") === "true",
+	});
+
+	if (!validatedFields.success) {
+		return {
+			message: "Invalid data",
+			errors: validatedFields.error.flatten().fieldErrors,
+			status: "error",
+		};
+	}
+
+	const { title, user_id, is_completed } = validatedFields.data;
+
+	const connection = await pool.connect();
+	try {
+		const sqlQuery = `
+			UPDATE tasks 
+			SET
+				title = $1,
+				is_completed = $2,
+				user_id = $3
+			WHERE 
+				task_id = $4
+		`;
+		const values = [title, is_completed, user_id, task_id];
+		const session = await verifySession();
+
+		if (session?.user_id === user_id || session?.role === "admin") {
+			await connection.query(sqlQuery, values);
+			revalidatePath("/all-tasks");
+			return {
+				message: "Task updated successfully",
+				status: "success",
+			};
+		}
+		return {
+			message: "You do not have permission to update this task",
+			status: "error",
+		};
+	} catch (error) {
+		console.error(`Database Error: ${error as Error}`);
+		return {
+			message: (error as Error).message,
+			status: "error",
+		};
+	} finally {
+		// RELEASE THE CONNECTION
 		connection.release();
 	}
 };
