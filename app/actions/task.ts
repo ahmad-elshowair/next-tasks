@@ -288,10 +288,7 @@ export const createAdminTask = async (
 	redirect("/all-tasks");
 };
 
-export const deleteTask = async (
-	id: string,
-	link: string,
-): Promise<DeleteStateForm> => {
+export const deleteTask = async (id: string): Promise<DeleteStateForm> => {
 	const connection = await pool.connect();
 	try {
 		const sqlQuery = `
@@ -309,7 +306,7 @@ export const deleteTask = async (
 		const session = await verifySession();
 		if (task.user_id === session?.user_id || session?.role === "admin") {
 			await connection.query(sqlQuery, values);
-			revalidatePath(`/${link}`);
+			revalidatePath(`/tasks`);
 			return {
 				message: "Task Deleted successfully!",
 				status: "success",

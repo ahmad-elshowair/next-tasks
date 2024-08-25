@@ -1,5 +1,11 @@
 "use server";
-import { User, UserField, UserFormState, UserTable } from "@/lib/definitions";
+import {
+	DeleteStateForm,
+	User,
+	UserField,
+	UserFormState,
+	UserTable,
+} from "@/lib/definitions";
 import { hash } from "@/lib/helpers";
 import { deleteFile, uploadFile } from "@/lib/manage-upload";
 import pool from "@/lib/pool";
@@ -67,7 +73,6 @@ export const fetchUsersPages = async (query: string) => {
 
 export const fetchUserById = async (user_id: string) => {
 	const client = await pool.connect();
-	const session = await verifySession();
 	try {
 		const sqlQuery = `SELECT
 							user_id, 
@@ -79,7 +84,9 @@ export const fetchUserById = async (user_id: string) => {
 							updated_at 
 						FROM users 
 						WHERE user_id = $1`;
-		const result: QueryResult = await client.query(sqlQuery, [user_id]);
+		const result: QueryResult<UserTable> = await client.query(sqlQuery, [
+			user_id,
+		]);
 		return result.rows[0];
 	} catch (error) {
 		console.error(`Error Fetching a User By Id: ${(error as Error).message}`);
@@ -275,7 +282,7 @@ export const updateUser = async (
 
 			// delete the old image
 			const oldImageUrl = currentUser.rows[0]?.image_url;
-			if (oldImageUrl) {
+			if (oldImageUrl && oldImageUrl !== "/default-avatar.png") {
 				await deleteFile(oldImageUrl);
 			}
 		}
@@ -309,6 +316,56 @@ export const updateUser = async (
 		return {
 			errors: { other: [(error as Error).message] },
 			message: "Failed to update User",
+		};
+	} finally {
+		// RELEASE THE CONNECTION
+		connection.release();
+	}
+};
+
+export const deleteUser = async (user_id: string): Promise<DeleteStateForm> => {
+	const connection = await pool.connect();
+	try {
+		const user = await fetchUserById(user_id);
+		if (!user) {
+			return {
+				message: "User not found",
+				status: "error",
+			};
+		}
+		const userImage = user.image_url;
+		const session = await verifySession();
+		const sqlQuery = `
+				DELETE FROM users
+				WHERE user_id = $1
+				RETURNING *
+				`;
+		const values = [user_id];
+		if (session?.user_id === user_id || session?.role === "admin") {
+			if (userImage && userImage !== "/default-avatar.png") {
+				// DELETE THE USER'S AVATAR
+				await deleteFile(user.image_url);
+			}
+
+			await connection.query(sqlQuery, values);
+
+			await connection.query("COMMIT");
+			revalidatePath("/users");
+			return {
+				message: "User deleted successfully",
+				status: "success",
+			};
+		}
+		return {
+			message: "Authorization Failed",
+			status: "error",
+		};
+	} catch (error) {
+		await connection.query("ROLLBACK");
+		console.error(`ERROR DELETING A USER: ${error as Error}`);
+		return {
+			message: (error as Error).message,
+			status: "error",
 		};
 	} finally {
 		// RELEASE THE CONNECTION

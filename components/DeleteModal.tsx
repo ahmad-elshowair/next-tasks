@@ -1,5 +1,6 @@
 "use client";
 import { deleteTask } from "@/app/actions/task";
+import { deleteUser } from "@/app/actions/user";
 import { Button } from "@/components/ui/button";
 import {
 	Dialog,
@@ -11,28 +12,27 @@ import {
 	DialogTitle,
 	DialogTrigger,
 } from "@/components/ui/dialog";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { FaTrashCan } from "react-icons/fa6";
 
-const DeleteModal = ({
-	label,
-	id,
-	link,
-}: {
-	label: string;
-	id: string;
-	link: string;
-}) => {
+const DeleteModal = ({ label, id }: { label: string; id: string }) => {
 	const [isOpen, setIsOpen] = useState(false);
 	const [isPending, startTransition] = useTransition();
 	const { replace } = useRouter();
+	const pathname = usePathname();
 
 	const handleDelete = async () => {
 		startTransition(async () => {
-			const { message, status } = await deleteTask(id, link);
+			if (pathname === "/tasks") {
+				const { message, status } = await deleteTask(id);
+				replace(
+					`/tasks?message=${encodeURIComponent(message!)}&status=${status}`,
+				);
+			}
+			const { message, status } = await deleteUser(id);
 			replace(
-				`/${link}?message=${encodeURIComponent(message!)}&status=${status}`,
+				`/users?message=${encodeURIComponent(message!)}&status=${status}`,
 			);
 		});
 	};

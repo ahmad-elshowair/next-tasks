@@ -59,7 +59,7 @@ const UsersTable = ({ users }: { users: UserTable[] }) => {
 									<td className="whitespace-nowrap px-3">
 										<div className="flex items-center gap-3">
 											<EditBtn href={`/users/${user.user_id}/edit`} />
-											<DeleteModal label="User" />
+											<DeleteModal label="User" id={user.user_id} />
 										</div>
 									</td>
 								</tr>

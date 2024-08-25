@@ -83,6 +83,9 @@ export const uploadFile = async (
 };
 
 export const deleteFile = async (filePath: string) => {
+	if (!filePath) {
+		return { success: false, error: "File path is required" };
+	}
 	try {
 		const absoluteFilePath = path.join(process.cwd(), "public", filePath);
 

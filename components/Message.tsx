@@ -6,8 +6,8 @@ const Message = ({
 	message,
 	status,
 }: {
-	message: string;
-	status: "success" | "error";
+	message?: string;
+	status?: "success" | "error";
 }) => {
 	const [visible, setVisible] = useState(true);
 
