@@ -16,7 +16,15 @@ import { usePathname, useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { FaTrashCan } from "react-icons/fa6";
 
-const DeleteModal = ({ label, id }: { label: string; id: string }) => {
+const DeleteModal = ({
+	label,
+	id,
+	link,
+}: {
+	label: string;
+	id: string;
+	link?: string;
+}) => {
 	const [isOpen, setIsOpen] = useState(false);
 	const [isPending, startTransition] = useTransition();
 	const { replace } = useRouter();
@@ -24,16 +32,17 @@ const DeleteModal = ({ label, id }: { label: string; id: string }) => {
 
 	const handleDelete = async () => {
 		startTransition(async () => {
-			if (pathname === "/tasks") {
-				const { message, status } = await deleteTask(id);
+			if (pathname === "/my-tasks" || pathname === "/all-tasks") {
+				const { message, status } = await deleteTask(id, link);
 				replace(
-					`/tasks?message=${encodeURIComponent(message!)}&status=${status}`,
+					`/${link}?message=${encodeURIComponent(message!)}&status=${status}`,
+				);
+			} else {
+				const { message, status } = await deleteUser(id);
+				replace(
+					`/users?message=${encodeURIComponent(message!)}&status=${status}`,
 				);
 			}
-			const { message, status } = await deleteUser(id);
-			replace(
-				`/users?message=${encodeURIComponent(message!)}&status=${status}`,
-			);
 		});
 	};
 

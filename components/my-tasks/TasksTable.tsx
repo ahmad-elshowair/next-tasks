@@ -92,7 +92,11 @@ const TasksTable = ({
 									<td className="whitespace-nowrap px-3 ">
 										<div className="py-3 flex items-center gap-3">
 											<EditBtn href={`/${edit_href}/${task.task_id}/edit`} />
-											<DeleteModal label="Task" id={task.task_id} />
+											<DeleteModal
+												label="Task"
+												id={task.task_id}
+												link={edit_href}
+											/>
 										</div>
 									</td>
 								</tr>
