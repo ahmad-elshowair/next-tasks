@@ -1,6 +1,6 @@
 "use client";
 import { CreateUser } from "@/app/actions/user";
-import { CreateUserFormState } from "@/lib/definitions";
+import { UserFormState } from "@/lib/definitions";
 import Image from "next/image";
 import Link from "next/link";
 import { ChangeEvent, useActionState, useState } from "react";
@@ -11,16 +11,20 @@ import { RiAdminLine, RiLockPasswordFill } from "react-icons/ri";
 const CreateUserForm = () => {
 	const [file, setFile] = useState<File | null>(null);
 	const [fileName, setFileName] = useState<string>("");
-
+	const MAX_SIZE = 500 * 1024;
+	const [imageError, setImageError] = useState("");
 	const handleFile = (event: ChangeEvent<HTMLInputElement>) => {
 		const input = event.target;
 		const file = input.files?.[0];
+		if (file?.size! > MAX_SIZE) {
+			setImageError(`image size must be less than ${MAX_SIZE / 1024} KB`);
+		}
 		if (file) {
 			setFile(file);
 			setFileName(file.name);
 		}
 	};
-	const initialState: CreateUserFormState = { message: null, errors: {} };
+	const initialState: UserFormState = { message: null, errors: {} };
 	const [state, formAction, pending] = useActionState(CreateUser, initialState);
 	return (
 		<form action={formAction}>
@@ -192,6 +196,12 @@ const CreateUserForm = () => {
 						onChange={handleFile}
 					/>
 				</div>
+				{/* DISPLAY ERROR IF ANY FOR THE FILE */}
+				{imageError && (
+					<p className="mt-2 p-2 rounded-lg bg-red-100 text-red-600 uppercase ring-2 ring-red-700">
+						{imageError}
+					</p>
+				)}
 			</div>
 			<div className="mt-6 flex justify-end gap-4">
 				<Link
