@@ -7,45 +7,18 @@ type FileUploadResult = {
 	error?: string;
 };
 
-type FileOptions = {
-	maxSize?: number;
-	allowedTypes?: string[];
-};
+// type FileOptions = {
+// 	maxSize?: number;
+// 	allowedTypes?: string[];
+// };
 
 export const uploadFile = async (
 	file: File | null,
 	directory: string = "uploads",
-	options: FileOptions = {},
 ) => {
 	// IF NO FILE RETURN SUCCESS WITH NULL FILE PATH.
 	if (!file) {
 		return { success: true, filePath: null };
-	}
-
-	// make the max size 500KB
-	const {
-		maxSize = 500 * 1024,
-		allowedTypes = ["image/jpeg", "image/jpg", "image/png", "image/gif"],
-	} = options;
-
-	// CHECK THE FILE SIZE
-	if (file.size > maxSize) {
-		return {
-			success: false,
-			filePath: null,
-			error: `File size exceeds the limit of ${maxSize / 1024} KB`,
-		};
-	}
-
-	// CHECK THE FILE TYPE.
-	if (!allowedTypes.includes(file.type)) {
-		return {
-			success: false,
-			filePath: null,
-			error: `File type is not allowed, Allowed types: ${allowedTypes.join(
-				", ",
-			)}`,
-		};
 	}
 
 	try {

@@ -264,10 +264,9 @@ export const updateUser = async (
 			[user_id],
 		);
 
-		let newImageUrl: string | null = "/default-avatar.png";
-
+		let newImageUrl: string | null = null;
 		// if a new image is provided, then upload it
-		if (newImageFile) {
+		if (newImageFile instanceof File && newImageFile.size > 0) {
 			const uploadResult = await uploadFile(newImageFile);
 
 			if (!uploadResult.success) {

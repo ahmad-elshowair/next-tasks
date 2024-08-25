@@ -15,15 +15,35 @@ const EditUserFrom = ({ user }: { user: UserEditForm }) => {
 	);
 
 	const MAX_SIZE = 500 * 1024;
+	const ALLOWED_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/gif"];
 	const [imageError, setImageError] = useState("");
 
 	const handleFile = (event: ChangeEvent<HTMLInputElement>) => {
 		const input = event.target;
 		const file = input.files?.[0];
-		if (file?.size! > MAX_SIZE) {
-			setImageError(`File size must be less than ${MAX_SIZE / 1024} KB`);
-		}
+
+		console.log(file?.type);
+
 		if (file) {
+			if (file.size > MAX_SIZE) {
+				setImageError(`File size must be less than ${MAX_SIZE / 1024} KB`);
+				setFile(null);
+				setFileName("No file chosen");
+				event.target.value = "";
+				return;
+			}
+
+			if (!ALLOWED_TYPES.includes(file.type)) {
+				setImageError(
+					"File type not allowed, Please use JPEG, PNG, GIF, or JPG",
+				);
+				setFile(null);
+				setFileName("No file chosen");
+				event.target.value = "";
+				return;
+			}
+
+			setImageError("");
 			setFile(file);
 			setFileName(file.name);
 		}
@@ -123,7 +143,7 @@ const EditUserFrom = ({ user }: { user: UserEditForm }) => {
 									type="radio"
 									id="user"
 									name="role"
-									defaultValue={user.role}
+									value="user"
 									defaultChecked={user.role === "user"}
 									className="h-4 w-4 cursor-pointer border-emerald-300 bg-emerald-100 text-emerald-600 focus:ring-2"
 									aria-describedby="role-error"
@@ -140,7 +160,7 @@ const EditUserFrom = ({ user }: { user: UserEditForm }) => {
 									type="radio"
 									id="admin"
 									name="role"
-									defaultValue={user.role}
+									value="admin"
 									defaultChecked={user.role === "admin"}
 									className="h-4 w-4 cursor-pointer border-emerald-300 bg-emerald-100 text-emerald-600 focus:ring-2"
 								/>
