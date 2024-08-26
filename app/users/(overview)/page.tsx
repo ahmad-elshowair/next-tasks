@@ -3,8 +3,10 @@ import Message from "@/components/Message";
 import Pagination from "@/components/Pagination";
 import Search from "@/components/Search";
 import { CreateBtn } from "@/components/buttons";
+import { TasksTableSkeleton } from "@/components/skeletons";
 import UsersTable from "@/components/users/UsersTable";
 import type { Metadata } from "next";
+import { Suspense } from "react";
 
 export const metadata: Metadata = {
 	title: "Users Page",
@@ -36,7 +38,9 @@ const UsersPage = async ({
 				<Search placeholder="Search User..." />
 				<CreateBtn href="/users/create" label="Create User" />
 			</section>
-			<UsersTable users={users} />
+			<Suspense fallback={<TasksTableSkeleton />}>
+				<UsersTable users={users} />
+			</Suspense>
 			<section className="mt-5 flex w-full justify-center">
 				<Pagination totalPages={totalPages} />
 			</section>
