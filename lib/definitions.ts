@@ -20,7 +20,7 @@ export type Task = {
 	update_at: string;
 };
 
-export type TasksTable = {
+export type TaskTable = {
 	task_id: string;
 	title: string;
 	is_completed: boolean;

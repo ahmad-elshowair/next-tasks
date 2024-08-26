@@ -13,12 +13,12 @@ const TaskStatus = ({ status }: { status: boolean }) => {
 			)}>
 			{status ? (
 				<>
-					<span className="hidden md:inline mr-1">Done</span>
+					<span className="inline mr-1">Done</span>
 					<FaCircleCheck className="w-4" />
 				</>
 			) : (
 				<>
-					<span className="hidden md:inline mr-1">Not Yet</span>
+					<span className="inline mr-1">Not Yet</span>
 					<FaClock className="w-4" />
 				</>
 			)}

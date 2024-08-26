@@ -2,6 +2,7 @@
 import { EditBtn } from "@/components/buttons";
 import Task from "@/components/my-tasks/Task";
 import TaskStatus from "@/components/my-tasks/TaskStatus";
+import { TaskTable } from "@/lib/definitions";
 import Image from "next/image";
 import DeleteModal from "../DeleteModal";
 
@@ -10,24 +11,17 @@ const TasksTable = ({
 	edit_href,
 }: {
 	edit_href: string;
-	tasks: Array<{
-		task_id: string;
-		title: string;
-		is_completed: boolean;
-		created_at: string;
-		email: string;
-		user_name: string;
-		image_url: string;
-	}>;
+	tasks: TaskTable[];
 }) => {
 	return (
 		<section className="mt-6 flow-root">
-			{/* tasks in the in small screens  */}
 			<div className="inline-block min-w-full align-middle">
 				<div className="rounded-lg bg-emerald-100 p-2 md:mt-0">
 					<div className="md:hidden">
 						{tasks.length > 0 ? (
-							tasks.map((task) => <Task key={task.task_id} {...task} />)
+							tasks.map((task) => (
+								<Task key={task.task_id} task={task} edit_href={edit_href} />
+							))
 						) : (
 							<p className="text-4xl text-red-100 border rounded-md p-4 bg-red-200">
 								No tasks found

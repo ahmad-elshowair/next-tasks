@@ -151,7 +151,7 @@ const EditUserFrom = ({ user }: { user: UserEditForm }) => {
 								<label
 									className="ml-2 flex cursor-pointer items-center gap-1.5 rounded-full bg-emerald-100 px-3 py-1.5 text-xs font-medium text-emerald-600"
 									htmlFor="user">
-									<span className="text-sm hidden md:inline-block">User</span>
+									<span className="text-sm inline-block">User</span>
 									<FaRegUser className="h-4 w-4" />
 								</label>
 							</div>
@@ -167,7 +167,7 @@ const EditUserFrom = ({ user }: { user: UserEditForm }) => {
 								<label
 									className="ml-2 flex cursor-pointer items-center gap-1.5 rounded-full bg-emerald-100 px-3 py-1.5 text-xs font-medium text-emerald-600"
 									htmlFor="admin">
-									<span className="text-sm hidden md:inline-block">Admin</span>
+									<span className="text-sm inline-block">Admin</span>
 									<RiAdminLine className="h-4 w-4" />
 								</label>
 							</div>

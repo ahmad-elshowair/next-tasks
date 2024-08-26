@@ -1,14 +1,23 @@
 import { EditBtn } from "@/components/buttons";
+import DeleteModal from "@/components/DeleteModal";
+import User from "@/components/users/User";
 import { UserTable } from "@/lib/definitions";
 import Image from "next/image";
-import DeleteModal from "../DeleteModal";
 
 const UsersTable = ({ users }: { users: UserTable[] }) => {
 	return (
 		<section className="mt-6 flow-root">
 			<div className="inline-block min-w-full align-middle">
 				<div className="rounded-lg bg-emerald-100 p-2 md:mt-0">
-					<div className="md:hidden">{/* <User /> */}</div>
+					<div className="md:hidden">
+						{users.length > 0 ? (
+							users.map((user) => <User {...user} key={user.user_id} />)
+						) : (
+							<p className="text-4xl text-red-100 border rounded-md p-4 bg-red-200">
+								No Users found
+							</p>
+						)}
+					</div>
 					<table className="hidden md:table min-w-full text-emerald-900">
 						<thead className="rounded-lg text-left text-sm font-normal">
 							<tr>

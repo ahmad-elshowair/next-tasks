@@ -1,10 +1,10 @@
+import DeleteModal from "@/components/DeleteModal";
+import { EditBtn } from "@/components/buttons";
 import TaskStatus from "@/components/my-tasks/TaskStatus";
-import { TasksTable } from "@/lib/definitions";
+import { TaskTable } from "@/lib/definitions";
 import Image from "next/image";
-import Link from "next/link";
-import { FaPencil, FaTrashCan } from "react-icons/fa6";
 
-const Task = (task: TasksTable) => {
+const Task = ({ task, edit_href }: { task: TaskTable; edit_href: string }) => {
 	return (
 		<div className="mb-2 w-full rounded-md bg-gray-50 p-4">
 			<div className="flex items-center justify-between border-b pb-4">
@@ -21,26 +21,25 @@ const Task = (task: TasksTable) => {
 					</div>
 					<p className="text-sm text-green-500">{task.email}</p>
 				</div>
-				<TaskStatus status={task.is_completed} />
+				<p>{task.created_at?.toString().slice(4, 16)}</p>
 			</div>
 			<div className="flex w-full items-center justify-between pt-4">
 				<div>
-					<p className="text-xl font-medium">{task.title}</p>
-					<p>{task.created_at?.toString().slice(4, 16)}</p>
+					<p className="text-xl font-medium">
+						<span
+							className={`${
+								task.is_completed
+									? "text-gray-300 line-through italic font-normal"
+									: ""
+							}`}>
+							{task.title}
+						</span>
+					</p>
+					<TaskStatus status={task.is_completed} />
 				</div>
 				<div className="flex justify-end gap-2">
-					<Link
-						href={`/tasks/${task.task_id}/edit`}
-						className="rounded-md border p-2 hover:bg-emerald-100">
-						<FaPencil className="w-5" />
-					</Link>
-
-					<form action={task.task_id}>
-						<button className="rounded-md border p-2 hover:bg-emerald-100">
-							<span className="sr-only">Delete</span>
-							<FaTrashCan className="w-5" />
-						</button>
-					</form>
+					<EditBtn href={`/${edit_href}/${task.task_id}/edit`} />
+					<DeleteModal label="Task" id={task.task_id} link={edit_href} />
 				</div>
 			</div>
 		</div>
