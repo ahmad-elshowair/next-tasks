@@ -34,7 +34,7 @@ const AuthLinks = ({
 								height={30}
 								width={30}
 								alt={`avatar`}
-								className="rounded-full"
+								className="rounded-full hidden md:inline"
 							/>
 							<span>{user_name || "User Name"}</span>
 						</div>
@@ -42,7 +42,7 @@ const AuthLinks = ({
 
 					<button
 						onClick={handleLogout}
-						className="flex h-[48px] w-full grow items-center justify-center gap-2 rounded-md p-3 text-sm font-semibold md:flex-none md:justify-start md:p-2 md:px-3 shadow hover:bg-green-500 text-green-600 bg-emerald-100 hover:text-green-50 duration-200 ease-in-out">
+						className="flex h-[48px] w-full grow items-center justify-center gap-2 rounded-md p-3 text-sm font-semibold lg:flex-none md:justify-start md:p-2 md:px-3 shadow hover:bg-green-500 text-green-600 bg-emerald-100 hover:text-green-50 duration-200 ease-in-out">
 						<FaRightFromBracket className="w-6" />
 						<span className="sm:hidden lg:block">Sign out</span>
 					</button>
