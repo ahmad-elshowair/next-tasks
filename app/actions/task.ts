@@ -2,6 +2,8 @@
 import {
 	AdminTaskStateFrom,
 	DeleteStateForm,
+	Task,
+	TaskSchema,
 	TasksTable,
 	UserTaskStateFrom,
 } from "@/lib/definitions";
@@ -10,7 +12,6 @@ import { verifySession } from "@/lib/session";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { PoolClient, QueryResult } from "pg";
-import { z } from "zod";
 
 const ITEMS_PER_PAGE = 6;
 
@@ -174,7 +175,7 @@ export const fetchTaskById = async (id: string) => {
 		const sqlQuery = `
 			SELECT * FROM tasks WHERE task_id = $1;
 		`;
-		const result = await connection.query(sqlQuery, [id]);
+		const result: QueryResult<Task> = await connection.query(sqlQuery, [id]);
 		const task = result.rows[0];
 		return task;
 	} catch (error) {
@@ -186,11 +187,9 @@ export const fetchTaskById = async (id: string) => {
 	}
 };
 
-const CreateUserTaskSchema = z.object({
-	title: z
-		.string()
-		.min(10, { message: "describe your task with at least 10 characters!" }),
-	user_id: z.string(),
+const CreateUserTaskSchema = TaskSchema.omit({
+	is_completed: true,
+	task_id: true,
 });
 
 export const createUserTask = async (
@@ -208,6 +207,7 @@ export const createUserTask = async (
 		return {
 			errors: validatedFields.error.flatten().fieldErrors,
 			message: "Missing Fields, Failed to create tasks",
+			status: "error",
 		};
 	}
 
@@ -227,8 +227,8 @@ export const createUserTask = async (
 		await connection.query("ROLLBACK");
 		console.error(`Database Error: ${(error as Error).message}`);
 		return {
-			errors: { other: [(error as Error).message] },
-			message: "Failed to Create tasks",
+			message: (error as Error).message,
+			status: "error",
 		};
 	} finally {
 		// RELEASE THE CONNECTION
@@ -238,21 +238,12 @@ export const createUserTask = async (
 	redirect("/my-tasks");
 };
 
-const CreateAdminTaskSchema = z.object({
-	task_id: z.string(),
-	user_id: z.string({ invalid_type_error: "Please Select  a User" }),
-	title: z.string().min(10, {
-		message: "Please describe your task with at least 10 characters!",
-	}),
-	is_completed: z.boolean({
-		invalid_type_error: "Please select the task status",
-	}),
-});
+const AdminCreateTaskSchema = TaskSchema.omit({ task_id: true });
 export const createAdminTask = async (
 	prevState: AdminTaskStateFrom,
 	formData: FormData,
 ): Promise<AdminTaskStateFrom> => {
-	const validatedFields = CreateAdminTaskSchema.safeParse({
+	const validatedFields = AdminCreateTaskSchema.safeParse({
 		user_id: formData.get("user_id"),
 		title: formData.get("title"),
 		is_completed: formData.get("is_completed") === "true",
@@ -336,7 +327,7 @@ export const deleteTask = async (
 	}
 };
 
-const AdminUpdateTaskSchema = CreateAdminTaskSchema.omit({ task_id: true });
+const AdminUpdateTaskSchema = TaskSchema.omit({ task_id: true });
 export const adminUpdateTask = async (
 	task_id: string,
 	prevState: AdminTaskStateFrom,
@@ -374,7 +365,9 @@ export const adminUpdateTask = async (
 
 		if (session?.user_id === user_id || session?.role === "admin") {
 			await connection.query(sqlQuery, values);
+
 			revalidatePath("/all-tasks");
+
 			return {
 				message: "Task updated successfully",
 				status: "success",
@@ -383,6 +376,72 @@ export const adminUpdateTask = async (
 		return {
 			message: "You do not have permission to update this task",
 			status: "error",
+		};
+	} catch (error) {
+		console.error(`Database Error: ${error as Error}`);
+		return {
+			message: (error as Error).message,
+			status: "error",
+		};
+	} finally {
+		// RELEASE THE CONNECTION
+		connection.release();
+	}
+};
+
+const UserUpdateTaskForm = TaskSchema.omit({ task_id: true, user_id: true });
+export const userUpdateTask = async (
+	task_id: string,
+	prevState: UserTaskStateFrom,
+	formData: FormData,
+): Promise<UserTaskStateFrom> => {
+	const validatedFields = UserUpdateTaskForm.safeParse({
+		title: formData.get("title"),
+		is_completed: formData.get("is_completed") === "true",
+	});
+
+	if (!validatedFields.success) {
+		return {
+			errors: validatedFields.error?.flatten().fieldErrors,
+			status: "error",
+			message: "Invalid Data",
+		};
+	}
+
+	const { title, is_completed } = validatedFields.data;
+
+	const task = await fetchTaskById(task_id);
+	if (!task) {
+		return {
+			status: "error",
+			message: "Task not found",
+		};
+	}
+	const connection = await pool.connect();
+	try {
+		const sqlQuery = `
+			UPDATE tasks
+			SET 
+				title = $1, 
+				is_completed = $2
+			WHERE 
+				task_id = $3
+		`;
+		const values = [title, is_completed, task_id];
+
+		const session = await verifySession();
+
+		if (session?.user_id === task.user_id || session?.role === "admin") {
+			await connection.query(sqlQuery, values);
+			revalidatePath("/my-tasks");
+			return {
+				status: "success",
+				message: "Task updated successfully",
+			};
+		}
+		return {
+			status: "error",
+			message: "You do not have permission to update this task",
 		};
 	} catch (error) {
 		console.error(`Database Error: ${error as Error}`);

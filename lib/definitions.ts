@@ -1,3 +1,5 @@
+import { z } from "zod";
+
 export type User = {
 	user_id: string;
 	user_name: string;
@@ -76,11 +78,23 @@ export type SessionPayload = {
 
 export type UserTaskStateFrom = {
 	message?: string | null;
+	status: "success" | "error" | null;
 	errors?: {
 		title?: string[];
-		other?: string[];
+		is_completed?: string[];
 	};
 };
+
+export const TaskSchema = z.object({
+	task_id: z.string(),
+	user_id: z.string({ invalid_type_error: "Please Select  a User" }),
+	title: z.string().min(10, {
+		message: "Please describe your task with at least 10 characters!",
+	}),
+	is_completed: z.boolean({
+		invalid_type_error: "Please select the task status",
+	}),
+});
 
 export type AdminTaskStateFrom = {
 	message?: string | null;

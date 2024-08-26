@@ -1,19 +1,38 @@
-import { TaskFrom } from "@/lib/definitions";
+"use client";
+import { userUpdateTask } from "@/app/actions/task";
+import { EditTaskFrom, UserTaskStateFrom } from "@/lib/definitions";
 import Link from "next/link";
+import { useActionState } from "react";
 import { CiText } from "react-icons/ci";
 import { FaCircleCheck, FaClock } from "react-icons/fa6";
+import Message from "../Message";
 
-const EditUserTaskForm = (task: TaskFrom) => {
+const EditUserTaskForm = (task: EditTaskFrom) => {
+	const initialState: UserTaskStateFrom = {
+		message: null,
+		status: null,
+		errors: {},
+	};
+
+	const updateTaskWithId = userUpdateTask.bind(null, task.task_id);
+	const [state, formAction, isPending] = useActionState(
+		updateTaskWithId,
+		initialState,
+	);
 	return (
-		<form action="">
+		<form action={formAction}>
+			{state.message && (
+				<Message status={state.status!} message={state.message} />
+			)}
 			<div className="rounded-lg bg-emerald-100 p-4 md:p-6">
-				<div className="mb-4">
+				<div className="mb-2">
 					<label className="mb-2 block text-sm font-medium" htmlFor="title">
 						Title
 					</label>
 					<div className="relative">
 						<input
 							id="title"
+							name="title"
 							className="peer block w-full rounded-md border border-emerald-200 py-2 pl-10 text-sm outline-2 placeholder:text-emerald-700"
 							defaultValue={task.title}
 							aria-describedby="title-error"
@@ -23,7 +42,15 @@ const EditUserTaskForm = (task: TaskFrom) => {
 					</div>
 				</div>
 				{/* Show error here  */}
-				<fieldset>
+				<div id="title-error" aria-atomic="true" aria-live="polite">
+					{state.errors?.title &&
+						state.errors.title.map((error: string) => (
+							<p key={error} className="text-sm text-red-600">
+								{error}
+							</p>
+						))}
+				</div>
+				<fieldset className="mt-4">
 					<legend className="mb-2 block text-sm font-medium capitalize">
 						set the task status
 					</legend>
@@ -34,7 +61,8 @@ const EditUserTaskForm = (task: TaskFrom) => {
 									id="done"
 									name="is_completed"
 									type="radio"
-									checked={task.is_completed === true}
+									value={"true"}
+									defaultChecked={task.is_completed === true}
 									className="h-4 w-4 cursor-pointer border-emerald-300 bg-emerald-100 text-emerald-600 focus:ring-2"
 									aria-describedby="is_completed-error"
 								/>
@@ -50,7 +78,8 @@ const EditUserTaskForm = (task: TaskFrom) => {
 									id="nope"
 									name="is_completed"
 									type="radio"
-									checked={task.is_completed === false}
+									value={"false"}
+									defaultChecked={task.is_completed === false}
 									className="h-4 w-4 cursor-pointer border-emerald-300 bg-emerald-100 text-emerald-600 focus:ring-2"
 									aria-describedby="is_completed-error"
 								/>
@@ -65,6 +94,14 @@ const EditUserTaskForm = (task: TaskFrom) => {
 					</div>
 				</fieldset>
 				{/* error goes here  */}
+				<div id="is_completed-error" aria-atomic="true" aria-live="polite">
+					{state.errors?.is_completed &&
+						state.errors.is_completed.map((error: string) => (
+							<p key={error} className="text-sm text-red-600">
+								{error}
+							</p>
+						))}
+				</div>
 			</div>
 			<div className="mt-6 flex justify-end gap-4">
 				<Link
@@ -74,8 +111,9 @@ const EditUserTaskForm = (task: TaskFrom) => {
 				</Link>
 				<button
 					type="submit"
+					disabled={isPending}
 					className="h-10 rounded-lg bg-green-500 px-4 text-sm font-medium transition-colors hover:bg-green-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-500 active:bg-green-500 aria-disabled:cursor-not-allowed aria-disabled:opacity-50 text-green-50">
-					Save Changes
+					{isPending ? "Saving..." : "Save Changes"}
 				</button>
 			</div>
 		</form>
