@@ -1,7 +1,6 @@
 import { SessionPayload } from "@/lib/definitions";
 import { jwtVerify, SignJWT } from "jose";
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
 import "server-only";
 
 const secretKey = process.env.SESSION_SECRET;
@@ -85,11 +84,11 @@ export const verifySession = async (): Promise<SessionPayload | null> => {
 		const cookie = cookies().get("user-session")?.value;
 		if (!cookie) {
 			console.error("NO SESSION COOKIE FOUND!");
-			redirect("/login");
+			return null;
 		}
 		const session = await decrypt(cookie);
 		if (!session) {
-			redirect("/login");
+			return null;
 		}
 		return session as SessionPayload;
 	} catch (error) {
