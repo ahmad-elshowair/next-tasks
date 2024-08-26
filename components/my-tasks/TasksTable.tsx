@@ -17,7 +17,7 @@ const TasksTable = ({
 		<section className="mt-6 flow-root">
 			<div className="inline-block min-w-full align-middle">
 				<div className="rounded-lg bg-emerald-100 p-2 md:mt-0">
-					<div className="md:hidden">
+					<div className="lg:hidden">
 						{tasks.length > 0 ? (
 							tasks.map((task) => (
 								<Task key={task.task_id} task={task} edit_href={edit_href} />
@@ -28,7 +28,7 @@ const TasksTable = ({
 							</p>
 						)}
 					</div>
-					<table className="hidden md:table min-w-full text-emerald-900">
+					<table className="hidden lg:table min-w-full text-emerald-900">
 						<thead className="rounded-lg text-left text-sm font-normal">
 							<tr>
 								<th scope="col" className="px-4 py-5 font-medium sm:pl-6">

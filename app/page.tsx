@@ -5,9 +5,9 @@ import { BsArrowRight } from "react-icons/bs";
 export default async function Home() {
 	const session = await verifySession();
 	return (
-		<section className="flex min-h-screen h-full p-4 w-full flex-col gap-3">
+		<section className="flex lg:min-h-screen xl:min-h-screen h-[calc(100vh-168px)] p-4 w-full flex-col gap-3">
 			{/* THE WELCOME SECTION */}
-			<div className="flex flex-col gap-6 rounded-lg bg-neutral-50 px-6 py-10 md:px-20 shadow h-full justify-center items-center">
+			<div className="flex flex-col gap-6 rounded-lg bg-neutral-50 xs:px-6 py-10 md:px-20 shadow h-full justify-center items-center">
 				<h1 className="text-3xl font-bold mb-4">Welcome to Task Manager</h1>
 				{session ? (
 					<div className="flex flex-col gap-12 w-8/12 items-center">

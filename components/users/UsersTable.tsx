@@ -9,7 +9,7 @@ const UsersTable = ({ users }: { users: UserTable[] }) => {
 		<section className="mt-6 flow-root">
 			<div className="inline-block min-w-full align-middle">
 				<div className="rounded-lg bg-emerald-100 p-2 md:mt-0">
-					<div className="md:hidden">
+					<div className="lg:hidden">
 						{users.length > 0 ? (
 							users.map((user) => <User {...user} key={user.user_id} />)
 						) : (
@@ -18,7 +18,7 @@ const UsersTable = ({ users }: { users: UserTable[] }) => {
 							</p>
 						)}
 					</div>
-					<table className="hidden md:table min-w-full text-emerald-900">
+					<table className="hidden lg:table min-w-full text-emerald-900">
 						<thead className="rounded-lg text-left text-sm font-normal">
 							<tr>
 								<th scope="col" className="px-4 py-5 font-medium">

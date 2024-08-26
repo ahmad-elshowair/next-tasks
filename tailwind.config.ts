@@ -13,7 +13,12 @@ const config = {
 			center: true,
 			padding: "2rem",
 			screens: {
-				"2xl": "1400px",
+				xs: { min: "476px", max: "639px" },
+				sm: { min: "640px", max: "767px" },
+				md: { min: "768px", max: "1023px" },
+				lg: { min: "1024px", max: "1279px" },
+				xl: { min: "1280px", max: "1535px" },
+				"2xl": { min: "1536px" },
 			},
 		},
 		extend: {

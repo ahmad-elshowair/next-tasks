@@ -30,7 +30,7 @@ const AuthLinks = ({
 					<Link
 						href={`/profile/${user_name}`}
 						className={clsx(
-							"sm:flex h-[48px] w-full grow items-center justify-center gap-2 rounded-md p-3 text-sm font-semibold lg:flex-none md:justify-start md:p-2 md:px-3 shadow hover:bg-green-500 text-green-600 bg-emerald-100 hover:text-green-50 duration-200 ease-in-out",
+							"flex h-[48px] w-full grow items-center justify-center gap-2 rounded-md p-3 text-sm font-semibold lg:flex-none md:justify-start md:p-2 md:px-3 shadow hover:bg-green-500 text-green-600 bg-emerald-100 hover:text-green-50 duration-200 ease-in-out",
 							{
 								"bg-green-500 text-orange-50":
 									pathname === `/profile/${user_name}`,
@@ -45,7 +45,7 @@ const AuthLinks = ({
 									alt={`avatar`}
 									className="rounded-full hidden md:inline"
 								/>
-								<span>{user_name || "User Name"}</span>
+								<span className="line-clamp-1">{user_name || "User Name"}</span>
 							</div>
 						</div>
 					</Link>
@@ -62,7 +62,7 @@ const AuthLinks = ({
 					<Link
 						href={"/login"}
 						className={clsx(
-							"sm:flex h-[48px] w-full grow items-center justify-center gap-2 rounded-md p-3 text-sm font-semibold lg:flex-none lg:justify-start md:p-2 md:px-3 shadow hover:bg-green-500 text-green-600 bg-emerald-100 hover:text-green-50  duration-200 ease-in-out",
+							"flex h-[48px] w-full grow items-center justify-center gap-2 rounded-md p-3 text-sm font-semibold lg:flex-none lg:justify-start md:p-2 md:px-3 shadow hover:bg-green-500 text-green-600 bg-emerald-100 hover:text-green-50  duration-200 ease-in-out",
 							{
 								"bg-green-500 text-orange-50": pathname === "/login",
 							},
@@ -73,7 +73,7 @@ const AuthLinks = ({
 					<Link
 						href={"/register"}
 						className={clsx(
-							"sm:flex h-[48px] w-full grow items-center justify-center gap-2 rounded-md p-3 text-sm font-semibold lg:flex-none md:justify-start md:p-2 md:px-3 shadow hover:bg-green-500 text-green-600 bg-emerald-100 hover:text-green-50 duration-200 ease-in-out",
+							"flex h-[48px] w-full grow items-center justify-center gap-2 rounded-md p-3 text-sm font-semibold lg:flex-none md:justify-start md:p-2 md:px-3 shadow hover:bg-green-500 text-green-600 bg-emerald-100 hover:text-green-50 duration-200 ease-in-out",
 							{
 								"bg-green-500 text-orange-50": pathname === "/register",
 							},

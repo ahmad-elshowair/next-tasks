@@ -42,13 +42,13 @@ const NavLinks = ({ role }: { role: "admin" | "user" | undefined }) => {
 						href={link.href}
 						key={link.href}
 						className={clsx(
-							"flex h-[48px] grow items-center justify-center gap-2 rounded-md p-3 text-sm font-semibold md:flex-none md:justify-start md:p-2 md:px-3 shadow text-green-600 hover:bg-green-500 bg-emerald-100 hover:text-green-50 duration-200 ease-in-out",
+							"flex h-[48px] grow items-center justify-center gap-2 rounded-md p-3 md:text-sm font-semibold md:flex-none md:justify-start md:p-2 md:px-3 shadow text-green-600 hover:bg-green-500 bg-emerald-100 hover:text-green-50 duration-200 ease-in-out",
 							{
 								"bg-green-500 text-orange-50": link.href === pathname,
 							},
 						)}>
 						<LintIcon className="w-6 font-bold" />
-						<p className="sm:hidden lg:block">{link.label}</p>
+						<p className="hidden lg:block">{link.label}</p>
 					</Link>
 				);
 			})}
