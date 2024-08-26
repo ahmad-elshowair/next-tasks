@@ -1,12 +1,16 @@
 "use client";
 import { createUserTask } from "@/app/actions/task";
-import { UserCreateTaskStateFrom } from "@/lib/definitions";
+import { UserTaskStateFrom } from "@/lib/definitions";
 import Link from "next/link";
 import { useActionState } from "react";
 import { CiText } from "react-icons/ci";
 
 const CreateUserTaskForm = () => {
-	const initialState: UserCreateTaskStateFrom = { message: null, errors: {} };
+	const initialState: UserTaskStateFrom = {
+		message: null,
+		errors: {},
+		status: null,
+	};
 	const [state, formAction, pending] = useActionState(
 		createUserTask,
 		initialState,

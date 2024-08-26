@@ -32,7 +32,7 @@ const AllTasksPage = async ({
 	const status = searchParams?.status;
 
 	return (
-		<main className="py-2 px-10 w-full">
+		<section className="py-2 px-10 w-full">
 			<h1 className="md:mt-20 text-3xl font-bold mb-4 md:mb-8">Tasks</h1>
 			{message && status && <Message message={message} status={status} />}
 			<section className="flex items-center justify-between gap-2">
@@ -45,7 +45,7 @@ const AllTasksPage = async ({
 			<section className="mt-5 flex w-full justify-center">
 				<Pagination totalPages={totalPages} />
 			</section>
-		</main>
+		</section>
 	);
 };
 

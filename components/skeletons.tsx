@@ -28,29 +28,29 @@ export const TaskMobileSkeleton = () => {
 
 export const TableRowSkeleton = () => {
 	return (
-		<tr className="w-full border-b border-emerald-100 last-of-type:border-none [&:first-child>td:first-child]:rounded-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg">
+		<tr className="min-w-full border-b border-emerald-100 last-of-type:border-none [&:first-child>td:first-child]:rounded-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg">
 			<td className="relative overflow-hidden whitespace-nowrap py-3 pl-6 pr-3">
 				<div className="flex items-center gap-3">
-					<div className="h-8 w-8 rounded-full bg-emerald-100"></div>
-					<div className="h-6 w-24 rounded bg-emerald-100"></div>
+					<div className="h-8 w-8 rounded-full bg-emerald-100" />
+					<div className="h-6 w-24 rounded bg-emerald-100" />
 				</div>
 			</td>
 			<td className="whitespace-nowrap px-3 py-3">
-				<div className="h-6 w-16 rounded bg-emerald-100"></div>
+				<div className="h-6 w-16 rounded bg-emerald-100" />
 			</td>
 			<td className="whitespace-nowrap px-3 py-3">
-				<div className="h-6 w-16 rounded bg-emerald-100"></div>
+				<div className="h-6 w-16 rounded bg-emerald-100" />
 			</td>
 			<td className="whitespace-nowrap px-3 py-3">
-				<div className="h-6 w-16 rounded bg-emerald-100"></div>
+				<div className="h-6 w-16 rounded bg-emerald-100" />
 			</td>
 			<td className="whitespace-nowrap px-3 py-3">
-				<div className="h-6 w-16 rounded bg-emerald-100"></div>
+				<div className="h-6 w-16 rounded bg-emerald-100" />
 			</td>
 			<td className="whitespace-nowrap pl-6 pr-3 py-3">
 				<div className="flex justify-end gap-3">
-					<div className="h-[38px] w-[38px] rounded bg-emerald-100"></div>
-					<div className="h-[38px] w-[38px] rounded bg-emerald-100"></div>
+					<div className="h-[38px] w-[38px] rounded bg-emerald-100" />
+					<div className="h-[38px] w-[38px] rounded bg-emerald-100" />
 				</div>
 			</td>
 		</tr>
@@ -59,8 +59,8 @@ export const TableRowSkeleton = () => {
 
 export const TasksTableSkeleton = () => {
 	return (
-		<div className={`${shimmer} mt-6 flow-root `}>
-			<div className="inline-block min-w-full align-middle">
+		<div className={`${shimmer} mt-6 flow-root`}>
+			<div className="block min-w-full align-middle">
 				<div className="rounded-lg bg-emerald-50 p-2 md:pt-0">
 					<div className="md:hidden">
 						<TaskMobileSkeleton />
@@ -74,13 +74,13 @@ export const TasksTableSkeleton = () => {
 						<thead>
 							<tr>
 								<th scope="col" className="px-4 py-5 font-medium sm:pl-6">
-									Customer
+									User
 								</th>
 								<th scope="col" className="px-3 py-5 font-medium">
 									Email
 								</th>
 								<th scope="col" className="px-3 py-5 font-medium">
-									Amount
+									Title
 								</th>
 								<th scope="col" className="px-3 py-5 font-medium">
 									Date
@@ -91,11 +91,11 @@ export const TasksTableSkeleton = () => {
 								<th
 									scope="col"
 									className="relative pb-4 pl-3 pr-6 pt-2 sm:pr-6">
-									<span className="sr-only">Edit</span>
+									<span className="sr-only">Actions</span>
 								</th>
 							</tr>
 						</thead>
-						<tbody className="bg-white">
+						<tbody className="bg-white min-w-full">
 							<TableRowSkeleton />
 							<TableRowSkeleton />
 							<TableRowSkeleton />
@@ -176,9 +176,9 @@ export const LatestTasksSkeleton = () => {
 
 export const DashboardSkeleton = () => {
 	return (
-		<>
+		<div className="shimmer">
 			<div
-				className={`${shimmer} relative mb-4 h-8 w-36 overflow-hidden rounded-md bg-emerald-100`}
+				className={`relative mb-4 h-8 w-36 overflow-hidden rounded-md bg-emerald-100`}
 			/>
 			<div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
 				<CardSkeleton />
@@ -189,6 +189,66 @@ export const DashboardSkeleton = () => {
 			<div className="mt-6 flex min-w-full items-center justify-center">
 				<LatestTasksSkeleton />
 			</div>
+		</div>
+	);
+};
+
+export const InputSkeleton = () => {
+	return (
+		<div className="mb-4">
+			<div className="relative w-full h-12 block rounded-md bg-emerald-50" />
+		</div>
+	);
+};
+export const MyTasksSkelton = () => {
+	return (
+		<div className="shimmer mt-6">
+			<div className="py-2 px-10 w-full">
+				<div className="mb-4 md:mb-8 w-16 h-2 bg-slate-400" />
+				<div className="flex items-center justify-between gap-2">
+					<InputSkeleton />
+					<div className="h-10 bg-green-300 w-8" />
+				</div>
+				<div className="relative mt-4 w-full overflow-hidden rounded-md bg-emerald-100">
+					<TasksTableSkeleton />
+				</div>
+			</div>
+		</div>
+	);
+};
+
+export const BreadSkeleton = () => {
+	return (
+		<div className="mb-6 block">
+			<div className="flex items-center gap-2">
+				<div className="rounded-md w-16 h-6 bg-emerald-100" />
+				<div className="rounded-md w-16 h-6 bg-emerald-100" />
+			</div>
+		</div>
+	);
+};
+
+export const FormSkeleton = () => {
+	return (
+		<>
+			<div className="rounded-lg bg-emerald-100 p-4 md:p-6">
+				<InputSkeleton />
+				<InputSkeleton />
+				<InputSkeleton />
+			</div>
+			<div className="mt-6 flex justify-end gap-4">
+				<div className="h-10 w-20 bg-emerald-100 rounded-md" />
+				<div className="h-10 w-20 bg-green-500 rounded-md" />
+			</div>
 		</>
+	);
+};
+
+export const EditTaskSkeleton = () => {
+	return (
+		<div className="shimmer px-10 pt-20 pb-2">
+			<BreadSkeleton />
+			<FormSkeleton />
+		</div>
 	);
 };
