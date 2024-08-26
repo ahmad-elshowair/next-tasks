@@ -96,6 +96,23 @@ export const fetchUserById = async (user_id: string) => {
 	}
 };
 
+export const fetchUserByUserName = async (user_name: string) => {
+	const connection = await pool.connect();
+	try {
+		const sqlQuery = `SELECT * FROM users WHERE user_name = $1`;
+		const result: QueryResult<User> = await connection.query(sqlQuery, [
+			user_name,
+		]);
+		return result.rows[0];
+	} catch (error) {
+		console.error(`Error Fetching a User By Name: ${(error as Error).message}`);
+		throw new Error((error as Error).message);
+	} finally {
+		// RELEASE THE CONNECTION
+		connection.release();
+	}
+};
+
 export const fetchUserByEmail = async (email: string) => {
 	const client = await pool.connect();
 	try {
