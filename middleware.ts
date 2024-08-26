@@ -1,47 +1,48 @@
 import { verifySession } from "@/lib/session";
 import { NextRequest, NextResponse } from "next/server";
 
-//  SPECIFY PROTECTED AND PUBLIC ROUTES
-
-const ROUTE_CONFIG = {
+// DEFINE ROUTES SPECIFIC ROUTES.
+const ROUTES_CONFIG = {
 	PUBLIC: new Set(["/login", "/register", "/"]),
 	PROTECTED: new Set(["/my-tasks"]),
 	ADMIN: new Set(["/dashboard", "/users", "/all-tasks"]),
 };
+
 export default async function middleware(req: NextRequest) {
 	const path = req.nextUrl.pathname;
-	const session = await verifySession();
 
+	// REDIRECTION FUNCTION
 	const redirect = (destination: string) => {
-		NextResponse.rewrite(new URL(destination, req.nextUrl));
+		return NextResponse.redirect(new URL(destination, req.url));
 	};
-	// check if the route is public
-	if (ROUTE_CONFIG.PUBLIC.has(path)) {
-		// then allow access
+
+	// IF THE ROUTE IS PUBLIC, THEN ALLOW ACCESS.
+	if (ROUTES_CONFIG.PUBLIC.has(path)) {
 		return NextResponse.next();
 	}
 
-	// if no session.
-	if (session === null) {
-		// then redirect to login for non-public routes.
+	// VERIFY SESSION
+	const session = await verifySession();
+
+	// IF NO SESSION, THEN REDIRECT TO LOGIN PAGE.
+	if (!session) {
 		return redirect("/login");
 	}
 
-	// check for admin routes, but use is not admin.
-	if (ROUTE_CONFIG.ADMIN.has(path) && session.role !== "admin") {
-		// then redirect to not-authorized.
+	// IF THE ROUTE IS ADMIN ROUTE, THEN REDIRECT TO NOT AUTHORIZED PAGE
+	if (ROUTES_CONFIG.ADMIN.has(path) && session.role === "admin") {
 		return redirect("/not-authorized");
 	}
 
-	// allow access to protected routes for logged-in users
-	if (ROUTE_CONFIG.PROTECTED.has(path)) {
+	// IF THE PATH IS PROTECTED, THEN ALLOW ACCESS IF LOGGED IN.
+	if (ROUTES_CONFIG.PROTECTED.has(path)) {
 		return NextResponse.next();
 	}
 
-	// for any other routes, proceed normally.
+	// ALLOW ACCESS FOR ANY OTHER ROUTES,
 	return NextResponse.next();
 }
 
 export const config = {
-	matcher: ["/((?!api|_next/static|_next/image|/public/uploads).*)"],
+	matcher: ["/((?!api|_next/static|_next/image|/uploads).*)"],
 };
