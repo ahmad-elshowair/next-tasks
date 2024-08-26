@@ -30,7 +30,7 @@ export default async function middleware(req: NextRequest) {
 	}
 
 	// IF THE ROUTE IS ADMIN ROUTE, THEN REDIRECT TO NOT AUTHORIZED PAGE
-	if (ROUTES_CONFIG.ADMIN.has(path) && session.role === "admin") {
+	if (ROUTES_CONFIG.ADMIN.has(path) && session.role !== "admin") {
 		return redirect("/not-authorized");
 	}
 
