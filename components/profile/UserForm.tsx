@@ -260,11 +260,6 @@ const UserFrom = ({ user }: { user: UserEditForm }) => {
 				</div>
 			))}
 			<div className="mt-6 flex justify-end gap-4">
-				<Link
-					href={"/users"}
-					className="h-10 px-6 text-sm font-medium text-emerald-600 bg-emerald-50 hover:bg-emerald-200 transition-colors duration-200 py-2 rounded-md">
-					Cancel
-				</Link>
 				<button
 					type="submit"
 					className="rounded-md bg-green-500 px-6 py-2 text-sm font-medium transition-colors hover:bg-green-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-50 active:bg-green-600 duration-200 aria-disabled:cursor-not-allowed aria-disabled:opacity-50 text-green-50"
