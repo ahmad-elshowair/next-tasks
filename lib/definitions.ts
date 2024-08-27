@@ -85,17 +85,6 @@ export type UserTaskStateFrom = {
 	};
 };
 
-export const TaskSchema = z.object({
-	task_id: z.string(),
-	user_id: z.string({ invalid_type_error: "Please Select  a User" }),
-	title: z.string().min(10, {
-		message: "Please describe your task with at least 10 characters!",
-	}),
-	is_completed: z.boolean({
-		invalid_type_error: "Please select the task status",
-	}),
-});
-
 export type AdminTaskStateFrom = {
 	message?: string | null;
 	status: "success" | "error" | null;
@@ -142,3 +131,34 @@ export type DeleteStateForm = {
 	message?: string;
 	status?: "error" | "success";
 };
+
+export const TaskSchema = z.object({
+	task_id: z.string(),
+	user_id: z.string({ invalid_type_error: "Please Select  a User" }),
+	title: z.string().min(10, {
+		message: "Please describe your task with at least 10 characters!",
+	}),
+	is_completed: z.boolean({
+		invalid_type_error: "Please select the task status",
+	}),
+});
+
+export const CreateUserSchema = z.object({
+	user_name: z
+		.string()
+		.min(3, { message: "Please Enter user name at least 3 characters long" })
+		.trim(),
+	email: z.string().email({ message: "Please Enter a valid Email" }).trim(),
+	password: z
+		.string()
+		.min(8, { message: "Be at least 8 characters long." })
+		.regex(/[a-zA-Z]/, { message: "Contain at least 1 letter." })
+		.regex(/[0-9]/, { message: "Contain at least 1 number." })
+		.regex(/[^a-zA-Z0-9]/, {
+			message: "Contain at least 1 special character (@ # $ % & !).",
+		})
+		.trim(),
+	role: z.enum(["user", "admin"], {
+		invalid_type_error: "Please choose what role this user is.",
+	}),
+});

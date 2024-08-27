@@ -1,5 +1,6 @@
 "use server";
 import {
+	CreateUserSchema,
 	DeleteStateForm,
 	User,
 	UserField,
@@ -13,7 +14,6 @@ import { verifySession } from "@/lib/session";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { QueryResult } from "pg";
-import { z } from "zod";
 
 const ITEMS_PER_PAGE = 3;
 export const fetchFilteredUsers = async (
@@ -74,42 +74,14 @@ export const fetchUsersPages = async (query: string) => {
 export const fetchUserById = async (user_id: string) => {
 	const client = await pool.connect();
 	try {
-		const sqlQuery = `SELECT
-							user_id, 
-							user_name, 
-							email, 
-							image_url, 
-							role, 
-							created_at, 
-							updated_at 
-						FROM users 
-						WHERE user_id = $1`;
-		const result: QueryResult<UserTable> = await client.query(sqlQuery, [
-			user_id,
-		]);
+		const sqlQuery = `SELECT * FROM users WHERE user_id = $1`;
+		const result: QueryResult<User> = await client.query(sqlQuery, [user_id]);
 		return result.rows[0];
 	} catch (error) {
 		console.error(`Error Fetching a User By Id: ${(error as Error).message}`);
 		throw new Error((error as Error).message);
 	} finally {
 		client.release();
-	}
-};
-
-export const fetchUserByUserName = async (user_name: string) => {
-	const connection = await pool.connect();
-	try {
-		const sqlQuery = `SELECT * FROM users WHERE user_name = $1`;
-		const result: QueryResult<User> = await connection.query(sqlQuery, [
-			user_name,
-		]);
-		return result.rows[0];
-	} catch (error) {
-		console.error(`Error Fetching a User By Name: ${(error as Error).message}`);
-		throw new Error((error as Error).message);
-	} finally {
-		// RELEASE THE CONNECTION
-		connection.release();
 	}
 };
 
@@ -144,26 +116,6 @@ export const fetchUsersForTasks = async () => {
 		connection.release();
 	}
 };
-
-const CreateUserSchema = z.object({
-	user_name: z
-		.string()
-		.min(3, { message: "Please Enter user name at least 3 characters long" })
-		.trim(),
-	email: z.string().email({ message: "Please Enter a valid Email" }).trim(),
-	password: z
-		.string()
-		.min(8, { message: "Be at least 8 characters long." })
-		.regex(/[a-zA-Z]/, { message: "Contain at least 1 letter." })
-		.regex(/[0-9]/, { message: "Contain at least 1 number." })
-		.regex(/[^a-zA-Z0-9]/, {
-			message: "Contain at least 1 special character (@ # $ % & !).",
-		})
-		.trim(),
-	role: z.enum(["user", "admin"], {
-		invalid_type_error: "Please choose what role this user is.",
-	}),
-});
 
 export const CreateUser = async (
 	prevState: UserFormState,
@@ -382,6 +334,100 @@ export const deleteUser = async (user_id: string): Promise<DeleteStateForm> => {
 		return {
 			message: (error as Error).message,
 			status: "error",
+		};
+	} finally {
+		// RELEASE THE CONNECTION
+		connection.release();
+	}
+};
+
+const UpdateInfoSchema = CreateUserSchema.omit({ role: true, password: true });
+
+export const updateInfo = async (
+	prevState: UserFormState,
+	formData: FormData,
+): Promise<UserFormState> => {
+	const validatedFields = UpdateInfoSchema.safeParse({
+		user_name: formData.get("user_name"),
+		email: formData.get("email"),
+	});
+	if (!validatedFields.success) {
+		return {
+			message: "Invalid input",
+			errors: validatedFields.error.flatten().fieldErrors,
+		};
+	}
+
+	const { user_name, email } = validatedFields.data;
+	const newImageFile = formData.get("image_url") as File | null;
+
+	// CONNECT TO THE DATABASE
+	const connection = await pool.connect();
+	try {
+		const session = await verifySession();
+
+		// FETCH THE CURRENT USER
+		const user = await connection.query(
+			`SELECT * FROM users WHERE user_id = $1;`,
+			[session?.user_id],
+		);
+
+		// check if the user exist
+		if (!user) {
+			return {
+				message: "User not found",
+				errors: {
+					other: ["User not found"],
+				},
+			};
+		}
+
+		let newImageUrl: string | null = null;
+		// if a new image is provided, then upload it
+		if (newImageFile instanceof File && newImageFile.size > 0) {
+			const uploadResult = await uploadFile(newImageFile);
+			if (!uploadResult.success) {
+				return {
+					errors: {
+						image_url: [uploadResult.error!],
+					},
+					message: "failed to upload image",
+				};
+			}
+			newImageUrl = uploadResult.filePath;
+
+			// delete the old image
+			const oldImageUrl = user.rows[0]?.image_url;
+			if (oldImageUrl && oldImageUrl !== "/default-avatar.png") {
+				await deleteFile(oldImageUrl);
+			}
+		}
+		await connection.query("BEGIN");
+		const sqlQuery = `
+		UPDATE 
+			users
+		SET 
+			user_name = $1, 
+			email = $2, 
+			image_url = COALESCE($3, image_url)
+		WHERE 
+			user_id = $4;
+		`;
+		const values = [user_name, email, newImageUrl, session?.user_id];
+		await connection.query(sqlQuery, values);
+		await connection.query("COMMIT");
+		revalidatePath(`/profile/${user_name}`);
+		return {
+			message: "User updated successfully",
+		};
+	} catch (error) {
+		await connection.query("ROLLBACK");
+		console.error(`ERROR UPDATING INFO: ${error as Error}`);
+		return {
+			message: (error as Error).message,
+			errors: {
+				other: [(error as Error).message],
+			},
 		};
 	} finally {
 		// RELEASE THE CONNECTION

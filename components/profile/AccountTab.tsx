@@ -1,4 +1,5 @@
 "use client";
+import { updateInfo } from "@/app/actions/user";
 import { Button } from "@/components/ui/button";
 import {
 	Card,
@@ -11,9 +12,9 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { User } from "@/lib/definitions";
+import { User, UserFormState } from "@/lib/definitions";
 import Image from "next/image";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useActionState, useState } from "react";
 import { FaRegUser, FaUser } from "react-icons/fa6";
 import { MdOutlineAlternateEmail } from "react-icons/md";
 import { RiAdminLine, RiLockPasswordFill } from "react-icons/ri";
@@ -57,6 +58,11 @@ const AccountTab = ({ user }: { user: User }) => {
 		}
 	};
 
+	const initialState: UserFormState = { message: null, errors: {} };
+	const [infoState, infoAction, isPendingInfo] = useActionState(
+		updateInfo,
+		initialState,
+	);
 	return (
 		<Tabs defaultValue="info" className="w-full">
 			<TabsList className="flex w-full bg-emerald-100">
@@ -68,7 +74,7 @@ const AccountTab = ({ user }: { user: User }) => {
 				</TabsTrigger>
 			</TabsList>
 			<TabsContent value="info">
-				<form action="">
+				<form action={infoAction}>
 					<Card className="bg-emerald-100">
 						<CardHeader>
 							<CardTitle>Info</CardTitle>
@@ -95,15 +101,15 @@ const AccountTab = ({ user }: { user: User }) => {
 									<FaUser className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-emerald-700" />
 								</div>
 							</div>
-							{/* {state.errors?.user_name && (
-							<div id="user_name-error" aria-atomic="true" aria-live="polite">
-								{state.errors.user_name.map((error: string) => (
-									<p key={error} className="text-red-500 text-sm">
-										{error}
-									</p>
-								))}
-							</div>
-						)} */}
+							{infoState.errors?.user_name && (
+								<div id="user_name-error" aria-atomic="true" aria-live="polite">
+									{infoState.errors.user_name.map((error: string) => (
+										<p key={error} className="text-red-500 text-sm">
+											{error}
+										</p>
+									))}
+								</div>
+							)}
 							<div className="mb-6">
 								<Label
 									className="block mb-2 text-sm font-bold text-emerald-900"
@@ -124,15 +130,15 @@ const AccountTab = ({ user }: { user: User }) => {
 							</div>
 							{/* DISPLAY ERROR IF ANY FOR THE EMAIL */}
 
-							{/* {state.errors?.email && (
-							<div id="email-error" aria-atomic="true" aria-live="polite">
-								{state.errors.email.map((error: string) => (
-									<p key={error} className="text-red-500 text-sm">
-										{error}
-									</p>
-								))}
-							</div>
-						)} */}
+							{infoState.errors?.email && (
+								<div id="email-error" aria-atomic="true" aria-live="polite">
+									{infoState.errors.email.map((error: string) => (
+										<p key={error} className="text-red-500 text-sm">
+											{error}
+										</p>
+									))}
+								</div>
+							)}
 							<div className="mt-4 flex items-center ">
 								<span className="text-2xl text-emerald-700 font-semibold">
 									I am
@@ -149,16 +155,6 @@ const AccountTab = ({ user }: { user: User }) => {
 									</span>
 								)}
 							</div>
-							{/* DISPLAY ERROR IF ANY FOR THE ROLE */}
-							{/* {state.errors?.role && (
-							<div id="role-error" aria-atomic="true" aria-live="polite">
-								{state.errors.role.map((error: string) => (
-									<p key={error} className="text-red-500 text-sm">
-										{error}
-									</p>
-								))}
-							</div>
-						)} */}
 							<div className="mt-4 flex items-center gap-6">
 								<div className="">
 									{file ? (
@@ -200,10 +196,29 @@ const AccountTab = ({ user }: { user: User }) => {
 							)}
 						</CardContent>
 						<CardFooter className="justify-end">
-							<Button className="bg-green-500 hover:bg-green-700">
-								Save changes
+							<Button
+								className="bg-green-500 hover:bg-green-700"
+								disabled={isPendingInfo}>
+								{isPendingInfo ? "Saving..." : "Save changes"}
 							</Button>
 						</CardFooter>
+						{infoState.message && (
+							<div
+								className={`mt-4 p-4 rounded-md ${
+									infoState.errors
+										? "bg-red-100 text-red-700"
+										: "bg-green-100 text-green-700"
+								}`}>
+								{infoState.message}
+							</div>
+						)}
+						{Object.entries(infoState.errors || {}).map(([key, errors]) => (
+							<div
+								key={key}
+								className="mt-2 -p4 rounded-md bg-red-100 text-red-700">
+								{errors.join(", ")}
+							</div>
+						))}
 					</Card>
 				</form>
 			</TabsContent>

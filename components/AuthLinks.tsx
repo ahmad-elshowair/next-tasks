@@ -14,10 +14,12 @@ const AuthLinks = ({
 	isLoggedIn,
 	image_url,
 	user_name,
+	user_id,
 }: {
 	isLoggedIn: boolean;
 	user_name?: string;
 	image_url?: string;
+	user_id?: string;
 }) => {
 	const pathname = usePathname();
 	const handleLogout = async () => {
@@ -28,7 +30,7 @@ const AuthLinks = ({
 			{isLoggedIn ? (
 				<>
 					<Link
-						href={`/profile/${user_name}`}
+						href={`/profile/${user_id}`}
 						className={clsx(
 							"flex h-[48px] w-full grow items-center justify-center gap-2 rounded-md p-3 text-sm font-semibold lg:flex-none md:justify-start md:p-2 md:px-3 shadow hover:bg-green-500 text-green-600 bg-emerald-100 hover:text-green-50 duration-200 ease-in-out",
 							{

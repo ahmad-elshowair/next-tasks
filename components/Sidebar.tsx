@@ -7,6 +7,7 @@ const Sidebar = async () => {
 	const session = await verifySession();
 	const isLoggedIn = !!session;
 	const role = session?.role;
+	const user_id = session?.user_id;
 
 	return (
 		<>
@@ -22,6 +23,7 @@ const Sidebar = async () => {
 							isLoggedIn={isLoggedIn}
 							user_name={session?.user_name}
 							image_url={session?.image_url}
+							user_id={user_id}
 						/>
 					</section>
 				</aside>
