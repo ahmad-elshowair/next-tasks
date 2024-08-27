@@ -1,5 +1,5 @@
 import { fetchUserByUserName } from "@/app/actions/user";
-import UserFrom from "@/components/profile/UserForm";
+import AccountTab from "@/components/profile/AccountTab";
 
 const Profile = async ({ params }: { params: { user_name: string } }) => {
 	const { user_name } = params;
@@ -9,7 +9,8 @@ const Profile = async ({ params }: { params: { user_name: string } }) => {
 			<h1 className="text-3xl font-bold uppercase mb-4 md:mb-8">
 				{user.user_name}
 			</h1>
-			<UserFrom user={user} />
+			{/* <UserFrom user={user} /> */}
+			<AccountTab user={user} />
 		</section>
 	);
 };
