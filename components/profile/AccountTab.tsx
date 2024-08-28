@@ -1,5 +1,5 @@
 "use client";
-import { updateInfo } from "@/app/actions/user";
+import { updateInfo, updatePassword } from "@/app/actions/user";
 import { Button } from "@/components/ui/button";
 import {
 	Card,
@@ -12,9 +12,14 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { User, UserFormState } from "@/lib/definitions";
+import {
+	UpdatePasswordStateForm,
+	User,
+	UserFormState,
+} from "@/lib/definitions";
 import Image from "next/image";
-import { ChangeEvent, useActionState, useState } from "react";
+import { useRouter } from "next/navigation";
+import { ChangeEvent, useActionState, useEffect, useState } from "react";
 import { FaRegUser, FaUser } from "react-icons/fa6";
 import { MdOutlineAlternateEmail } from "react-icons/md";
 import { RiAdminLine, RiLockPasswordFill } from "react-icons/ri";
@@ -59,15 +64,35 @@ const AccountTab = ({ user }: { user: User }) => {
 		}
 	};
 
-	const initialState: UserFormState = {
+	const initialInfoState: UserFormState = {
+		message: null,
+		errors: {},
+		status: null,
+	};
+	const initialPasswordState: UpdatePasswordStateForm = {
 		message: null,
 		errors: {},
 		status: null,
 	};
 	const [infoState, infoAction, isPendingInfo] = useActionState(
 		updateInfo,
-		initialState,
+		initialInfoState,
 	);
+
+	const [passwordState, passwordAction, isPendingPassword] = useActionState(
+		updatePassword,
+		initialPasswordState,
+	);
+	const router = useRouter();
+	useEffect(() => {
+		if (passwordState.status === "success" && passwordState.shouldRedirect) {
+			const timer = setTimeout(() => {
+				router.push("/login");
+			}, 4000);
+			return () => clearTimeout(timer);
+		}
+	}, [passwordState, router]);
+
 	return (
 		<Tabs defaultValue="info" className="w-full">
 			<TabsList className="flex w-full bg-emerald-100">
@@ -210,18 +235,20 @@ const AccountTab = ({ user }: { user: User }) => {
 						{infoState.message && (
 							<Message message={infoState.message} status={infoState.status!} />
 						)}
-						{Object.entries(infoState.errors || {}).map(([key, errors]) => (
-							<div
-								key={key}
-								className="mt-2 -p4 rounded-md bg-red-100 text-red-700">
-								{errors.join(", ")}
-							</div>
-						))}
 					</Card>
 				</form>
+				{infoState.errors?.other &&
+					infoState.errors.other.map((error: string) => (
+						<p
+							key={error}
+							className="mt-2 p-2 rounded-lg bg-red-
+							100 text-red-600 uppercase ring-2 ring-red-700">
+							{error}
+						</p>
+					))}
 			</TabsContent>
 			<TabsContent value="password">
-				<form action={""}>
+				<form action={passwordAction}>
 					<Card className="bg-emerald-100">
 						<CardHeader>
 							<CardTitle>Password</CardTitle>
@@ -230,50 +257,96 @@ const AccountTab = ({ user }: { user: User }) => {
 							</CardDescription>
 						</CardHeader>
 						<CardContent>
-							<div className="mb-4">
+							<div>
 								<label
 									className="block mb-2 text-sm font-bold text-emerald-900"
-									htmlFor="password">
-									Password
+									htmlFor="old_password">
+									Old Password
 								</label>
 								<div className="relative">
 									<input
 										className="peer block w-full border border-emerald-200 pl-10 py-2 outline-2 text-sm placeholder:text-emerald-700 rounded-md"
 										type="password"
-										id="password"
-										name="password"
-										aria-describedby="password-error"
+										id="old_password"
+										name="old_password"
+										aria-describedby="old_password-error"
 										placeholder="***********"
 									/>
 									<RiLockPasswordFill className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-emerald-700" />
 								</div>
 							</div>
-							<div className="mb-4">
+							{/* old Password error if any  */}
+							<div
+								id="old_password-error"
+								aria-atomic="true"
+								aria-live="polite"
+								className="mb-4">
+								{passwordState.errors?.old_password &&
+									passwordState.errors.old_password.map((error: string) => (
+										<p key={error} className="p-2 text-red-700">
+											{error}
+										</p>
+									))}
+							</div>
+
+							<div className="mb-2">
 								<label
-									className="block mb-2 text-sm font-medium text-emerald-900"
-									htmlFor="password">
-									Password
+									className="block mb-2 text-sm font-bold text-emerald-900"
+									htmlFor="new_password">
+									New Password
 								</label>
 								<div className="relative">
 									<input
 										className="peer block w-full border border-emerald-200 pl-10 py-2 outline-2 text-sm placeholder:text-emerald-700 rounded-md"
 										type="password"
-										id="password"
-										name="password"
-										aria-describedby="password-error"
+										id="new_password"
+										name="new_password"
+										aria-describedby="new_password-error"
 										placeholder="********"
 									/>
 									<RiLockPasswordFill className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-emerald-700" />
 								</div>
 							</div>
+							{/* New Password error if any  */}
+							<div
+								id="new_password-error"
+								aria-atomic="true"
+								aria-live="polite">
+								{passwordState.errors?.new_password && (
+									<div>
+										<p className="text-red-700">New Password Must: </p>
+										{passwordState.errors.new_password.map((error: string) => (
+											<p key={error} className="pl-4  text-red-500">
+												{error}
+											</p>
+										))}
+									</div>
+								)}
+							</div>
 						</CardContent>
 						<CardFooter className="justify-end">
-							<Button className="bg-green-400 hover:bg-green-700">
-								Save password
+							<Button
+								className="bg-green-400 hover:bg-green-700"
+								disabled={isPendingPassword}>
+								{isPendingPassword ? "Changing..." : "Change password"}
 							</Button>
 						</CardFooter>
+						{passwordState.message && (
+							<Message
+								message={passwordState.message}
+								status={passwordState.status!}
+							/>
+						)}
 					</Card>
 				</form>
+				{passwordState.errors?.other &&
+					passwordState.errors.other.map((error: string) => (
+						<p
+							key={error}
+							className="mt-2 p-2 rounded-lg bg-red-100 text-red-700">
+							{error}
+						</p>
+					))}
 			</TabsContent>
 		</Tabs>
 	);

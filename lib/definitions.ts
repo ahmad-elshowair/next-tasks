@@ -133,6 +133,17 @@ export type DeleteStateForm = {
 	status?: "error" | "success";
 };
 
+export type UpdatePasswordStateForm = {
+	message?: string | null;
+	status: "success" | "error" | null;
+	shouldRedirect?: boolean;
+	errors?: {
+		old_password?: string[];
+		new_password?: string[];
+		other?: string[];
+	};
+};
+
 export const TaskSchema = z.object({
 	task_id: z.string(),
 	user_id: z.string({ invalid_type_error: "Please Select  a User" }),

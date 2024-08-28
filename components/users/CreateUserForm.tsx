@@ -24,7 +24,11 @@ const CreateUserForm = () => {
 			setFileName(file.name);
 		}
 	};
-	const initialState: UserFormState = { message: null, errors: {} };
+	const initialState: UserFormState = {
+		message: null,
+		errors: {},
+		status: null,
+	};
 	const [state, formAction, pending] = useActionState(CreateUser, initialState);
 	return (
 		<form action={formAction}>

@@ -108,6 +108,5 @@ export const deleteSession = async () => {
 		cookies().delete("user-session");
 	} catch (error) {
 		console.error(`FAILED TO DELETE SESSION: ${(error as Error).message}`);
-		throw new Error("SESSION DELETING FAILED!");
 	}
 };

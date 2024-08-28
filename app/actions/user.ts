@@ -2,18 +2,21 @@
 import {
 	CreateUserSchema,
 	DeleteStateForm,
+	UpdatePasswordStateForm,
 	User,
 	UserField,
 	UserFormState,
 	UserTable,
 } from "@/lib/definitions";
-import { hash } from "@/lib/helpers";
+import { hash, isMatch } from "@/lib/helpers";
 import { deleteFile, uploadFile } from "@/lib/manage-upload";
 import pool from "@/lib/pool";
 import { updateSession, verifySession } from "@/lib/session";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { QueryResult } from "pg";
+import { z } from "zod";
+import { logout } from "./auth";
 
 const ITEMS_PER_PAGE = 3;
 export const fetchFilteredUsers = async (
@@ -351,7 +354,6 @@ export const deleteUser = async (user_id: string): Promise<DeleteStateForm> => {
 };
 
 const UpdateInfoSchema = CreateUserSchema.omit({ role: true, password: true });
-
 export const updateInfo = async (
 	prevState: UserFormState,
 	formData: FormData,
@@ -448,6 +450,83 @@ export const updateInfo = async (
 				other: [(error as Error).message],
 			},
 			status: "error",
+		};
+	} finally {
+		// RELEASE THE CONNECTION
+		connection.release();
+	}
+};
+
+const UpdatePasswordSchema = z.object({
+	old_password: z.string().min(1, { message: "please input the old password" }),
+	new_password: z
+		.string()
+		.min(8, { message: "Be at least 8 characters long." })
+		.regex(/[a-zA-Z]/, { message: "Contain at least 1 letter." })
+		.regex(/[0-9]/, { message: "Contain at least 1 number." })
+		.regex(/[^a-zA-Z0-9]/, {
+			message: "Contain at least 1 special character (@ # $ % & !).",
+		})
+		.trim(),
+});
+export const updatePassword = async (
+	prevState: UpdatePasswordStateForm,
+	formData: FormData,
+): Promise<UpdatePasswordStateForm> => {
+	const validatedFields = UpdatePasswordSchema.safeParse({
+		old_password: formData.get("old_password"),
+		new_password: formData.get("new_password"),
+	});
+
+	if (!validatedFields.success) {
+		return {
+			errors: validatedFields.error.flatten().fieldErrors,
+			status: "error",
+		};
+	}
+	const session = await verifySession();
+
+	const { old_password, new_password } = validatedFields.data;
+	const user_id = session?.user_id;
+	const user = await fetchUserById(user_id!);
+	if (!user) {
+		return {
+			message: "User Not Found",
+			status: "error",
+		};
+	}
+
+	const checkOldPassword = isMatch(old_password, user.password);
+	if (!checkOldPassword) {
+		return {
+			message: "Old password is incorrect",
+			status: "error",
+		};
+	}
+
+	const hashedPassword = hash(new_password);
+	const connection = await pool.connect();
+	try {
+		await connection.query("BEGIN");
+		const sqlQuery = `UPDATE users SET password = $1 WHERE user_id = $2`;
+		const values = [hashedPassword, user_id];
+		await connection.query(sqlQuery, values);
+		await connection.query("COMMIT");
+		await logout();
+		return {
+			message: "Password updated successfully",
+			status: "success",
+			shouldRedirect: true,
+		};
+	} catch (error) {
+		await connection.query("ROLLBACK");
+		console.error(`ERROR Update the password: ${error as Error}`);
+		return {
+			errors: {
+				other: [(error as Error).message],
+			},
+			status: "error",
+			message: "Error Updating the Password",
 		};
 	} finally {
 		// RELEASE THE CONNECTION
