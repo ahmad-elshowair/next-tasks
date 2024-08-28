@@ -10,7 +10,7 @@ import {
 import { hash } from "@/lib/helpers";
 import { deleteFile, uploadFile } from "@/lib/manage-upload";
 import pool from "@/lib/pool";
-import { verifySession } from "@/lib/session";
+import { updateSession, verifySession } from "@/lib/session";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { QueryResult } from "pg";
@@ -360,6 +360,7 @@ export const updateInfo = async (
 
 	const { user_name, email } = validatedFields.data;
 	const newImageFile = formData.get("image_url") as File | null;
+	let newImageUrl: string | null = null;
 
 	// CONNECT TO THE DATABASE
 	const connection = await pool.connect();
@@ -382,7 +383,6 @@ export const updateInfo = async (
 			};
 		}
 
-		let newImageUrl: string | null = null;
 		// if a new image is provided, then upload it
 		if (newImageFile instanceof File && newImageFile.size > 0) {
 			const uploadResult = await uploadFile(newImageFile);
@@ -405,18 +405,24 @@ export const updateInfo = async (
 		await connection.query("BEGIN");
 		const sqlQuery = `
 		UPDATE 
-			users
+		users
 		SET 
-			user_name = $1, 
-			email = $2, 
-			image_url = COALESCE($3, image_url)
+		user_name = $1, 
+		email = $2, 
+		image_url = COALESCE($3, image_url)
 		WHERE 
-			user_id = $4;
+		user_id = $4;
 		`;
 		const values = [user_name, email, newImageUrl, session?.user_id];
 		await connection.query(sqlQuery, values);
 		await connection.query("COMMIT");
-		revalidatePath(`/profile/${user_name}`);
+		if (session) {
+			await updateSession({
+				user_name: user_name,
+				image_url: newImageUrl || session.image_url,
+			});
+		}
+		revalidatePath(`/profile`);
 		return {
 			message: "User updated successfully",
 		};

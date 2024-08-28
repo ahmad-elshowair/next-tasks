@@ -58,7 +58,7 @@ export const createSession = async (user: SessionPayload) => {
 	}
 };
 
-export const updateSession = async () => {
+export const updateSession = async (updateData: Partial<SessionPayload>) => {
 	try {
 		const session = cookies().get("user-session")?.value;
 		const payload = await decrypt(session);
@@ -66,13 +66,19 @@ export const updateSession = async () => {
 			return null;
 		}
 		const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
-		cookies().set("user-session", session, {
+
+		const updatedPayload = { ...payload, ...updateData, expiresAt };
+
+		const newSession = await encrypt(updatedPayload as SessionPayload);
+
+		cookies().set("user-session", newSession, {
 			httpOnly: true,
 			secure: true,
 			expires: expiresAt,
 			sameSite: "lax",
 			path: "/",
 		});
+		return updatedPayload as SessionPayload;
 	} catch (error) {
 		console.error(`FAILED TO UPDATE SESSION: ${(error as Error).message}`);
 		throw new Error("SESSION UPDATING FAILED!");
