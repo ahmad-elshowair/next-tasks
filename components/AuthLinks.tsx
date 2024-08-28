@@ -2,7 +2,7 @@
 import clsx from "clsx";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import {
 	FaArrowRightToBracket,
 	FaRightFromBracket,
@@ -22,8 +22,10 @@ const AuthLinks = ({
 	user_id?: string;
 }) => {
 	const pathname = usePathname();
+	const router = useRouter();
 	const handleLogout = async () => {
 		await logout();
+		router.push("/login");
 	};
 	return (
 		<>
