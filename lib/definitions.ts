@@ -116,6 +116,7 @@ export type UserEditForm = {
 
 export type UserFormState = {
 	message?: string | null;
+	status: "error" | "success" | null;
 	errors?: {
 		user_id?: string[];
 		user_name?: string[];

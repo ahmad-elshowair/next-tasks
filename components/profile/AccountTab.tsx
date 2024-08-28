@@ -18,6 +18,7 @@ import { ChangeEvent, useActionState, useState } from "react";
 import { FaRegUser, FaUser } from "react-icons/fa6";
 import { MdOutlineAlternateEmail } from "react-icons/md";
 import { RiAdminLine, RiLockPasswordFill } from "react-icons/ri";
+import Message from "../Message";
 const AccountTab = ({ user }: { user: User }) => {
 	const [file, setFile] = useState<File | null>(null);
 	const [fileName, setFileName] = useState<string>(
@@ -58,7 +59,11 @@ const AccountTab = ({ user }: { user: User }) => {
 		}
 	};
 
-	const initialState: UserFormState = { message: null, errors: {} };
+	const initialState: UserFormState = {
+		message: null,
+		errors: {},
+		status: null,
+	};
 	const [infoState, infoAction, isPendingInfo] = useActionState(
 		updateInfo,
 		initialState,
@@ -203,14 +208,7 @@ const AccountTab = ({ user }: { user: User }) => {
 							</Button>
 						</CardFooter>
 						{infoState.message && (
-							<div
-								className={`mt-4 p-4 rounded-md ${
-									infoState.errors
-										? "bg-red-100 text-red-700"
-										: "bg-green-100 text-green-700"
-								}`}>
-								{infoState.message}
-							</div>
+							<Message message={infoState.message} status={infoState.status!} />
 						)}
 						{Object.entries(infoState.errors || {}).map(([key, errors]) => (
 							<div

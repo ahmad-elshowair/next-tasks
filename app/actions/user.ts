@@ -132,6 +132,7 @@ export const CreateUser = async (
 		return {
 			errors: validatedFields.error.flatten().fieldErrors,
 			message: "Missing Fields, Failed to create User",
+			status: "error",
 		};
 	}
 
@@ -153,6 +154,7 @@ export const CreateUser = async (
 			return {
 				errors: { image_url: [uploadResult.error!] },
 				message: "Failed to upload image",
+				status: "error",
 			};
 		}
 	}
@@ -162,6 +164,7 @@ export const CreateUser = async (
 		return {
 			errors: { email: ["Email already exists"] },
 			message: "Failed to create User",
+			status: "error",
 		};
 	}
 
@@ -191,6 +194,7 @@ export const CreateUser = async (
 		return {
 			errors: { other: [(error as Error).message] },
 			message: "Failed to create User",
+			status: "error",
 		};
 	} finally {
 		// RELEASE THE CONNECTION
@@ -215,6 +219,7 @@ export const updateUser = async (
 		return {
 			errors: validatedFields.error.flatten().fieldErrors,
 			message: "Invalid Data",
+			status: "error",
 		};
 	}
 
@@ -244,6 +249,7 @@ export const updateUser = async (
 						image_url: [uploadResult.error!],
 					},
 					message: "Failed to upload image",
+					status: "error",
 				};
 			}
 			newImageUrl = uploadResult.filePath;
@@ -271,12 +277,14 @@ export const updateUser = async (
 					user_id: ["User not found"],
 				},
 				message: "User not found or no changes made",
+				status: "error",
 			};
 		}
 		await connection.query("COMMIT");
 		revalidatePath("/users");
 		return {
 			message: "User updated successfully",
+			status: "success",
 		};
 	} catch (error) {
 		await connection.query("ROLLBACK");
@@ -284,6 +292,7 @@ export const updateUser = async (
 		return {
 			errors: { other: [(error as Error).message] },
 			message: "Failed to update User",
+			status: "error",
 		};
 	} finally {
 		// RELEASE THE CONNECTION
@@ -355,6 +364,7 @@ export const updateInfo = async (
 		return {
 			message: "Invalid input",
 			errors: validatedFields.error.flatten().fieldErrors,
+			status: "error",
 		};
 	}
 
@@ -380,6 +390,7 @@ export const updateInfo = async (
 				errors: {
 					other: ["User not found"],
 				},
+				status: "error",
 			};
 		}
 
@@ -392,6 +403,7 @@ export const updateInfo = async (
 						image_url: [uploadResult.error!],
 					},
 					message: "failed to upload image",
+					status: "error",
 				};
 			}
 			newImageUrl = uploadResult.filePath;
@@ -425,6 +437,7 @@ export const updateInfo = async (
 		revalidatePath(`/profile`);
 		return {
 			message: "User updated successfully",
+			status: "success",
 		};
 	} catch (error) {
 		await connection.query("ROLLBACK");
@@ -434,6 +447,7 @@ export const updateInfo = async (
 			errors: {
 				other: [(error as Error).message],
 			},
+			status: "error",
 		};
 	} finally {
 		// RELEASE THE CONNECTION
