@@ -34,7 +34,7 @@ const MyTasksPage = async ({
 
 	return (
 		<section className="py-2 px-10 w-full">
-			<h1 className="md:mt-20 text-3xl font-bold mb-4 md:mb-8">Tasks</h1>
+			<h1 className="md:mt-20 text-3xl font-bold mb-4 md:mb-8">My Tasks</h1>
 			{message && status && <Message message={message} status={status} />}
 			<section className="flex items-center justify-between gap-2">
 				<Search placeholder="Search Task..." />
