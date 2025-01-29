@@ -4,7 +4,7 @@ import {
 	DeleteStateForm,
 	Task,
 	TaskSchema,
-	TasksTable,
+	TaskTable,
 	UserTaskStateFrom,
 } from "@/lib/definitions";
 import pool from "@/lib/pool";
@@ -48,7 +48,7 @@ export const fetchFilteredMyTasks = async (
 		const session = await verifySession();
 
 		const values = [session?.user_id, `%${query}%`, ITEMS_PER_PAGE, offset];
-		const tasks: QueryResult<TasksTable> = await connection.query(
+		const tasks: QueryResult<TaskTable> = await connection.query(
 			sqlQuery,
 			values,
 		);
@@ -90,7 +90,7 @@ export const fetchFilteredAllTasks = async (
             `;
 
 		const values = [`%${query}%`, ITEMS_PER_PAGE, offset];
-		const tasks: QueryResult<TasksTable> = await connection.query(
+		const tasks: QueryResult<TaskTable> = await connection.query(
 			sqlQuery,
 			values,
 		);
