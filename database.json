@@ -5,6 +5,7 @@
 		"host": { "ENV": "PG_HOST" },
 		"database": { "ENV": "PG_DATABASE" },
 		"user": { "ENV": "PG_USER" },
-		"password": { "ENV": "PG_PASSWORD" }
+		"password": { "ENV": "PG_PASSWORD" },
+		"ssl": false
 	}
 }

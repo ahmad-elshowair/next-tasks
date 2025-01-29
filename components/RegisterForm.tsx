@@ -1,15 +1,21 @@
 "use client";
 import { register } from "@/app/actions/auth";
 import { RegisterFormState } from "@/lib/definitions";
+import { useState } from "react";
 import { useFormState, useFormStatus } from "react-dom";
+import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { MdOutlineAlternateEmail } from "react-icons/md";
 import { RiEnglishInput, RiLockPasswordFill } from "react-icons/ri";
 
 const RegisterForm = () => {
 	const initialState: RegisterFormState = { message: null, errors: {} };
-
 	const [state, formAction] = useFormState(register, initialState);
+	const [showPassword, setShowPassword] = useState(false);
 	const { pending } = useFormStatus();
+
+	const togglePassword = () => {
+		setShowPassword(!showPassword);
+	};
 	return (
 		<form action={formAction}>
 			<div className="flex flex-col bg-emerald-100 px-5 py-10 rounded-lg">
@@ -78,11 +84,21 @@ const RegisterForm = () => {
 							className="peer block w-full border border-emerald-200 pl-10 py-2 outline-2 text-sm placeholder:text-emerald-700 rounded-md"
 							name="password"
 							id="password"
-							type="password"
+							type={showPassword ? "text" : "password"}
 							placeholder="********"
 							aria-describedby="password-error"
 						/>
 						<RiLockPasswordFill className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-emerald-700" />
+						<button
+							type="button"
+							onClick={togglePassword}
+							className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
+							{showPassword ? (
+								<AiOutlineEyeInvisible size={20} />
+							) : (
+								<AiOutlineEye size={20} />
+							)}
+						</button>
 					</div>
 				</div>
 				{/* display an error of the password if any  */}

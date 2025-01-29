@@ -20,6 +20,7 @@ import {
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { ChangeEvent, useActionState, useEffect, useState } from "react";
+import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { FaRegUser, FaUser } from "react-icons/fa6";
 import { MdOutlineAlternateEmail } from "react-icons/md";
 import { RiAdminLine, RiLockPasswordFill } from "react-icons/ri";
@@ -29,6 +30,10 @@ const AccountTab = ({ user }: { user: User }) => {
 	const [fileName, setFileName] = useState<string>(
 		user.image_url || "No file Chosen",
 	);
+	const [showPassword, setShowPassword] = useState<boolean>(false);
+
+	const togglePassword = () => setShowPassword((prev) => !prev);
+
 	const MAX_SIZE = 500 * 1024;
 	const ALLOWED_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/gif"];
 	const [imageError, setImageError] = useState("");
@@ -266,13 +271,23 @@ const AccountTab = ({ user }: { user: User }) => {
 								<div className="relative">
 									<input
 										className="peer block w-full border border-emerald-200 pl-10 py-2 outline-2 text-sm placeholder:text-emerald-700 rounded-md"
-										type="password"
+										type={showPassword ? "text" : "password"}
 										id="old_password"
 										name="old_password"
 										aria-describedby="old_password-error"
 										placeholder="***********"
 									/>
 									<RiLockPasswordFill className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-emerald-700" />
+									<button
+										type="button"
+										onClick={togglePassword}
+										className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
+										{showPassword ? (
+											<AiOutlineEyeInvisible size={20} />
+										) : (
+											<AiOutlineEye size={20} />
+										)}
+									</button>
 								</div>
 							</div>
 							{/* old Password error if any  */}
@@ -298,13 +313,23 @@ const AccountTab = ({ user }: { user: User }) => {
 								<div className="relative">
 									<input
 										className="peer block w-full border border-emerald-200 pl-10 py-2 outline-2 text-sm placeholder:text-emerald-700 rounded-md"
-										type="password"
+										type={showPassword ? "text" : "password"}
 										id="new_password"
 										name="new_password"
 										aria-describedby="new_password-error"
 										placeholder="********"
 									/>
 									<RiLockPasswordFill className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-emerald-700" />
+									<button
+										type="button"
+										onClick={togglePassword}
+										className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
+										{showPassword ? (
+											<AiOutlineEyeInvisible size={20} />
+										) : (
+											<AiOutlineEye size={20} />
+										)}
+									</button>
 								</div>
 							</div>
 							{/* New Password error if any  */}
